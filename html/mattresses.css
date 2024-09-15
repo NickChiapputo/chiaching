@@ -1,0 +1,11 @@
+#mattresses {
+    width: 100%;
+}
+
+#mattressList {
+    display: flex;
+    flex-flow: row wrap;
+
+    width: calc(100% - 2*1em);
+    padding: 1em;
+}

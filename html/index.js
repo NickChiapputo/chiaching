@@ -1,5 +1,7 @@
 // Import template header and footer HTML.
 import {header} from '/header.js'
+import {init as initMattresses} from "/mattress.js"
+import {send} from "/send.js"
 
 (() => {
     var userInfo = undefined;
@@ -53,6 +55,18 @@ import {header} from '/header.js'
     document.addEventListener( "DOMContentLoaded", (e) => {
         document.getElementById( "header" ).outerHTML = header;
         // document.getElementById( "footer" ).outerHTML = footer;
+
+        window.addEventListener( "keydown", (e) => {
+            if (e.keyIdentifier=='U+000A' || e.keyIdentifier=='Enter' || e.keyCode==13)
+            {
+                if (e.target.nodeName=='INPUT' && e.target.type=='text')
+                {
+                    console.log( "Ignoring input" )
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        }, true);
 
         send(
             "/api/user/validateToken", "GET", {},
@@ -123,45 +137,13 @@ import {header} from '/header.js'
         newAccountButton.addEventListener( "click", toggleNewMoneyAccountForm );
 
 
-        // Budgets
-        newBudgetForm = document.getElementById( "newBudgetForm" );
-        newBudgetForm.addEventListener( "submit", createNewBudget );
-
-        newBudgetButton = document.getElementById( "addBudgetButton" );
-        newBudgetButton.addEventListener( "click", toggleNewBudgetForm );
-
-        newBudgetLineItemButton = document.getElementById("addNewBudgetLineItemButton" );
-        newBudgetLineItemButton.addEventListener( "click", updateNewBudgetLineItems );
-
-        budgetsListDiv = document.getElementById( "budgetsList" );
-
 
         // Populate data
         getMoneyAccounts();
         getTransactions();
         // getBudgets();
+        initMattresses();
     });
-
-
-    const send = (uri, method, data, successCallback, errorCallback, parseResponse) => {
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if( this.readyState == 4 && this.status == 200 )
-            {
-                try { parseResponse ? successCallback( JSON.parse( this.responseText ) ) : successCallback( this.responseText ); }
-                catch(e) { errorCallback( e, this.responseText, this.status ); }
-            }
-            else if( this.readyState == 4 && this.status != 200 )
-            {
-                try { errorCallback( null, parseResponse ? JSON.parse( this.responseText ) : this.responseText, this.status ) }
-                catch(e) { errorCallback( e, this.responseText, this.status ); }
-            }
-        }
-
-        xhr.open( method, uri );
-        if( method == "POST" && data ) xhr.send( JSON.stringify( data ) );
-        else xhr.send();
-    };
 
 
     const getBudgets = () => {
@@ -200,7 +182,7 @@ import {header} from '/header.js'
 
     const clearBudgets = () => {
         budgetsListDiv.innerHTML = '';
-    }
+    };
 
 
     const displayBudget = (budget, budgetTransactions) => {

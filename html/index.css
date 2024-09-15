@@ -77,7 +77,7 @@
     padding-right: 5vw;
 }
 
-#accounts, #transactions, #budgets {
+#accounts, #transactions, #budgets, #mattresses {
     display: flex;
     align-items: flex-start;
     flex-flow: column;

@@ -190,5 +190,9 @@ async function incrementAccountBalance( username, accountName, institution, incr
     let result = await dbLib.updateItem( 
         DB_NAMES.dbName, DB_NAMES.accountsCollectionName, 
         query, update, options );
-    return result;
+    
+    if( !result || result.lastErrorObject.n == 0 )
+        return null;
+    else
+        return result;
 }

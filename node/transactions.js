@@ -532,22 +532,89 @@ async function deleteTransaction( res, req, data )
     }
 
     console.log( `Deleting transaction ${data._id} for ${user.username}` );
-    // let result = await dbLib.getItem(
-    //     DB_NAMES.dbName, DB_NAMES.transactionsCollectionName,
-    //     { "_id": dbLib.createObjectID( data._id ), "username": user.username }
-    // );
-    let result = await dbLib.deleteItem( 
+    let result = await dbLib.getItem(
+        DB_NAMES.dbName, DB_NAMES.transactionsCollectionName,
+        { "_id": dbLib.createObjectID( data._id ), "username": user.username }
+    );
+
+    let srcAccountIsOutside = result.sourceAccount.toLowerCase() === "outside";
+    let dstAccountIsOutside = result.destinationAccount.toLowerCase() === "outside";
+
+    // Add money back to source account.
+    if( !srcAccountIsOutside )
+    {
+        let src_result = await accounts.incrementAccountBalance( 
+            user.username, result.sourceAccount, 
+            result.sourceInstitution, result.amount 
+        );
+        
+        if( !src_result )
+        {
+            util.resolveAction( res, 500, { response: RESPONSE_CODES.DatabaseError } );
+            return;
+        }
+    }
+
+    // Take money back from destination account.
+    if( !dstAccountIsOutside ) 
+    {
+        let dst_result = await accounts.incrementAccountBalance( 
+            user.username, result.destinationAccount, 
+            result.destinationInstitution, -result.amount 
+        );
+        
+        if( !dst_result )
+        {
+            // Failed to update destination account.
+            // If we added money to the source account,
+            // try to take it back.
+            if( !srcAccountIsOutside )
+            {
+                await accounts.incrementAccountBalance( 
+                    user.username, result.sourceAccount, 
+                    result.sourceInstitution, -result.amount 
+                );
+            }
+            util.resolveAction( res, 500, { response: RESPONSE_CODES.DatabaseError } );
+            return;
+        }
+    }
+
+    // Delete the transaction.
+    result = await dbLib.deleteItem( 
         DB_NAMES.dbName, DB_NAMES.transactionsCollectionName, 
         { "_id": dbLib.createObjectID( data._id ), "username": user.username }    
     );
 
-    // TODO: Update account amounts.
     // TODO: Check if bad delete was user error (item not existing) or server error.
     if( result.deletedCount != undefined && result.deletedCount == 1 )
     {
         util.resolveAction( res, 200, { response: RESPONSE_CODES.OK } );
     }
     else
+    {
+        // We failed to delete the transaction. Make an
+        // attempt to un-update the account balances.
+        if( !srcAccountIsOutside )
+        {
+            // Take money back from source.
+            await accounts.incrementAccountBalance( 
+                user.username, result.sourceAccount, 
+                result.sourceInstitution, -result.amount 
+            );
+        }
+
+        if( !dstAccountIsOutside )
+        {
+            // Add money back to destination.
+            await accounts.incrementAccountBalance( 
+                user.username, result.destinationAccount, 
+                result.destinationInstitution, result.amount 
+            );
+        }
+
         util.resolveAction( res, 400, { response: RESPONSE_CODES.MissingData } );
+    }
+
     return;
 }

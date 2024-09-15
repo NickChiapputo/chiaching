@@ -1,4 +1,4 @@
-# <div><img src="https://github.com/user-attachments/assets/855577d8-9890-4d12-aaa3-cd9da6655d7f" data-canonical-src="https://github.com/user-attachments/assets/855577d8-9890-4d12-aaa3-cd9da6655d7f" height="30" /> ChiaChing</div>
+# <div><img src="https://github.com/user-attachments/assets/a50bf17f-62f9-41a1-8c2a-d1c5edb29ef5" data-canonical-src="https://github.com/user-attachments/assets/a50bf17f-62f9-41a1-8c2a-d1c5edb29ef5" height="30" /> ChiaChing</div>
 
 
 ## Setup

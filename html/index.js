@@ -897,7 +897,10 @@ import {send} from "/send.js"
     const deleteTransaction = (transactionEl) => {
         console.log( transactionEl )
         send( "/api/transactions/delete", "POST", { "_id": transactionEl.getAttribute( "_id" ) },
-            (resp, status) => { getTransactions(); },
+            (resp, status) => { 
+                getMoneyAccounts();
+                getTransactions();
+            },
             (e, resp, status) => { 
                 alert( `Error deleting transaction. ${e}\n\nServer Response: ${status}, ${JSON.stringify(resp, null, 2)}` )
                 console.error( e );

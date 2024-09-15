@@ -157,6 +157,19 @@
     * Indexes
         * Unique combination of username, budgetName, startDate, and endDate (case insensitive).
         * `db.budgets.createIndex( { username: 1, budgetName: 1, startDate: 1, endDate: 1 }, { name: "uniqueBudgetInstance", unique: true, collation: { locale: "en", strength: 2, caseLevel: false } } )`
+* **mattresses**
+    * Collection of mattresses (i.e., money ear-marked for a purpose).
+    * This is separated from the user to allow for easier searching than on a nested array.
+    * Each document has:
+        * `username`
+        * `name`
+        * `maxAmount`
+            * Maximum amount of money that can be stored in the mattress. 0 means there is no limit
+        * `amount`
+            * Current amount in the mattress
+    * Indexes:
+        * Unique combination of username and mattress name
+            * `db.mattresses.createIndex( { username: 1, name: 1 }, { name: "uniqueUserMattress", unique: true, collation: { locale: "en", strength: 2, caseLevel: false } } )`
 * **transactions**
     * Collection of transactions for specified user.
     * This is separated from the user to allow for easier searching than on a nested array.

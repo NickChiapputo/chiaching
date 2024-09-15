@@ -1,3 +1,6 @@
+# <div><img src="https://github.com/user-attachments/assets/855577d8-9890-4d12-aaa3-cd9da6655d7f" data-canonical-src="https://github.com/user-attachments/assets/855577d8-9890-4d12-aaa3-cd9da6655d7f" height="30" /> ChiaChing</div>
+
+
 ## Setup
 ### Initial Server Setup
 * `sudo apt-get install nginx`

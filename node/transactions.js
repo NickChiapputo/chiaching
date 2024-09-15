@@ -2,6 +2,7 @@ const fs = require( "fs" );
 const dbLib = require( "./db.js" );
 const util = require( "./util.js" );
 const accounts = require( "./accounts.js" );
+const mattresses = require( "./mattresses.js" );
 const RESPONSE_CODES = require( './response_codes.js' ).RESPONSE_CODES;
 
 var DB_NAMES;
@@ -357,6 +358,26 @@ async function createNewTransaction( res, req, data )
         return;
     }
 
+    // Check if optional mattress target exists.
+    let mattress = undefined;
+    if( util.validateNonEmptyString( data.mattress, false ) )
+    {
+        mattress = await mattresses.getMattress( user.username,
+            util.parseStringTrim( data.mattress )
+        );
+        if( !mattress )
+        {
+            util.resolveAction( res, 400, {
+                response: RESPONSE_CODES.InvalidFormData
+            } );
+            return;
+        }
+    }
+    else
+    {
+        console.log( `Mattress check failed: '${data.mattress}'` );
+    }
+
     // Validate amount exists, is non-negative, and only has two decimal places.
     if( util.validateNonNegativeFloat( data.amount, true, res ) )
     {
@@ -461,6 +482,7 @@ async function createNewTransaction( res, req, data )
                  `    Location:            ${doc.location}\n` +
                  `    Source Account:      ${doc.sourceAccount}\n` +
                  `    Destination Account: ${doc.destinationAccount}\n` +
+                 `    Mattress:            ${mattress ? mattress.name : ''}\n` +
                  `    Amount:              \$${doc.amount}\n` +
                  `    Date:                ${doc.date}\n` +
                  `    Tag:                 ${doc.tag}\n` +
@@ -475,20 +497,14 @@ async function createNewTransaction( res, req, data )
     }
 
 
-    // Insert transaction into user transaction list then sort by date and amount.
+
+    // Create new transaction.
     query = { username: user.username };
-    update = {
-        // "$push" : {
-        //     "transactions" : {
-        //         "$each" : [ doc ],
-        //         "$sort" : { "date" : 1, "amount" : 1 }
-        //     }
-        // }
-    };
+    update = {};
     options = {};
-    // result = await dbLib.updateItem( DB_NAMES.dbName, DB_NAMES.usersCollectionName,
-    //     query, update, options );
-    result = await dbLib.createNewItem( DB_NAMES.dbName, DB_NAMES.transactionsCollectionName, doc );
+    result = await dbLib.createNewItem( DB_NAMES.dbName, 
+        DB_NAMES.transactionsCollectionName, doc 
+    );
 
     // Move amount from source account (if not outside).
     if( !srcAccountIsOutside &&
@@ -508,6 +524,15 @@ async function createNewTransaction( res, req, data )
         console.log( result );
         util.resolveAction( res, 502, { "response" : RESPONSE_CODES.DatabaseError } );
         return;
+    }
+
+    // If mattress is specified, update amount.
+    if( mattress )
+    {
+        await mattresses.incrementMattressAmount(
+            user.username, mattress.name, 
+            srcAccountIsOutside ? doc.amount : -doc.amount
+        );
     }
 
 

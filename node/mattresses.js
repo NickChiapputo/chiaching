@@ -21,6 +21,8 @@ const ACTION_HANDLERS = {
 
 module.exports = {
     ACTION_HANDLERS: ACTION_HANDLERS,
+    incrementMattressAmount: incrementAmount,
+    getMattress: getMattressByName,
 };
 
 /**
@@ -137,10 +139,33 @@ async function getMattress( res, req, data )
         return;
     }
 
+    let result = await getMattressByName( 
+        user.username, util.parseStringTrim( data.name ) 
+    );
+    
+    if( !result )
+        util.resolveAction( res, 500, { "response": RESPONSE_CODES.DatabaseError } );
+    else
+        util.resolveAction( res, 200, { 
+            response: RESPONSE_CODES.OK, 
+            mattress: result 
+        } );
+    return;
+}
+
+/**
+ * Check database for mattress specified by
+ * owning user and the name of the mattress.
+ * @param {String} username 
+ * @param {String} name 
+ * @returns Mattress object from database.
+ */
+async function getMattressByName( username, name )
+{
     let result, query, options;
     query = {
-        username: user.username,
-        name: util.parseStringTrim( data.name ),
+        username: username,
+        name: name,
     };
 
     options = {
@@ -154,15 +179,8 @@ async function getMattress( res, req, data )
         DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
         query, options 
     );
-    
-    if( !result )
-        util.resolveAction( res, 500, { "response": RESPONSE_CODES.DatabaseError } );
-    else
-        util.resolveAction( res, 200, { 
-            response: RESPONSE_CODES.OK, 
-            mattress: result 
-        } );
-    return;
+
+    return result;
 }
 
 /**
@@ -213,4 +231,26 @@ async function getMattressNames( res, req )
 
     util.resolveAction( res, 200, result );
     return;
+}
+
+async function incrementAmount( username, mattressName, amount )
+{
+    let query = {
+        username: username,
+        name: mattressName,
+    };
+
+    let update = { "$inc" : { "amount" : amount } };
+    let options = {};
+
+    console.log( `  Incrementing ${username}'s mattress ${mattressName} by ${amount}.` );
+    let result = await dbLib.updateItem( 
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
+        query, update, options );
+    console.log( `    Result: ${JSON.stringify(result)}` );
+        
+    if( !result || result.lastErrorObject.n == 0 )
+        return null;
+    else
+        return result;
 }

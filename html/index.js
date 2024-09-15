@@ -1,6 +1,6 @@
 // Import template header and footer HTML.
 import {header} from '/header.js'
-import {init as initMattresses} from "/mattress.js"
+import {init as initMattresses, mattressNames} from "/mattress.js"
 import {send} from "/send.js"
 
 (() => {
@@ -496,6 +496,12 @@ import {send} from "/send.js"
             newTranscationDestinationAccountSelect[ newTranscationDestinationAccountSelect.selectedIndex ].closest( "optgroup" )?.label :
             "Outside";
 
+        // The key value is kind of ugly
+        // so just make it a little nicer.
+        delete Object.assign( 
+            data, 
+            {["mattress"]: data["transactionMattressName"]} 
+        )["transactionMattressName"];
 
         xmlHttp.open( "POST", "/api/transactions/new" );
         xmlHttp.send( JSON.stringify( data ) );
@@ -929,6 +935,15 @@ import {send} from "/send.js"
         modal.classList.remove( "modalHidden" );
         modalContainer.classList.remove( "modalShow" );
         modal.classList.remove( "modalShow" );
+
+        // Populate the mattress list dropdown
+        transactionMattressName.innerHTML = '<option></option>';
+        mattressNames.forEach((name) => {
+            let mattressOption = document.createElement( "option" );
+            mattressOption.innerHTML = name;
+            mattressOption.value = name;
+            transactionMattressName.appendChild( mattressOption );
+        });
 
         if( show )
         {  // Show modal

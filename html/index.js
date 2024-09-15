@@ -469,6 +469,7 @@ import {send} from "/send.js"
                 getMoneyAccounts();
                 getTransactions();
                 // getBudgets();
+                showModal(false);
             }
             else if( this.readyState == 4 && this.status != 200 )
             {

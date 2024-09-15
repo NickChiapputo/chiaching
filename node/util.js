@@ -159,7 +159,7 @@ function validateNonNegativeFloat( str, respond, res )
 
     if( respond )
     {
-        util.resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
+        resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
     }
 
     return false;

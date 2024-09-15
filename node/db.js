@@ -60,6 +60,17 @@ module.exports = {
         }
     },
 
+	/**
+	 * Add a new document `doc` to a collection `collectionName` within a
+	 * database `dbName`. This will return either the result of the insert
+	 * or a thrown error. If the result has a `keyPattern` member, the item
+	 * did not pass an index check (likely already exists). If the result does
+	 * not have a `acknowledged` member, there was likely a database error.
+	 * @param {*} dbName 			Database to insert into
+	 * @param {*} collectionName 	Collection to insert into
+	 * @param {*} doc 				Document to insert
+	 * @returns MongoDB insertion result or error.
+	 */
     createNewItem: async function( dbName, collectionName, doc )
     {
         const client = new MongoClient( dburl, mongoClientOptions );

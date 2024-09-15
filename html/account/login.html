@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+
+        <!-- Google Fonts Pre-reqs -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <!-- Montserrat -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800" rel="stylesheet">
+
+        <!-- Orbitron -->
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+
+        <!-- Genos -->
+        <link href="https://fonts.googleapis.com/css2?family=Genos:wght@300;400&display=swap" rel="stylesheet"> 
+
+
+        <!-- Header and Footer Templates -->
+        <script type="module" src="/header.js"></script>
+        <script type="module" src="/footer.js"></script>
+
+
+        <!-- JavaScript source files. -->
+        <script type="module" src="login.js"></script>
+
+
+        <!-- CSS Styles -->
+        <link rel="stylesheet" id="colorSchemeCSS" href="/css/colors-latte.css">
+        <link rel="stylesheet" href="/css/theme-definition.css">
+        <link rel="stylesheet" href="/css/html_body.css">
+        <link rel="stylesheet" href="/css/loading.css">
+        <link rel="stylesheet" href="/css/header.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <link rel="stylesheet" href="/css/form.css">
+        <link rel="stylesheet" href="/css/cards.css">
+        <link rel="stylesheet" href="login.css">
+
+
+        <title>Project: Nanovor ─ Login</title>
+    </head>
+    <body>
+        <script>0</script>
+
+        <div id="header"></div>
+
+        <div id="spinner"></div>
+
+        <div id="content">
+            <div id="contentContainer" style="display: none;">
+                <div class="card">
+                    <span class="cardTitle">Login</span>
+                    <form id="loginForm">
+                        <label for="username">Username<span class="required">*</span></label>
+                        <input type="text" id="username" name="username" required>
+
+                        <br /><br />
+
+                        <label for="pass">Password<span class="required">*</span></label>
+                        <input type="password" autocomplete="new-password" id="pass" name="pass" required>
+
+                        <br /><br />
+
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer"></div>
+    </body>
+</html>

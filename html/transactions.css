@@ -1,0 +1,159 @@
+#transactions {
+    width: var(--transaction-width);
+}
+
+
+#paycheckGrouping {
+    width: 75%;
+
+    margin: 0 auto auto auto;
+}
+
+#addTransactionButton {
+    margin: var(--button-margin)
+}
+
+
+/**** TRANSACTIONS TABLE ****/
+table, tr {
+    width: 100%;
+    table-layout: fixed;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+tr {
+    display: table;
+}
+
+table > tbody {
+    padding: var(--card-padding);
+}
+
+.transaction {
+    background-color: var(--odd-row-background);
+    transition: var(--transaction-background-transition);
+
+    cursor: pointer;
+}
+
+.transaction:hover {
+    background-color: var(--transaction-hover-background);
+}
+
+.transactionTableDescription {
+    /* Take up all remaining room with the description.
+       Other columns will fit to the longest cell. */
+    width: 100%;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.transactionTableAmount {
+    width: 6em;
+}
+
+.transactionTableDate {
+    width: 6rem;
+}
+
+.transactionTableTag {
+    width: 6rem;
+}
+
+.transactionTableSelect, .transactionTableDelete {
+    text-align: center;
+}
+
+.transactionTableSelect {
+    width: 1.5rem;
+}
+
+.transactionTableDelete {
+    width: 1.1rem;
+}
+
+.transactionTableDeleteIcon {
+    height: 1.5em;
+}
+
+.transactionTableDate, .transactionTableLocation, 
+.transactionTableAccount, .transactionTableTag,
+.transactionTableDescription {
+    text-align: left;
+}
+
+table thead {
+    color: var(--header-row-foreground);
+    background-color: var(--header-row-background);
+}
+
+table thead tr th,
+table tbody tr td {
+    padding: var(--transaction-table-cell-side-padding);
+}
+
+table tbody tr {
+    border-bottom: solid 1px var(--table-border-color);
+}
+
+table tbody tr:nth-of-type(odd) {
+    background-color: var(--odd-row-background);
+}
+table tbody tr:nth-of-type(even) {
+    background-color: var(--even-row-background);
+}
+
+.transactionTableAmount {
+    text-align: right;
+}
+
+/* Transaction Table Page Selectors */
+#transactionTablePageContainer {
+    width: 100%;
+
+    margin-top: 1rem;
+
+    display: flex;
+    flex-flow: row nowrap;
+    column-gap: 0.5rem;
+    justify-content: space-between;
+}
+
+#transactionTablePageSelectionContainer {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 0rem;
+}
+
+#transactionTableNumbers {
+    white-space: nowrap;
+}
+
+.transactionPage {
+    min-width: 1rem;
+    border: solid 1px var(--foreground-text);
+    text-align: center;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+
+    cursor: pointer;
+}
+
+.transactionPage.currentPage {
+    color: var(--background-color);
+    background-color: var(--foreground-text);
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
+.transactionPage:hover {
+    background-color: var(--background-color-card-l1);
+}
+
+.transactionPage.currentPage:hover {
+    background-color: var(--foreground-text);
+}

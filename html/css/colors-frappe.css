@@ -1,0 +1,81 @@
+:root{
+    --logo-url:         /media/logos/chiaching.svg;
+    
+    --Rosewater:      #F2D5CF;
+    --RosewaterRGB:   242, 213, 207;
+
+    --Flamingo:       #EEBEBE;
+    --FlamingoRGB:    238, 190, 190;
+
+    --Pink:           #F4B8E4;
+    --PinkRGB:        244, 184, 228;
+
+    --Mauve:          #CA9EE6;
+    --MauveRGB:       202, 158, 230;
+
+    --Red:            #E78284;
+    --RedRGB:         231, 130, 132;
+
+    --Maroon:         #EA999C;
+    --MaroonRGB:      234, 153, 156;
+
+    --Peach:          #EF9F76;
+    --PeachRGB:       239, 159, 118;
+
+    --Yellow:         #E5C890;
+    --YellowRGB:      229, 200, 144;
+
+    --Green:          #A6D189;
+    --GreenRGB:       166, 209, 137;
+
+    --Teal:           #81C8BE;
+    --TealRGB:        129, 200, 190;
+
+    --Sky:            #99D1DB;
+    --SkyRGB:         153, 209, 219;
+
+    --Sapphire:       #85C1DC;
+    --SapphireRGB:    133, 193, 220;
+
+    --Blue:           #8CAAEE;
+    --BlueRGB:        140, 170, 238;
+
+    --Lavender:      #BABBF1;
+    --LavenderRGB:    186, 187, 241;
+
+    --Text:           #C6D0F5;
+    --TextRGB:        198, 208, 245;
+
+    --Subtext1:       #B5BFE2;
+    --Subtext1RGB:    181, 191, 226;
+
+    --Subtext0:       #A5ADCE;
+    --Subtext0RGB:    165, 173, 206;
+
+    --Overlay2:       #949CBB;
+    --Overlay2RGB:    148, 156, 187;
+
+    --Overlay1:       #838BA7;
+    --Overlay1RGB:    131, 139, 167;
+
+    --Overlay0:       #737994;
+    --Overlay0RGB:    115, 121, 148;
+
+    --Surface2:       #626880;
+    --Surface2RGB:    98, 104, 128;
+
+    --Surface1:       #51576D;
+    --Surface1RGB:    81, 87, 109;
+
+    --Surface0:       #414559;
+    --Surface0RGB:    65, 69, 89;
+
+    --Base:           #303446;
+    --BaseRGB:        48, 52, 70;
+
+    --Mantle:         #292C3C;
+    --MantleRGB:      41, 44, 60;
+
+    --Crust:          #232634;
+    --CrustRGB:       35, 38, 52;
+}

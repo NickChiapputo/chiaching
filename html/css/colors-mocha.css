@@ -1,0 +1,79 @@
+root{
+    --mochaRosewater:      ;
+    --mochaRosewaterRGB:   ;
+
+    --mochaFlamingo:       ;
+    --mochaFlamingoRGB:    ;
+
+    --mochaPink:           ;
+    --mochaPinkRGB:        ;
+
+    --mochaMauve:          ;
+    --mochaMauveRGB:       ;
+
+    --mochaRed:            ;
+    --mochaRedRGB:         ;
+
+    --mochaMaroon:         ;
+    --mochaMaroonRGB:      ;
+
+    --mochaPeach:          ;
+    --mochaPeachRGB:       ;
+
+    --mochaYellow:         ;
+    --mochaYellowRGB:      ;
+
+    --mochaGreen:          ;
+    --mochaGreenRGB:       ;
+
+    --mochaTeal:           ;
+    --mochaTealRGB:        ;
+
+    --mochaSky:            ;
+    --mochaSkyRGB:         ;
+
+    --mochaSapphire:       ;
+    --mochaSapphireRGB:    ;
+
+    --mochaBlue:           ;
+    --mochaBlueRGB:        ;
+
+    --mochaLavender:       ;
+    --mochaLavenderRGB:    ;
+
+    --mochaText:           ;
+    --mochaTextRGB:        ;
+
+    --mochaSubtext1:       ;
+    --mochaSubtext1RGB:    ;
+
+    --mochaSubtext2:       ;
+    --mochaSubtext2RGB:    ;
+
+    --mochaOverlay2:       ;
+    --mochaOverlay2RGB:    ;
+
+    --mochaOverlay1:       ;
+    --mochaOverlay1RGB:    ;
+
+    --mochaOverlay0:       ;
+    --mochaOverlay0RGB:    ;
+
+    --mochaSurface2:       ;
+    --mochaSurface2RGB:    ;
+
+    --mochaSurface1:       ;
+    --mochaSurface1RGB:    ;
+
+    --mochaSurface0:       ;
+    --mochaSurface0RGB:    ;
+
+    --mochaBase:           ;
+    --mochaBaseRGB:        ;
+
+    --mochaMantle:         ;
+    --mochaMantleRGB:      ;
+
+    --mochaCrust:          ;
+    --mochaCrustRGB:       ;
+}

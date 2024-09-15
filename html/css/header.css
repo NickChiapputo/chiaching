@@ -1,0 +1,275 @@
+:root {
+    --headerItemHeight: 3.5em;
+    --header-margin-bottom: 2em;
+}
+
+/* Header Bar */
+#header {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    height: fit-content;
+
+    margin-top: 0;
+    margin-bottom: 0em;
+
+    padding-left: min(5em, 5vw);
+    padding-right: min(5em, 5vw);
+
+    background-color: var(--title-background);
+    backdrop-filter: blur(5px);
+    color: var(--title-foreground);
+
+    border-bottom: solid 1px black;
+
+    position: relative;
+    top: 0;
+    left: 0;
+
+    z-index: 999;
+
+
+    /* Drop/box Shadow */
+    box-shadow: var(--title-shadow-h-offset) var(--title-shadow-v-offset) var(--title-shadow-blur) var(--title-shadow-spread) var(--title-shadow-color);
+}
+
+#header > * {
+}
+
+#title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 5em;
+    width: calc(100% - 10em);
+
+    text-align: center;
+    margin-top: 0;
+
+    padding-left: 5em;
+    padding-right: 5em;
+
+    background-color: var(--title-background);
+    color: var(--title-foreground);
+}
+/********************************************/
+/* Sections to Side of Navigation */
+.menuBarSide {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    flex-shrink: 0;
+
+    height: var(--headerItemHeight);
+
+    column-gap: 1em;
+}
+
+.menuBarSide > .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+
+    margin: var(--button-margin);
+
+    border: none;
+    border-radius: var(--border-radius-default);
+
+    color: var(--button-foreground);
+    background-color: var(--button-background);
+
+    cursor: var(--button-cursor);
+    
+    font-size: 1.25em;
+}
+
+.manuBarSide > a:visited {
+    color: inherit;
+}
+
+.menuBarSide>* {
+    max-height: 75%;
+}
+/********************************************/
+/* Menu Bar */
+#menubar {
+    /* Entire Menu Bar */
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
+    flex-flow: row wrap;
+
+    position: relative;
+
+    height: fit-content;
+    width: calc(100% - 10em);
+
+    text-align: center;
+
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 5em;
+    padding-right: 5em;
+
+    justify-content: center;
+
+    /* column-gap: 1.5em; */
+}
+
+#menubar > *.navItem {
+    /* All Children With navItem Class */
+    width: auto;
+    height: var(--headerItemHeight);
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+
+    text-decoration: none;
+    vertical-align: middle;
+
+    font-size: 1em;
+    font-weight: 500;
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+
+    color: var(--navItem-foreground);
+    background-color: var(--navItem-background);
+
+    margin: 0;
+}
+
+#menubar > *.navItem > a {
+    /* All Link Tag Children of navItem Children. */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    text-decoration: none;
+    /* padding-left: 1.5em;
+    padding-right: 1.5em; */
+}
+
+#menubar > *.navItem > a:visited {
+    /* All Visited Link Tag Children of navItem Children. */
+    color: inherit;
+}
+
+#menubar > *.navItem.selected {
+    /* All Children With navItem and selected Classes */
+    color: var(--navItem-selected-foreground);
+    /* background-color: var(--navItem-selected-background); */
+    text-decoration-line: underline;
+    text-decoration-color: var(--navItem-selected-foreground);
+    text-underline-offset: 0.5em;
+    text-decoration-thickness: 0.1em;
+}
+
+#menubar > *.navItem:hover {
+    /* All Children With navItem Class Being Hovered */
+    color: var(--navItem-hover-foreground);
+    background-color: var(--navItem-hover-background);
+
+    text-decoration: underline;
+    text-decoration-color: var(--navItem-hover-underline);
+}
+
+#menubar > *.navItem > .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--navItem-background);
+    color: var(--navItem-foreground);
+    /*top: 100%;*/
+    transform: translate(0, calc(50% + 1.5em));
+
+    box-shadow: var(--title-shadow-h-offset) var(--title-shadow-v-offset) var(--title-shadow-blur) var(--title-shadow-spread) var(--title-shadow-color);
+
+    z-index: 0;
+
+    border-top-right-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    overflow: hidden;
+}
+
+#menubar > *.navItem > .dropdown-content > a {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    height: 3em;
+    
+    color: inherit;
+
+    text-align: left;
+    text-decoration: none;
+}
+
+#menubar > *.navItem > .dropdown-content > a:visited {
+    color: inherit;
+}
+
+#menubar > *.navItem > .dropdown-content > a:hover {
+    color: var(--navItem-hover-foreground);
+    background-color: var(--navItem-hover-background);
+}
+
+#menubar > *.navItem:hover > .dropdown-content {
+    display: block;
+}
+/********************************************/
+
+@media screen and (max-width: 960px) {
+    #menubar {
+        width: 100%;
+        padding: 0;
+    }
+
+    #menubar > *.navItem {
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+    }
+
+    #title {
+        width: calc(100% - 2em);
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    #title>* {
+        font-size: 1.5em;
+    }
+
+    /* Disable dropdown on small screens. */
+    #menubar > *.navItem:hover > .dropdown-content {
+        /*display: none;*/
+    }
+}
+
+@media screen and (max-width: 700px) {
+    #header {
+        position: static;
+    }
+
+    #title>* {
+        font-size: 1.2em;
+    }
+}

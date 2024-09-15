@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Website Icons -->
+        <!-- Source: https://graphicdesign.stackexchange.com/a/69969 -->
+        <!-- Generated with: https://favicomatic.com/ -->
+            <!-- Desktop browsers (including 16x6, 32x32 & 48x48 PNGs)  -->
+            <link rel="shortcut icon" href="/media/logos/favicon.ico">
+
+            <!-- Modern browsers & Devices -->
+            <link rel="icon" type="image/png" href="/media/logos/favicon-16x16.png" sizes="16x16">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-32x32.png" sizes="32x32">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-48x48.png" sizes="48x48">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-64x64.png" sizes="64x64">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-96x96.png" sizes="96x96">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-128x128.png" sizes="128x128">
+            <link rel="icon" type="image/png" href="/media/logos/favicon-196x196.png" sizes="196x196">
+
+            <!-- iOS & other mobile devices -->
+            <link rel="apple-touch-icon" href="/media/logos/touch-icon-iphone.png">
+            <link rel="apple-touch-icon" sizes="76x76" href="/media/logos/touch-icon-ipad.png">
+            <link rel="apple-touch-icon" sizes="120x120" href="/media/logos/touch-icon-iphone-retina.png">
+            <link rel="apple-touch-icon" sizes="152x152" href="/media/logos/touch-icon-ipad-retina.png">
+            <link rel="apple-touch-icon" sizes="167x167" href="/media/logos/touch-icon-ipad-pro.png">
+            <link rel="apple-touch-icon" sizes="180x180" href="/media/logos/touch-icon-iphone-6plus.png">
+
+            <!-- Windows Tiles (optionally omitted and replaced with browserconfig.xml in root directory) -->
+            <meta name="msapplication-TileColor" content="#582686" />
+            <meta name="application-name" content="ChiChing" />
+            <meta name="msapplication-square70x70logo" content="/media/logos/tile-small.png" />
+            <meta name="msapplication-square150x150logo" content="/media/logos/tile-medium.png" />
+            <meta name="msapplication-wide310x150logo" content="/media/logos/tile-wide.png" />
+            <meta name="msapplication-square310x310logo" content="/media/logos/tile-large.png" />
+
+        <!-- Google Fonts Pre-reqs -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <!-- Montserrat -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800" rel="stylesheet">
+
+        <!-- Orbitron -->
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+
+        <!-- Genos -->
+        <link href="https://fonts.googleapis.com/css2?family=Genos:wght@300;400&display=swap" rel="stylesheet"> 
+
+        <!-- Syne -->
+        
+
+
+        <!-- Header and Footer Templates -->
+        <script type="module" src="/header.js"></script>
+
+
+        <!-- JavaScript source files. -->
+        <script type="module" src="index.js"></script>
+        <script src="https://cdn.plot.ly/plotly-2.29.0.min.js" charset="utf-8"></script>
+
+
+        <!-- CSS Styles -->
+        <!-- Update teh colorSchemeCSS href to change the scheme. -->
+        <link rel="stylesheet" id="colorSchemeCSS" href="/css/colors-latte.css">
+        <link rel="stylesheet" href="/css/theme-definition.css">
+        <link rel="stylesheet" href="/css/html_body.css">
+        <!-- <link rel="stylesheet" href="/css/loading.css"> -->
+        <link rel="stylesheet" href="/css/header.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <link rel="stylesheet" href="/css/form.css">
+        <link rel="stylesheet" href="/css/cards.css">
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="budgets.css">
+        <link rel="stylesheet" href="accounts.css">
+        <link rel="stylesheet" href="transactions.css">
+        <link rel="stylesheet" href="modal.css">
+        <link rel="stylesheet" href="responsive.css">
+
+
+        <title>ChiaChing</title>
+    </head>
+    <body>
+        <script>0</script>
+
+        <div id="header"></div>
+
+        <div id="content">
+            <div id="modalContainer" class="modalHidden">
+                <div id="modal" class="modalHidden">
+                    <div id="modalHeader">
+                        <button id="modalExitButton">x</button>
+                    </div>
+                    <div id="modalContent">
+                        <form id="newTransactionForm" class="addNewForm">
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="date">Date<span class="required">*</span></label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="location">Location<span class="required">*</span></label>
+                                <input type="text" id="location" name="location" placeholder="Location" required>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="sourceAccount">Source Account<span class="required">*</span></label>
+                                <select id="sourceAccount" name="sourceAccount" placeholder="Source Account" required>
+                                    <option></option>
+                                </select>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="destinationAccount">Destination Account<span class="required">*</span></label>
+                                <select id="destinationAccount" name="destinationAccount" placeholder="Destination Account" required>
+                                    <option></option>
+                                </select>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="tag">Tag<span class="required">*</span></label>
+                                <input type="text" id="tag" name="tag" placeholder="Tag" required>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="amount">Amount<span class="required">*</span></label>
+                                <input type="number" id="amount" name="amount" min="0.00" step="0.01" value="0.00" required>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="isPaycheck">Is Paycheck</label>
+                                <input type="checkbox" id="isPaycheck" name="isPaycheck">
+                            </div>
+        
+                            <div id="paycheckGrouping" class="addNewForm" style="display:none;">
+                                <!-- Earnings -->
+                                <div class="formInputGroup fullWidthInputGroup">
+                                    <label for="earnings">Paycheck Gross Earnings<span class="required">*</span></label>
+                                    <input type="number" id="earnings" name="earnings" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+        
+                                <!-- Taxes -->
+                                <div class="formInputGroup">
+                                    <label for="federalTaxes">Federal Taxes<span class="required">*</span></label>
+                                    <input type="number" id="federalTaxes" name="federalTaxes" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="stateTaxes">State Taxes<span class="required">*</span></label>
+                                    <input type="number" id="stateTaxes" name="stateTaxes" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+        
+                                <!-- Benefits -->
+                                <div class="formInputGroup">
+                                    <label for="healthcare">Healthcare<span class="required">*</span></label>
+                                    <input type="number" id="healthcare" name="healthcare" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="vision">Vision<span class="required">*</span></label>
+                                    <input type="number" id="vision" name="vision" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="dental">Dental<span class="required">*</span></label>
+                                    <input type="number" id="dental" name="dental" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="401k">401(k)<span class="required">*</span></label>
+                                    <input type="number" id="401k" name="401k" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="hsa">HSA<span class="required">*</span></label>
+                                    <input type="number" id="hsa" name="hsa" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                                <div class="formInputGroup">
+                                    <label for="rothIRA">Roth IRA<span class="required">*</span></label>
+                                    <input type="number" id="rothIRA" name="rothIRA" min="0.00" step="0.01" value="0.00" required>
+                                </div>
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="description">Description</label>
+                                <input type="text" id="description" name="description" placeholder="Description">
+                            </div>
+        
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <input type="submit" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="accounts">
+                <div class="sectionTitle">Accounts</div>
+                <div id="accountsList"></div>
+
+                <div class="sectionTitle">Balance Totals</div>
+                <div id="accountTotalsList">
+                    <div class="accountsListInstitution">
+                        <div class="sectionSubtitle"></div>
+                        <div class="accountsListAccount">
+                            <div class="accountsListAccountName">Total</div>
+                            <div class="accountsListAccountBalance">
+                                <span class="currencySymbol">$</span>
+                                <span class="currencyValue" id="totalValueSpan">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="addAccountButton" class="addNewButton">+ Add Account</button>
+                <form id="newMoneyAccountForm" class="addNewForm" style="display:none;">
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <label for="accountName">Name<span class="required">*</span></label>
+                        <input type="text" id="accountName" name="accountName" placeholder="Account Name" required>
+                    </div>
+
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <label for="institution">Institution<span class="required">*</span></label>
+                        <input type="text" id="institution" name="institution" placeholder="Financial Institution" required>
+                    </div>
+
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <label for="startingBalance">Starting Balance<span class="required">*</span></label>
+                        <input type="number" id="startingBalance" name="startingBalance" step="0.01" value="0.00" required>
+                    </div>
+
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <label for="type">Account Type</label>
+                        <select id="type" name="type" required>
+                            <!-- TODO: Dynamically populate these options from the server's valid list. -->
+                            <option></option>
+                            <option>Checking</option>
+                            <option>Savings</option>
+                            <option>Credit</option>
+                            <option>Investment</option>
+                            <option>Loan</option>
+                        </select>
+                    </div>
+
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+
+            <div id="transactions">
+                <div class="sectionTitle">Transactions</div>
+                <!-- Put header here! -->
+                <form id="transactionDateForm" class="addNewForm">
+                    <div class="formInputGroup">
+                        <label for="transactionListStartDate">Start Date</label>
+                        <input type="date" id="transactionListStartDate" name="transactionListStartDate" required>
+                    </div>
+                    <div class="formInputGroup">
+                        <label for="transactionListEndDate">End Date</label>
+                        <input type="date" id="transactionListEndDate" name="transactionListEndDate" required>
+                    </div>
+                </form>
+                <button id="addTransactionButton" class="addNewButton">+ Add Transaction</button>
+                <table id="transactionsList">
+                    <thead>
+                        <tr>
+                            <th class="transactionTableSelect"></th> <!-- For checkbox to select transactions -->
+                            <th class="transactionTableDate">Date</th>
+                            <th class="transactionTableDescription">Description</th>
+                            <!-- <th class="transactionTableLocation">Location</th> -->
+                            <!-- <th class="transactionTableAccount">Account</th> -->
+                            <th class="transactionTableTag">Tag</th>
+                            <th class="transactionTableAmount">Amount</th>
+                            <th class="transactionTableDelete"></th> <!-- For delete button -->
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="transactionTablePageContainer">
+                    <span id="transactionTableNumbers"></span>
+                    <div id="transactionTablePageSelectionContainer">
+                        <span id="transactionTablePagePrevious" class="transactionPage">Previous</span>
+                        <span id="transactionTablePageNext" class="transactionPage">Next</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="budgets">
+                <div class="sectionTitle">Budgets</div>
+                
+                <div id="budgetsList">
+                </div>
+
+                <button id="addBudgetButton" class="addNewButton">+ Add Budget</button>
+                <form id="newBudgetForm" class="addNewForm" style="display: none;">
+                    <div class="formInputGroup">
+                        <label for="budgetName">Budget Name</label>
+                        <input type="text" id="budgetName" name="budgetName" placeholder="My Budget" required>
+                    </div>
+
+                    <div class="formInputGroup">
+                        <label for="recurrence">Recurrence<span class="required">*</span></label>
+                        <select id="recurrence" name="recurrence" placeholder="Destination Account" required>
+                            <option></option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div id="budgetLines" class="addNewForm" style="width: 100%;">
+                        <div class="formInputGroup">
+                            <label>Tag</label>
+                        </div>
+                        <div class="formInputGroup">
+                            <label>Amount</label>
+                        </div>
+
+                        <div class="formInputGroup">
+                            <!-- <label for="budgetItem1">Tag</label> -->
+                            <input type="text" id="budgetItem1" name="budgetItem1" placeholder="Tag" class="newBudgetLineItemTag">
+                        </div>
+                        <div class="formInputGroup">
+                            <!-- <label for="budgetItem1Amount">Amount</label> -->
+                            <input type="number" id="budgetItem1Amount" name="budgetItem1Amount" min="0.00" step="0.01" value="0.00" class="newBudgetLineItemAmountTag">
+                        </div>
+                    </div>
+
+                    <div class="formInputGroup">
+                        <button type="button" id="addNewBudgetLineItemButton" class="addNewButton">+ Add New Budget Item</button>
+                    </div>
+
+                    <div class="formInputGroup fullWidthInputGroup">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- <div id="footer"></div> -->
+    </body>
+</html>

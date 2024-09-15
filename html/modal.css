@@ -1,0 +1,70 @@
+#modalContainer {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 100vw;
+
+    overflow: hidden;
+
+    /* backdrop-filter: blur(5px); */
+    transition: display 0.25s;
+}
+#modalContainer.modalHidden { pointer-events: none; }
+#modalContainer.modalShow { pointer-events: all; }
+
+#modal {
+    position: absolute;
+
+    display: flex;
+    flex-flow: column nowrap;
+
+    top: var(--modal-show-top);
+    left: calc((100vw - var(--modal-width)) / 2);
+
+    padding: 1rem;
+
+    width: calc(var(--modal-width) - 1rem);
+    height: 80vh; /* TODO: Change this */
+
+    overflow: hidden;
+
+    /* Padding-left of #content */
+    /* left: 5vw; */
+    margin-left: auto;
+    margin-right: auto;
+
+    border: var(--modal-border);
+    border-radius: var(--modal-border-radius);
+
+    background-color: var(--background-color-card-l1);
+    
+    transition: top 0.25s;
+}
+#modal.modalHidden { top: var(--modal-hidden-top); }
+#modal.modalShow { top: var(--modal-show-top); }
+
+#modalHeader {
+    display: flex;
+    /* 
+    Row-reverse to put the only item (exit button) on the right. 
+    If more items are put in the header, consider adding padding
+    to force the exit button to the end instead of using
+    row-reverse (or align-items: flex-end).
+    */
+    flex-flow: row-reverse nowrap;
+}
+
+#modalExitButton {
+    /* Overriding form.css button rules for this element */
+    margin: 0;
+    width: fit-content;
+    aspect-ratio: 1;
+}
+
+
+#modalContent {
+    overflow-y: scroll;
+}

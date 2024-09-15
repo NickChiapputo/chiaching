@@ -1,0 +1,96 @@
+:root {
+	/* Registration Form  */
+		--input-margin-bottom: 3em;
+
+
+	/* Borders */
+		--border-radius-default: 0.5em;
+}
+
+form {
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+}
+
+form input, form select {
+	margin-bottom: var(--input-margin-bottom);
+
+	background-color: var(--background-color-card);
+	color: var(--foreground-text);
+	border: solid 1px var(--foreground-text);
+}
+
+form input:not([type="radio"], [type="checkbox"], [type="submit"]), form select {
+	width: 40%;
+	min-width: 300px;
+	max-width: 90%;
+}
+
+form label, form span {
+	display: inline-block;
+	font-size: 1.25em;
+}
+
+input[type="submit"], input[type="radio"], input[type="checkbox"], button {
+	width: auto;
+}
+
+input[type="submit"]:disabled, input[type="submit"]:disabled:hover {
+	cursor: var(--button-disabled-cursor);
+	background-color: var(--button-disabled-background);
+	color: var(--button-disabled-foreground);
+	filter: grayscale(50%);
+	border: var(--button-disabled-border);
+}
+
+input[type="text"], input[type="email"], input[type="number"], input[type="password"] {
+	padding: 0.5em;
+	border: none;
+	border-bottom: solid 1px var(--foreground-text);
+}
+
+input[type="submit"], button {
+	/* Margin and padding */
+	margin: var(--button-margin);
+
+	/* Size */
+	height: var(--button-height);
+	width: 33%;
+
+	/* Colors */
+	background-color: var(--button-background);
+	color: var(--button-foreground);
+
+	/* Border */
+    border: var(--button-border);
+	border-radius: var(--border-radius-default);
+
+	transition: var(--button-transition);
+
+
+	cursor: var(--button-cursor);
+}
+
+input[type="submit"] {
+
+}
+
+button {
+}
+
+input[type="submit"]:hover, button:hover {
+	color: var(--button-foreground-hover);
+	background-color: var(--button-background-hover);
+}
+
+input[type="radio"], input[type="checkbox"] {
+	width: 1.5em;
+	height: 1.5em;
+	/*margin-bottom: 0.25em;*/
+}
+
+span.required {
+	width: auto;
+	color: var(--nord-aurora-red);
+}

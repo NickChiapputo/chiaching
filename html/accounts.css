@@ -1,0 +1,75 @@
+#accounts {
+    width: var(--accounts-width);
+
+    /* Consider using this if we want it to slide down the side
+       and not have budgets full width. 
+    */
+    /*position: -webkit-sticky;
+    position: sticky;
+    top: 0;*/
+}
+
+#accountsList, #accountTotalsList {
+   width: 100%;
+
+   display: flex;
+   flex-flow: column nowrap;
+}
+
+.accountsListInstitution {
+   width: 100%;
+   margin: var(--accounts-institution-padding);
+
+   background-color: transparent;
+
+   transition: var(--account-background-transition);
+
+   cursor: pointer;
+}
+
+.accountsListInstitution:hover {
+   background-color: var(--account-institution-hover-background);
+}
+
+.accountsListInstitution > .sectionSubtitle {
+   width: calc(100% - 2*var(--account-padding));
+
+   padding: var(--account-padding);
+
+   color: var(--header-row-foreground);
+   background-color: var(--header-row-background);
+}
+
+.accountsListAccount {
+   display: flex;
+   flex-flow: row nowrap;
+   justify-content: space-between;
+
+   padding: var(--account-padding);
+
+   border-bottom: solid 1px var(--table-border-color);
+
+   background-color: transparent;
+   transition: var(--account-background-transition);
+}
+
+.accountsListAccount:hover {
+   background-color: var(--account-hover-background);
+}
+
+.accountsListAccountName {
+   width: var(--account-name-width);
+}
+
+.accountsListAccountBalance {
+   display: flex;
+   flex-flow: row nowrap;
+   justify-content: space-between;
+
+   width: var(--account-balance-width);
+}
+
+
+/**** ADD NEW ACCOUNT ****/
+#newMoneyAccountForm {
+}

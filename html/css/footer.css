@@ -1,0 +1,75 @@
+:root {
+    --footer-height: 5em;
+}
+
+#footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: var(--footer-height);
+    width: calc(100% - 10em);
+
+    text-align: center;
+    margin: 0;
+
+    padding-left: 5em;
+    padding-right: 5em;
+
+    background-color: var(--title-background);
+    color: var(--title-foreground);
+
+
+    /* Drop/box Shadow */
+    box-shadow: var(--title-shadow-h-offset) var(--title-shadow-v-offset) var(--title-shadow-blur) var(--title-shadow-spread) var(--title-shadow-color);
+
+
+    flex-shrink: 0;
+}
+
+#footer>* {
+    max-height: 100%;
+    width: auto;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 1em;
+    letter-spacing: 0.1em;
+
+    vertical-align: middle;
+}
+
+
+/**** FOOTER MAIN LOGO AND SOCIALS ****/
+#footer>.logo {
+    /* Main Logo Container */
+    height: 80% !important;
+}
+
+#footer > .logo > #logo {
+    /* Main Logo */
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
+}
+
+#footer > .social {
+    /* Social Logo Container */
+    height: 25% !important;
+}
+
+#footer > .social > img {
+    /* Social Logos */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#footer > .logo, 
+#footer > .social {
+    /* Spacing for Main and Social Logos */
+    margin: 0 max(1em, 2.5%) 0 max(1em, 2.5%);
+}
+/****************************************/

@@ -1,0 +1,32 @@
+html, body {
+	margin: 0;
+	padding: 0;
+
+    font-family: 'Montserrat', 'Genos', 'Orbitron';
+    height: 100%;
+
+    line-height: 1.5em;
+
+    color: var(--foreground-text);
+    background-color: var(--background-color);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+a {
+    color: var(--nord-frost-light-blue);
+}
+
+a:visited {
+    color: var(--nord-aurora-purple);
+}
+
+
+@media screen and (max-width: 960px) {
+	#contentContainer {
+		width: 95%;
+	}
+}

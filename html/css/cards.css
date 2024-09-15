@@ -1,0 +1,65 @@
+/* Cards */
+div.card {
+    display: flex;
+    flex-flow: row wrap;
+
+    /* Size and margins */
+    width: calc(75% - 2.5em);
+    max-width: 1620px;
+
+    margin: 2.5em auto 5em auto;
+
+    padding: 2em 1em 1em 2em;
+
+    /* Colors */
+    background-color: var(--background-color-card-l1);
+    color: var(--foreground-text);
+
+    /* Roudned Corners */
+    border-radius: 0.5em;
+
+
+    /* Drop/box Shadow */
+    box-shadow: var(--card-shadow-h-offset) var(--card-shadow-v-offset) var(--card-shadow-blur) var(--card-shadow-spread) var(--card-shadow-color);
+}
+
+.cardTitle {
+    margin: 0 auto 1.0em auto;
+    width: 100%;
+    color: var(--foreground-text-card-title);
+    text-align: center;
+    font-size: 2em;
+    letter-spacing: 0.1em;
+    line-height: 1.2em;
+}
+
+div.section {
+    width: 100%;
+    margin-bottom: 3em;
+}
+
+span.sectionTitle {
+    display: block;
+
+    font-size: 1.1em;
+    font-weight: bold;
+
+    font-variant: small-caps;
+
+    margin-bottom: 0.5em;
+}
+
+hr.sectionSeparator {
+    width: 100%;
+    height: 2px;
+    border: none;
+    background-image: linear-gradient( to right, rgba( 255, 255, 255, 0) 0%, var(--ieee-blue) 50%, rgba( 255, 255, 255, 0) 100% );
+    /*background-color: var(--ieee-blue);*/
+    margin-bottom: 2.5em;
+}
+
+@media screen and (max-width: 960px) {
+    div.card {
+        width: calc( 95% - 1em );
+    }
+}

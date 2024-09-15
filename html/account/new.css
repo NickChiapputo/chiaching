@@ -1,0 +1,112 @@
+:root {
+    /* Foreground and background */
+        --background-color:                 var(--sumiInk0);
+        --background-color-card-l1:         var(--nord-polar-night-dark);
+        --background-color-card-l2:         var(--nord-polar-night-light);
+
+        --foreground-text:                  var(--nord-snow-storm-light);
+        --foreground-text-card-title:       var(--nord-snow-storm-light);
+        --foreground-text-link:             var(--nord-frost-light-blue);
+        --foreground-text-link-visited:     var(--nord-aurora-purple);
+        /************************************************/
+        /************************************************/
+
+    /* Title Bar */
+        --title-background:                 transparent;
+        --title-foreground:                 var(--foreground-text);
+
+        --title-shadow-h-offset:            0.00em;
+        --title-shadow-v-offset:            0.00em;
+        --title-shadow-blur:                0.9em;
+        --title-shadow-spread:              0.0em;
+        --title-shadow-color:               rgba( 0, 0, 0, 1.0 );
+
+        /* Nav Items */
+        --navItem-foreground:               var(--nord-snow-storm-light);
+        --navItem-background:               transparent;
+        --navItem-selected-foreground:      var(--nord-snow-storm-light);
+        --navItem-selected-background:      var(--nord-polar-night-darkest);
+        --navItem-hover-foreground:         var(--nord-snow-storm-light);
+        --navItem-hover-background:         var(--navItem-selected-background);
+        /************************************************/
+        /************************************************/
+
+    /* Shadows */
+        --card-shadow-h-offset:             0.00em;
+        --card-shadow-v-offset:             0.00em;
+        --card-shadow-blur:                 0.9em;
+        --card-shadow-spread:               -0.2em;
+        --card-shadow-color:                rgba( 0, 0, 0, 1.0 );
+        /************************************************/
+        /************************************************/
+
+    /* Table Colors */
+        --header-row-background: var(--ieee-blue);
+        --header-row-foreground: white;
+        --unselected-cell-background: var(--nord-snow-storm-light);
+        --border-color: var(--header-row-background);
+        /************************************************/
+        /************************************************/
+}
+
+/* PAGE-WIDE STYLES */
+#content {
+    flex-grow: 1;
+}
+
+div.card {
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+}
+
+.cardSubtitle {
+    font-size: 1em;
+}
+.cardSubtitle > * {
+    font-size: initial;
+}
+.cardSubtitle > a {
+    text-decoration: none;
+}
+
+#header, #footer {
+    backdrop-filter: blur(10px);
+}
+
+#newAccountForm {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#newAccountForm > * {
+    width: 100%;
+    /* Have to subtract 2 * 0.5em for left and right padding. */
+    max-width: calc(20em - 1em);
+}
+
+#newAccountForm > *:user-invalid {
+    border-color: var(--nord-aurora-red);
+}
+
+#newAccountForm > *:-webkit-autofill,
+#newAccountForm > *:autofill {
+    background-color: inherit;
+}
+
+@media screen and (max-width: 960px) {
+    #newAccountForm {
+        width: 100%;
+    }
+
+    #newAccountForm > * {
+        /* Have to subtract 2 * 0.5em for left and right padding. */
+        max-width: calc(100% - 1em);
+    }
+}

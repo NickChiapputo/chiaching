@@ -1,0 +1,72 @@
+@media screen {
+    /* Mobile devices */
+    @media (max-width: 900px) {
+        :root {
+            --mobile: true;
+        }
+
+        #content {
+            padding-left: 0.1rem;
+            padding-right: 0.1rem;
+        }
+
+        #accounts, #transactions, #budgets {
+            padding: calc(0.5 * var(--card-padding));
+        }
+
+        #addTransactionButton {
+            width: 100%;
+        }
+
+        /* Transactions only show date and amount */
+        .transactionTableTag {
+            display: none;
+        }
+
+        .transactionTableDate {
+            width: 3rem;
+        }
+
+        table thead tr th,
+        table tbody tr td {
+            padding-left: 0.1rem;
+            padding-right: 0.1rem;
+        }
+
+        #transactionTablePageContainer {
+            flex-flow: column nowrap;
+            row-gap: 0.5rem;
+            align-items: center;
+        }
+
+        .transactionTableSelect > input[type="checkbox"] {
+            width: 1rem;
+        }
+
+        .transactionTableAmount {
+            min-width: 5rem;
+        }
+    }
+
+    /* Small non-mobile devices */
+    @media (max-width: 1200px) {
+        :root { 
+            --accounts-width: 100%;
+            --transaction-width: 100%;
+        }
+    }
+    
+    @media (min-width: 1201px) {
+        :root {
+            --accounts-width:    calc(25% - 2*var(--card-padding));
+            
+            /*  Must subtract an extra 2*cardPadding because accountsWidth does not 
+                include its 2*cardPadding.
+                Must subtract 4*cardBorderWidth for left and right borders of account
+                and transaction elements. */
+            --transaction-width: calc(100% - var(--accounts-width) - 
+                var(--accounts-margin-right) - 4*var(--card-padding) - 
+                4*var(--card-border-width));
+        }
+    }
+}

@@ -1,0 +1,51 @@
+:root {
+    --title-height: 5em;
+    --title-left-padding: 5em;
+    --title-right-padding: 5em;
+}
+
+#title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: var(--title-height);
+    width: calc(100% - var(--title-left-padding) - var(--title-right-padding));
+
+    text-align: center;
+    margin-top: 0;
+
+    padding-left: var(--title-right-padding);
+    padding-right: var(--title-left-padding);
+
+    background-color: var(--title-background);
+    color: var(--title-foreground);
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+
+    z-index: 999;
+
+
+    /* Drop/box Shadow */
+    box-shadow: var(--title-shadow-h-offset) var(--title-shadow-v-offset) var(--title-shadow-blur) var(--title-shadow-spread) var(--title-shadow-color);
+}
+
+#title>* {
+    max-height: 100%;
+    width: auto;
+    /*max-width: 20%;*/
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 2em;
+    letter-spacing: 0.1em;
+
+    vertical-align: middle;
+}
+
+#title>img {
+    max-height: 40%;
+}

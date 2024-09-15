@@ -1,0 +1,96 @@
+:root {
+    /* Theme Colors */
+        --primary:                          var(--Sapphire);
+        --primaryRGB:                       var(--SapphireRGB);
+
+        --primaryForeground:                var(--Base);
+        --primaryForegroundRGB:             var(--BaseRGB);
+
+    /* Foreground and background */
+        --background-color:                 var(--Base);
+        --background-color-card-l1:         var(--Surface0);
+        --background-color-card-l2:         var(--Surface1);
+
+        --card-background:                  transparent;
+
+        --foreground-text:                  var(--Text);
+        --foreground-text-card-title:       var(--foreground-text);
+        --foreground-text-link:             var(--Sky);
+        --foreground-text-link-visited:     var(--Lavender);
+
+        --negative-currency-foreground:     var(--Red);
+        /************************************************/
+        /************************************************/
+
+    /* Title Bar */
+        --title-background:                 tranparent;
+        --title-foreground:                 var(--foreground-text);
+
+        --title-shadow-h-offset:            0.00em;
+        --title-shadow-v-offset:            0.00em;
+        --title-shadow-blur:                0.9em;
+        --title-shadow-spread:              0.0em;
+        --title-shadow-color:               var(--background-color);
+
+        /* Nav Items */
+        --navItem-foreground:               var(--foreground-text);
+        --navItem-background:               transparent;
+        --navItem-selected-foreground:      var(--Subtext1);
+        --navItem-selected-background:      var(--navItem-background);
+        --navItem-selected-underline:       var(--navItem-selected-foreground);
+        --navItem-hover-foreground:         var(--navItem-foreground);
+        --navItem-hover-background:         var(--navItem-background);
+        --navItem-hover-underline:          var(--Subtext1);
+        /************************************************/
+        /************************************************/
+
+    /* Shadows */
+        --card-shadow-h-offset:             0.00em;
+        --card-shadow-v-offset:             0.00em;
+        --card-shadow-blur:                 0.9em;
+        --card-shadow-spread:               -0.2em;
+        --card-shadow-color:                rgba( 0, 0, 0, 1.0 );
+        /************************************************/
+        /************************************************/
+
+    /* Table Colors */
+        --header-row-background:            var(--Overlay0);
+        --header-row-backgroundRGB:         var(--Overlay0RGB);
+        --header-row-foreground:            var(--background-color);
+        --unselected-cell-background:       transparent;
+
+        --odd-row-background:               transparent;
+        --even-row-background:              var(--odd-row-background);
+
+        --table-border-color:               rgba(var(--header-row-backgroundRGB), 0.5);
+        /************************************************/
+        /************************************************/
+
+    /* Button Colors */
+        --button-background:                var(--background-color);
+        --button-background-hover:          rgba( var(--primaryRGB ), 0.75 );
+
+        --button-foreground:                var(--foreground-text);
+        --button-foreground-hover:          var(--primaryForeground);
+
+        --button-border:                    solid 1px var(--button-background-hover);
+        --button-border-hover:              var(--button-border);
+
+        --button-transition:                background-color 0.25s, color 0.25s, border 0.25s;
+
+        --button-margin-top: 2em;
+        --button-margin-right: auto;
+        --button-margin-bottom: 2em;
+        --button-margin-left: auto;
+        --button-margin: var(--button-margin-top) var(--button-margin-right) var(--button-margin-bottom) var(--button-margin-left);
+        --button-height: 3em;
+
+        --button-cursor: pointer;
+
+        --button-disabled-cursor: default;
+        --button-disabled-background: var(--button-background);
+        --button-disabled-foreground: gray;
+        --button-disabled-border: none;
+        /************************************************/
+        /************************************************/
+}

@@ -1,0 +1,188 @@
+:root {
+    --card-padding: 1em;
+    --card-gap: var(--card-padding);
+    --card-border-width: 1px;
+    --card-border: solid var(--card-border-width) black;
+    --card-border-radius: 0.25em;
+
+
+    --accounts-margin-right: var(--card-gap);
+
+    /* Transactions */
+
+        --transaction-hover-background: var(--background-color-card-l2);
+        --transaction-background-transition: background 0.25s;
+
+    /* Accounts */
+        --accounts-institution-padding: 0 0 var(--card-padding) 0;
+        --account-padding: calc(0.5 * var(--transaction-table-cell-side-padding));
+
+        --account-name-width: 60%;
+        --account-balance-width: calc(100% - var(--account-name-width));
+
+        --account-institution-hover-background: var(--background-color-card-l1);
+        --account-hover-background: var(--background-color-card-l2);
+        --account-background-transition: var(--transaction-background-transition);
+
+    /* Sections */
+        --section-title-font-size:      1.25em;
+        --section-title-font-weight:    bold;
+        --section-title-margin-bottom:  calc(0.5 * var(--card-padding));
+
+        --section-subtitle-font-size:   1.10em;
+        --section-subtitle-font-weight: 500; /* 700 is bold */
+        /************************************************/
+        /************************************************/
+
+    /* Table */
+        --transaction-table-cell-side-padding: calc(0.5 * var(--card-padding));
+
+    /* Modal */
+        --modal-width: calc(
+            100vw - 2*1em
+        );
+
+        --modal-border: 1px solid black;
+        --modal-border-radius: 1rem;
+
+
+        /* Height of header items plus header margin-bottom */
+        --modal-show-top: calc(
+            var(--headerItemHeight) + 
+            var(--header-margin-bottom)
+        );
+        --modal-hidden-top: 105vh;
+
+}
+
+/* PAGE-WIDE STYLES */
+
+#content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    height: calc(100vh - var(--headerItemHeight));
+    overflow: scroll!important;
+    -webkit-overflow-scrolling: touch!important;
+
+    padding-top: var(--header-margin-bottom);
+    padding-bottom: var(--footer-height);
+
+    align-content: flex-start; /* Left align */
+
+    row-gap: var(--card-gap);
+
+    padding-left: 5vw;
+    padding-right: 5vw;
+}
+
+#accounts, #transactions, #budgets {
+    display: flex;
+    align-items: flex-start;
+    flex-flow: column;
+
+    height: fit-content;
+
+    margin: 0;
+    padding: var(--card-padding);
+
+    background: var(--card-background);
+
+    border: var(--card-border);
+    border-radius: var(--card-border-radius);
+}
+
+
+.currencyAmountNegative {
+    color: var(--negative-currency-foreground);
+}
+
+/* Add styling to all fields with the contenteditable attribute set.
+   This is mainly for editable values in table cells (budget, account, transactions) */
+[contenteditable="true"] {
+    border-bottom: var(--card-border);
+    text-decoration-style: italic;
+}
+
+
+/* New transaction and account form and buttons */
+.addNewButton {
+    width: auto;
+    height: auto;
+
+    padding: calc(0.75 * var(--card-padding));
+
+    /* Retain default button margin-right and -top */
+    margin-left: 0;
+    margin-bottom: 0;
+}
+
+.addNewForm {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+
+    max-width: 50rem;
+}
+.formInputGroup {
+    width: calc(50% - 2*0.5em - 0.5em);
+}
+.formInputGroup > label {
+    width: calc(100% - 2*0.5em);
+    max-width: 100%;
+}
+
+.formInputGroup.fullWidthInputGroup {
+    display: flex;
+    flex-flow: column wrap;
+
+    width: 100%;
+    max-width: 100%;
+}
+.formInputGroup.fullWidthInputGroup > * {
+    width: calc(100% - 2*0.5em);
+    max-width: 100%;
+}
+.formInputGroup > input[type="submit"] {
+    height: auto;
+    min-width: 50%;
+    width: fit-content;
+    padding: 1em 2em 1em 2em;
+    margin: 0;
+}
+.formInputGroup > input[type="checkbox"] {
+    width: fit-content;
+    max-width: 100%;
+}
+.formInputGroup > button {
+    margin-top: 0;
+    margin-bottom: var(--input-margin-bottom);
+}
+
+
+/**** BUDGETS ****/
+#budgets {
+    width: 100%;
+}
+
+
+/* Headers for accounts, transactions, and budgets sections. */
+.sectionTitle {
+    width: 100%;
+
+    font-size: var(--section-title-font-size);
+    font-weight: var(--section-title-font-weight);
+    font-variant: small-caps;
+
+    letter-spacing: 0.05em;
+
+    margin-bottom: var(--section-title-margin-bottom);
+}
+
+.sectionSubtitle {
+    width: 100%;
+
+    font-size: var(--section-subtitle-font-size);
+    font-weight: var(--section-subtitle-font-weight);
+}

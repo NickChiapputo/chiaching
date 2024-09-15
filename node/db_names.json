@@ -1,0 +1,9 @@
+{
+    "dbName"                        : "finances",
+    "usersCollectionName"           : "users",
+    "loginTokensCollectionName"     : "sessions",
+    "accountsCollectionName"        : "accounts",
+    "budgetTemplatesCollectionName" : "budgetTemplates",
+    "budgetsCollectionName"         : "budgets",
+    "transactionsCollectionName"    : "transactions"
+}

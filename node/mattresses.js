@@ -12,20 +12,15 @@ try
 catch( e ) { console.error( `Unable to read from DB names config file.\n${e}` ); }
 
 const ACTION_HANDLERS = {
-    new: createMattress,
     get: getMattress,
     getNames: getMattressNames,
-    // editBalance: updateAccountBalance,
-    // edit: updateAccountInformation,
+    create: createMattress,
+    // setAmount: setAmount,
+    // setMaxAmount: setMaxAmount,
 };
 
 module.exports = {
     ACTION_HANDLERS: ACTION_HANDLERS,
-
-    get: this.getMattress,
-    create: this.createMattress,
-    setAmount: this.setAmount,
-    setMaxAmount: this.setMaxAmount,
 };
 
 /**
@@ -136,7 +131,7 @@ async function getMattress( res, req, data )
         return;
     }
 
-    if( util.validateNonEmptyString( data.name ) )
+    if( !util.validateNonEmptyString( data.name ) )
     {
         util.resolveAction( res, 400, { response: RESPONSE_CODES.MissingData } );
         return;
@@ -144,9 +139,8 @@ async function getMattress( res, req, data )
 
     let result, query, options;
     query = {
-        username: username,
-        name: accountName,
-        institution: institution
+        username: user.username,
+        name: util.parseStringTrim( data.name ),
     };
 
     options = {
@@ -164,7 +158,10 @@ async function getMattress( res, req, data )
     if( !result )
         util.resolveAction( res, 500, { "response": RESPONSE_CODES.DatabaseError } );
     else
-        util.resolveAction( res, 200, { "response": RESPONSE_CODES.OK } )
+        util.resolveAction( res, 200, { 
+            response: RESPONSE_CODES.OK, 
+            mattress: result 
+        } );
     return;
 }
 

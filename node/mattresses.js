@@ -233,6 +233,14 @@ async function getMattressNames( res, req )
     return;
 }
 
+/**
+ * Increment the amount in `username`'s mattress `mattressName` by `amount`.
+ * @param {*} username      User who owns 'mattressName'.
+ * @param {*} mattressName  Mattress to update.
+ * @param {*} amount        Amount to update mattress's `amount` field by.
+ * @returns MongoDB update item result (containing original item) on success
+ *          or null on failure.
+ */
 async function incrementAmount( username, mattressName, amount )
 {
     let query = {

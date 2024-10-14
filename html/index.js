@@ -918,10 +918,89 @@ import {send} from "/send.js"
     };
 
 
+    const setSelectOption = (select, value, optgroup) => {
+        // optgroup is optional
+
+        // Get options for select box
+        let no_parent_check = optgroup == undefined;
+        for( let i = 0; i < select.options.length; i++ ) {
+            let opt = select.options[ i ];
+            if( opt.value == value ) {
+                let parent_matches = !no_parent_check && 
+                    opt.parentNode.label == optgroup;
+                let no_parent_optgroup = opt.parentNode.nodeName != "OPTGROUP";
+
+                // If we aren't looking for a parent, if the parent matches and 
+                // we are looking for the parent or if there is no parent 
+                // optgroup, then we have found the correct option.
+                if( no_parent_check || parent_matches || no_parent_optgroup ) {
+                    // found it
+                    select.selectedIndex = i;
+                    return i;
+                }
+            }
+        }
+
+        return null;
+    }
+
     const showTransactionDetailsModal = (e) => {
+        // Find the transaction
+
+        let transaction_id = e.target.parentNode.getAttribute("_id");
+        let transaction = undefined;
+        for( let i = 0; i < transactions.length; i++ ) {
+            if( transactions[ i ][ "_id" ] == transaction_id ) {
+                transaction = transactions[ i ];
+                break;
+            }
+        }
+
+        if( transaction === undefined )
+            return;
+
         showModal(true);
 
         // TODO: Populate details
+        // Set date
+        date.value = transaction.date.substring(0,10);
+
+        // Set location
+        document.getElementById("location").value = transaction.location;
+
+        // Set source account
+        setSelectOption(sourceAccount, transaction.sourceAccount, transaction.sourceInstitution);
+
+        // Set destination account
+        setSelectOption(destinationAccount, transaction.destinationAccount, transaction.destinationInstitution);
+        // Set mattress (if applicable)
+        if( transaction.mattress ) {
+            // TODO: this
+            // setSelectOption( transactionMattressName, transaction.mattress );
+        }
+
+        // Set tag
+        tag.value = transaction.tag;
+
+        // Set amount
+        amount.value = transaction.amount;
+
+        // Set paycheck
+            // Set gross earnings
+            // Set federal taxes
+            // Set state taxes
+            // Set healthcare
+            // Set vision
+            // Set dental
+            // Set 401(k)
+            // Set HSA
+            // Set Roth IRA
+
+        // Set description
+        description.value = transaction.description;
+
+        // Hide submission button
+        transactionSubmit.disabled = true;
     };
 
 

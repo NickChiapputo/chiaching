@@ -3,6 +3,7 @@
     @media (max-width: 900px) {
         :root {
             --mobile: true;
+            --modal-width: calc( 98vw - 2*1em );
         }
 
         #content {

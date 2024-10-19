@@ -959,7 +959,7 @@ import {send} from "/send.js"
         if( transaction === undefined )
             return;
 
-        showModal(true);
+        showModal(true, true);
 
         // TODO: Populate details
         // Set date
@@ -1009,7 +1009,18 @@ import {send} from "/send.js"
     };
 
 
-    const showModal = (show) => {
+    /**
+     * Display or hide the transaction modal dependent on `show`. All input 
+     * fields will be cleared and the date input will be set to today's date.
+     * 
+     * If `existingTransaction` is set, the modal will be set up with input 
+     * fields and the submit button disabled by default and the edit button next
+     * to each input field will be enabled.
+     * 
+     * @param {*} show                  Flag to show or hide the modal
+     * @param {*} existingTransaction   Flag to disable or enable input fields
+     */
+    const showModal = (show, existingTransaction) => {
         modalContainer.classList.remove( "modalHidden" );
         modal.classList.remove( "modalHidden" );
         modalContainer.classList.remove( "modalShow" );
@@ -1024,6 +1035,26 @@ import {send} from "/send.js"
             transactionMattressName.appendChild( mattressOption );
         });
 
+        // Clear the input fields.
+        date.value = new Date().toISOString().substring(0,10);
+        document.getElementById("location").value = "";
+        sourceAccount.selectedIndex = 0;
+        destinationAccount.selectedIndex = 0;
+        // TODO: Set mattress (if applicable)
+        tag.value = "";
+        amount.value = "";
+        // Set paycheck
+            // Set gross earnings
+            // Set federal taxes
+            // Set state taxes
+            // Set healthcare
+            // Set vision
+            // Set dental
+            // Set 401(k)
+            // Set HSA
+            // Set Roth IRA
+        description.value = "";
+
         if( show )
         {  // Show modal
             modalContainer.classList.add( "modalShow" );
@@ -1034,6 +1065,37 @@ import {send} from "/send.js"
             modalContainer.classList.add( "modalHidden" );
             modal.classList.add( "modalHidden" );
         }
+
+        // If we are showing an existing transaction, we want to disable the
+        // input fields and submit button by default and enable the edit 
+        // buttons.
+        date.disabled = existingTransaction;
+        document.getElementById("location").disabled = existingTransaction;
+        sourceAccount.disabled = existingTransaction;
+        destinationAccount.disabled = existingTransaction;
+        transactionMattressName.disabled = existingTransaction;
+        tag.disabled = existingTransaction;
+        amount.disabled = existingTransaction;
+
+        isPaycheck.disabled = existingTransaction;
+        earnings.disabled = existingTransaction;
+        federalTaxes.disabled = existingTransaction;
+        stateTaxes.disabled = existingTransaction;
+        healthcare.disabled = existingTransaction;
+        vision.disabled = existingTransaction;
+        dental.disabled = existingTransaction;
+        document.getElementById("401k").disabled = existingTransaction;
+        hsa.disabled = existingTransaction;
+        rothIRA.disabled = existingTransaction;
+
+        description.disabled = existingTransaction;
+        transactionSubmit.disabled = existingTransaction;
+
+        let editButtons = document.getElementsByClassName( "inputEditButton" )
+        for( let button of editButtons ) {
+            button.style.display = existingTransaction ? "" : "none";
+        }
+
 
 
         // On Firefox, the calendar icon will show through any

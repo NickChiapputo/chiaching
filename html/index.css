@@ -161,6 +161,18 @@
     margin-bottom: var(--input-margin-bottom);
 }
 
+/* Used for an input field with an edit button */
+.formInputGroup > div.inputWithButton {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.formInputGroup > div.inputWithButton > img {
+    height: 1em;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
 
 /**** BUDGETS ****/
 #budgets {

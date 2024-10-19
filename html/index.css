@@ -39,8 +39,9 @@
 
     /* Modal */
         --modal-width: calc(
-            100vw - 2*1em
+            50vw - 2*1em
         );
+        --modal-max-width: 50em;
 
         --modal-border: 1px solid black;
         --modal-border-radius: 1rem;

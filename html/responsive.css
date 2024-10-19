@@ -51,22 +51,22 @@
 
     /* Small non-mobile devices */
     @media (max-width: 1200px) {
-        :root { 
+        :root {
             --accounts-width: 100%;
             --transaction-width: 100%;
         }
     }
-    
+
     @media (min-width: 1201px) {
         :root {
             --accounts-width:    calc(25% - 2*var(--card-padding));
-            
-            /*  Must subtract an extra 2*cardPadding because accountsWidth does not 
+
+            /*  Must subtract an extra 2*cardPadding because accountsWidth does not
                 include its 2*cardPadding.
                 Must subtract 4*cardBorderWidth for left and right borders of account
                 and transaction elements. */
-            --transaction-width: calc(100% - var(--accounts-width) - 
-                var(--accounts-margin-right) - 4*var(--card-padding) - 
+            --transaction-width: calc(100% - var(--accounts-width) -
+                var(--accounts-margin-right) - 4*var(--card-padding) -
                 4*var(--card-border-width));
         }
     }

@@ -49,7 +49,7 @@
 
         /* Height of header items plus header margin-bottom */
         --modal-show-top: calc(
-            var(--headerItemHeight) + 
+            var(--headerItemHeight) +
             var(--header-margin-bottom)
         );
         --modal-hidden-top: 105vh;

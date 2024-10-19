@@ -70,19 +70,19 @@ import {send} from "/send.js"
 
         send(
             "/api/user/validateToken", "GET", {},
-            (response) => { 
-                if( !response.data ) 
+            (response) => {
+                if( !response.data )
                     window.location = `/account/login?redir_url=${window.location}`;
             },
-            (err, response, status) => { 
+            (err, response, status) => {
                 if( err )
-                    console.error( "Check login error!\n" + err ); 
+                    console.error( "Check login error!\n" + err );
                 else
                     console.error( `Check login error! ${status}\n${JSON.stringify(response, null, 2)}` );
             },
             true
         );
-        
+
         modalContainer.addEventListener( "click", (e) => {
             if( e.target == modalContainer ) showModal(false);
         } );
@@ -109,9 +109,9 @@ import {send} from "/send.js"
         newTransactionPaycheckSubform = document.getElementById( "paycheckGrouping" );
 
         let currDate = new Date();
-        setTransactionsDates( 
+        setTransactionsDates(
             new Date( currDate.getFullYear(), currDate.getMonth(), 1 ),
-            new Date( currDate.getFullYear(), currDate.getMonth() + 1, 0 )   
+            new Date( currDate.getFullYear(), currDate.getMonth() + 1, 0 )
         );
 
         transactionListStartDate.addEventListener( "change", e => getTransactions() );
@@ -153,9 +153,9 @@ import {send} from "/send.js"
                 budgetNames = resp.budgetNames;
                 budgetNames.forEach( getBudget );
             },
-            (e, resp, status) => { 
+            (e, resp, status) => {
                 console.error( e );
-                console.log( status, resp ); 
+                console.log( status, resp );
             },
             true
         );
@@ -171,9 +171,9 @@ import {send} from "/send.js"
 
         send( "/api/budget/get", "POST", query,
             (resp, status) => { displayBudget( resp.budget, resp.transactions ); },
-            (e, resp, status) => { 
+            (e, resp, status) => {
                 console.error( e );
-                console.log( status, resp ); 
+                console.log( status, resp );
             },
             true
         );
@@ -244,8 +244,8 @@ import {send} from "/send.js"
         });
 
         // Sort tags alphabetically, case insensitive.
-        tags.sort((a, b) => { 
-            return a.localeCompare( b, "en", {"sensitivity" : "base"} ); 
+        tags.sort((a, b) => {
+            return a.localeCompare( b, "en", {"sensitivity" : "base"} );
         });
 
 
@@ -287,7 +287,7 @@ import {send} from "/send.js"
                 currentCell.classList.toggle( cell.class );
                 currentCell.classList.toggle( "transactionTableAmount" );
                 if( cell.value < 0 ) currentCell.classList.toggle( "currencyAmountNegative" );
-                
+
                 let amountStr = numberToCurrencyString( cell.value );
 
                 let currencySignSpan = document.createElement( "span" );
@@ -359,7 +359,7 @@ import {send} from "/send.js"
         let data = { lineItems: [] };
         let formData = new FormData( newBudgetForm );
         formData.forEach( (val, key) => {
-            // Handle budget items separately. Amount will be taken at the same 
+            // Handle budget items separately. Amount will be taken at the same
             // time as the tag item, so we can skip it.
             // If not a budget item, add to object normally.
             if( key.endsWith( "Amount" ) ) return;
@@ -396,15 +396,15 @@ import {send} from "/send.js"
         let numInputs = tagInputs.length;
         let nextID = numInputs + 1;
 
-        // If tag is empty and it and the associated amount field do not have 
+        // If tag is empty and it and the associated amount field do not have
         // focus, remove the line item.
         for( let i = 0; i < tagInputs.length; i++ )
         {
             let currTagInput = tagInputs[ i ];
             let currAmountInput = amountInputs[ i ];
 
-            if( currTagInput.value == "" && 
-                document.activeElement !== currTagInput && 
+            if( currTagInput.value == "" &&
+                document.activeElement !== currTagInput &&
                 document.activeElement !== currAmountInput )
             {
                 nextID = parseInt( currTagInput.getAttribute( "name" ).substring( 10 ) );
@@ -424,7 +424,7 @@ import {send} from "/send.js"
         // Add new line item at end of list.
         let tagInputParentGrouping = document.createElement( "div" );
         tagInputParentGrouping.classList.toggle( "formInputGroup" );
-        
+
         let tagInput = document.createElement( "input" );
         tagInput.setAttribute( "type", "text" );
         tagInput.setAttribute( "id", `budgetItem${nextID}` );
@@ -436,7 +436,7 @@ import {send} from "/send.js"
 
         let amountInputParentGrouping = document.createElement( "div" );
         amountInputParentGrouping.classList.toggle( "formInputGroup" );
-        
+
         let amountInput = document.createElement( "input" );
         amountInput.setAttribute( "type", "number" );
         amountInput.setAttribute( "id", `budgetItem${nextID}Amount` );
@@ -489,18 +489,18 @@ import {send} from "/send.js"
 
         // Parse selections for source and destination account to
         // check for the institutions.
-        data[ "sourceInstitution" ] = data.sourceAccount !== "Outside" ? 
+        data[ "sourceInstitution" ] = data.sourceAccount !== "Outside" ?
             newTranscationSourceAccountSelect[ newTranscationSourceAccountSelect.selectedIndex ].closest( "optgroup" )?.label :
             "Outside";
-        data[ "destinationInstitution"] = data.destinationAccount !== "Outside" ? 
+        data[ "destinationInstitution"] = data.destinationAccount !== "Outside" ?
             newTranscationDestinationAccountSelect[ newTranscationDestinationAccountSelect.selectedIndex ].closest( "optgroup" )?.label :
             "Outside";
 
         // The key value is kind of ugly
         // so just make it a little nicer.
-        delete Object.assign( 
-            data, 
-            {["mattress"]: data["transactionMattressName"]} 
+        delete Object.assign(
+            data,
+            {["mattress"]: data["transactionMattressName"]}
         )["transactionMattressName"];
 
         xmlHttp.open( "POST", "/api/transactions/new" );
@@ -597,9 +597,9 @@ import {send} from "/send.js"
     };
 
     const getTransactions = () => {
-        send( "/api/transactions/getWithinDate", "POST", 
-            { 
-                startDate: transactionListStartDate.value, 
+        send( "/api/transactions/getWithinDate", "POST",
+            {
+                startDate: transactionListStartDate.value,
                 endDate: transactionListEndDate.value
             },
             (resp, status) => {
@@ -638,9 +638,9 @@ import {send} from "/send.js"
 
                 populateTransactions();
             },
-            (e, resp, status) => { 
+            (e, resp, status) => {
                 console.error( e );
-                console.log( status, resp ); 
+                console.log( status, resp );
             },
             true
         );
@@ -683,21 +683,21 @@ import {send} from "/send.js"
         // Place transactions from the current page into the table.
         let start_transaction = num_transactions_per_page * (page_num - 1);
         let end_transaction = Math.min((num_transactions_per_page * page_num), transactions.length);
-        transactions.slice( 
+        transactions.slice(
             start_transaction,
             end_transaction
         ).forEach(appendTransaction);
 
         // Display transaction numbers being shown.
-        transactionTableNumbers.innerHTML = 
+        transactionTableNumbers.innerHTML =
             `Showing ${start_transaction+1}–${end_transaction} of ${transactions.length}`;
 
         // Create links for the pages.
         // Remove existing links except next and previous
         while( transactionTablePageSelectionContainer.children.length != 2 )
         {
-            transactionTablePageSelectionContainer.removeChild( 
-                transactionTablePageSelectionContainer.children[ 1 ] 
+            transactionTablePageSelectionContainer.removeChild(
+                transactionTablePageSelectionContainer.children[ 1 ]
             );
         }
 
@@ -712,7 +712,7 @@ import {send} from "/send.js"
             new_page.innerHTML = i;
             new_page.setAttribute( "page", i );
             new_page.addEventListener( "click", (e) => updateTransactionPage(i) );
-            transactionTablePageSelectionContainer.insertBefore( 
+            transactionTablePageSelectionContainer.insertBefore(
                 new_page, transactionTablePageNext
             );
         }
@@ -756,16 +756,16 @@ import {send} from "/send.js"
         transactionsDiv.tBodies[0].innerHTML = '';
         let start_transaction = num_transactions_per_page * (page_num - 1);
         let end_transaction = Math.min((num_transactions_per_page * page_num), transactions.length);
-        transactions.slice( 
+        transactions.slice(
             start_transaction,
             end_transaction
         ).forEach(appendTransaction);
 
         // Display transaction numbers being shown.
-        transactionTableNumbers.innerHTML = 
+        transactionTableNumbers.innerHTML =
             `Showing ${start_transaction+1}–${end_transaction} of ${transactions.length}`;
 
-        
+
         transactionTablePageNext.setAttribute( "next_page", page_num + 1);
         transactionTablePagePrevious.setAttribute( "previous_page", page_num - 1);
     };
@@ -793,8 +793,8 @@ import {send} from "/send.js"
         let month_str = (dateObj.getUTCMonth()+1).toString();
         let day_str_padded = ("00" + dateObj.getUTCDate()).slice(-2)
         let day_str = dateObj.getUTCDate().toString()
-        let date = is_mobile ? 
-            `${month_str_padded}/${day_str_padded}` : 
+        let date = is_mobile ?
+            `${month_str_padded}/${day_str_padded}` :
             `${year_str}-${month_str_padded}-${day_str_padded}`;
 
         let description = transaction.description ? transaction.description : "-";
@@ -904,14 +904,14 @@ import {send} from "/send.js"
     const deleteTransaction = (transactionEl) => {
         console.log( transactionEl )
         send( "/api/transactions/delete", "POST", { "_id": transactionEl.getAttribute( "_id" ) },
-            (resp, status) => { 
+            (resp, status) => {
                 getMoneyAccounts();
                 getTransactions();
             },
-            (e, resp, status) => { 
+            (e, resp, status) => {
                 alert( `Error deleting transaction. ${e}\n\nServer Response: ${status}, ${JSON.stringify(resp, null, 2)}` )
                 console.error( e );
-                console.log( status, resp ); 
+                console.log( status, resp );
             },
             true
         );
@@ -926,12 +926,12 @@ import {send} from "/send.js"
         for( let i = 0; i < select.options.length; i++ ) {
             let opt = select.options[ i ];
             if( opt.value == value ) {
-                let parent_matches = !no_parent_check && 
+                let parent_matches = !no_parent_check &&
                     opt.parentNode.label == optgroup;
                 let no_parent_optgroup = opt.parentNode.nodeName != "OPTGROUP";
 
-                // If we aren't looking for a parent, if the parent matches and 
-                // we are looking for the parent or if there is no parent 
+                // If we aren't looking for a parent, if the parent matches and
+                // we are looking for the parent or if there is no parent
                 // optgroup, then we have found the correct option.
                 if( no_parent_check || parent_matches || no_parent_optgroup ) {
                     // found it
@@ -973,6 +973,7 @@ import {send} from "/send.js"
 
         // Set destination account
         setSelectOption(destinationAccount, transaction.destinationAccount, transaction.destinationInstitution);
+
         // Set mattress (if applicable)
         if( transaction.mattress ) {
             // TODO: this
@@ -1010,13 +1011,13 @@ import {send} from "/send.js"
 
 
     /**
-     * Display or hide the transaction modal dependent on `show`. All input 
+     * Display or hide the transaction modal dependent on `show`. All input
      * fields will be cleared and the date input will be set to today's date.
-     * 
-     * If `existingTransaction` is set, the modal will be set up with input 
+     *
+     * If `existingTransaction` is set, the modal will be set up with input
      * fields and the submit button disabled by default and the edit button next
      * to each input field will be enabled.
-     * 
+     *
      * @param {*} show                  Flag to show or hide the modal
      * @param {*} existingTransaction   Flag to disable or enable input fields
      */
@@ -1067,7 +1068,7 @@ import {send} from "/send.js"
         }
 
         // If we are showing an existing transaction, we want to disable the
-        // input fields and submit button by default and enable the edit 
+        // input fields and submit button by default and enable the edit
         // buttons.
         date.disabled = existingTransaction;
         document.getElementById("location").disabled = existingTransaction;
@@ -1251,7 +1252,7 @@ import {send} from "/send.js"
     };
 
 
-    const numberToCurrencyString = (n) => { 
+    const numberToCurrencyString = (n) => {
         let str = Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         if( n < 0 )
             str = '(' + str + ')';
@@ -1309,11 +1310,11 @@ import {send} from "/send.js"
 
                 let amountStr = numberToCurrencyString( account.balance );
                 if( account.balance < 0 ) accountBalanceEl.classList.toggle( "currencyAmountNegative" );
-                
+
                 let currencySignSpan = document.createElement( "span" );
                 currencySignSpan.classList.toggle( "currencySymbol" );
                 currencySignSpan.innerHTML = amountStr[0];
-                
+
                 let amountSpan = document.createElement( "span" );
                 amountSpan.classList.toggle( "currencyValue" );
                 amountSpan.innerHTML = amountStr.substring(1);
@@ -1412,7 +1413,7 @@ import {send} from "/send.js"
             let adminRefLink = document.createElement( "a" );
             adminRefLink.href = "/admin";
             adminRefLink.innerHTML = "admin";
-            
+
             // Add link to nav item.
             adminDashboardNavItem.appendChild( adminRefLink );
 

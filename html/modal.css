@@ -41,7 +41,7 @@
     background-color: rgba(var(--background-color-card-l1), 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    
+
     transition: top 0.25s;
 }
 #modal.modalHidden { top: var(--modal-hidden-top); }
@@ -49,8 +49,8 @@
 
 #modalHeader {
     display: flex;
-    /* 
-    Row-reverse to put the only item (exit button) on the right. 
+    /*
+    Row-reverse to put the only item (exit button) on the right.
     If more items are put in the header, consider adding padding
     to force the exit button to the end instead of using
     row-reverse (or align-items: flex-end).

@@ -86,4 +86,5 @@
 /* Style disabled inputs */
 #modal input:disabled, #modal select:disabled {
     border: none;
+    appearance: none;
 }

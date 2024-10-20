@@ -21,6 +21,10 @@ form input, form select {
 	border: solid 1px var(--foreground-text);
 }
 
+form select {
+	margin-top: 0.5em;
+}
+
 form input:not([type="radio"], [type="checkbox"], [type="submit"]), form select {
 	width: 30em;
 	min-width: 300px;

@@ -28,7 +28,7 @@
 
     width: calc(var(--modal-width) - 2rem);
     max-width: var(--modal-max-width);
-    max-height: 80vh;
+    max-height: calc(90vh - 2*var(--modal-show-top));
 
     overflow: hidden;
 
@@ -84,7 +84,7 @@
 }
 
 /* Style disabled inputs */
-#modal input:disabled, #modal select:disabled {
+#modal input:not([type="checkbox"]):disabled, #modal select:disabled {
     border: none;
     appearance: none;
 }

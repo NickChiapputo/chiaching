@@ -22,7 +22,7 @@ form input, form select {
 }
 
 form input:not([type="radio"], [type="checkbox"], [type="submit"]), form select {
-	width: 40%;
+	width: 30em;
 	min-width: 300px;
 	max-width: 90%;
 }
@@ -44,7 +44,8 @@ input[type="submit"]:disabled, input[type="submit"]:disabled:hover {
 	border: var(--button-disabled-border);
 }
 
-input[type="text"], input[type="email"], input[type="number"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="number"],
+input[type="password"], input[type="date"] {
 	padding: 0.5em;
 	border: none;
 	border-bottom: solid 1px var(--foreground-text);

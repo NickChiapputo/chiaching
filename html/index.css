@@ -129,21 +129,10 @@
 .formInputGroup {
     width: calc(50% - 2*0.5em - 0.5em);
 }
-.formInputGroup > label {
-    width: calc(100% - 2*0.5em);
-    max-width: 100%;
-}
 
 .formInputGroup.fullWidthInputGroup {
     display: flex;
     flex-flow: column wrap;
-
-    width: 100%;
-    max-width: 100%;
-}
-.formInputGroup.fullWidthInputGroup > * {
-    width: calc(100% - 2*0.5em);
-    max-width: 100%;
 }
 .formInputGroup > input[type="submit"] {
     height: auto;
@@ -165,11 +154,13 @@
 .formInputGroup > div.inputWithButton {
     display: flex;
     flex-flow: row nowrap;
+
+    max-width: 100%;
 }
 
 .formInputGroup > div.inputWithButton > img {
     height: 1em;
-    margin-right: 1em;
+    padding-top: 0.5em;
     cursor: pointer;
 }
 

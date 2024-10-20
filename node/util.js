@@ -109,20 +109,23 @@ function validateNonEmptyString( str, respond, res )
 **/
 function validateDateString( str, respond, res )
 {
-    let split = str.split('-');
-    if( split.length == 3 )
+    if( str && typeof string !== "string" )
     {
-        let d = new Date( str );
-        let strYear = parseInt( split[0] );
-        let strMonth = parseInt( split[1] ) - 1;
-        let strDay = parseInt( split[2] );
+        let split = str.split('-');
+        if( split.length == 3 )
+        {
+            let d = new Date( str );
+            let strYear = parseInt( split[0] );
+            let strMonth = parseInt( split[1] ) - 1;
+            let strDay = parseInt( split[2] );
 
-        // Check with UTC dates because we won't get timezone information from
-        // the transaction (and we don't want to, that'll annoy users).
-        // UTC dates will ensure that the value return from getUTC<val> will
-        // match if the date string is properly formatted.
-        if( d.getUTCFullYear() === strYear && d.getUTCMonth() === strMonth && d.getUTCDate() )
-            return true;
+            // Check with UTC dates because we won't get timezone information from
+            // the transaction (and we don't want to, that'll annoy users).
+            // UTC dates will ensure that the value return from getUTC<val> will
+            // match if the date string is properly formatted.
+            if( d.getUTCFullYear() === strYear && d.getUTCMonth() === strMonth && d.getUTCDate() )
+                return true;
+        }
     }
 
     if( respond )

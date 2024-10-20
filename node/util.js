@@ -73,12 +73,12 @@ function dateToUTCDate( date )
 /**
  * @brief Validate the str is non-empty. If response is true, send a response
  * if str is empty using res.
- * 
+ *
  * @param str                   String to validate
- * @param response (optional)   Flag set to true if response is required for 
+ * @param response (optional)   Flag set to true if response is required for
  *                              invalid string.
  * @param res (optional)        Response object used if response is true.
- * 
+ *
  * @return True if valid, false otherwise.
 **/
 function validateNonEmptyString( str, respond, res )
@@ -88,7 +88,7 @@ function validateNonEmptyString( str, respond, res )
 
     if( respond )
     {
-        util.resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
+        resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
     }
 
     return false;
@@ -99,12 +99,12 @@ function validateNonEmptyString( str, respond, res )
  * Validate the str is non-empty. Input format for valid date string is
  * expected to match yyyy-mm-dd. If response is true, send a response
  * if str is empty using res.
- * 
+ *
  * @param str                   String to validate
- * @param response (optional)   Flag set to true if response is required for 
+ * @param response (optional)   Flag set to true if response is required for
  *                              invalid string.
  * @param res (optional)        Response object used if response is true.
- * 
+ *
  * @return True if valid, false otherwise.
 **/
 function validateDateString( str, respond, res )
@@ -127,7 +127,7 @@ function validateDateString( str, respond, res )
 
     if( respond )
     {
-        util.resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
+        resolveAction( res, 400, { "response" : RESPONSE_CODES.InvalidFormData } );
     }
 
     return false;
@@ -137,20 +137,20 @@ function validateDateString( str, respond, res )
 /**
  * Validate the string number is a float that is non-negative (>= 0) and
  * has at most 2 decimal places.
- * 
+ *
  * @param str                   String to validate
- * @param response (optional)   Flag set to true if response is required for 
+ * @param response (optional)   Flag set to true if response is required for
  *                              invalid string.
  * @param res (optional)        Response object used if response is true.
- * 
+ *
  * @return True if valid, false otherwise.
 **/
 function validateNonNegativeFloat( str, respond, res )
 {
-    let isValid = str && 
-        str.trim() && 
+    let isValid = str &&
+        str.trim() &&
         /^\d+(?:\.{0,1}\d{0,2})$/.test( str ) &&
-        !isNaN( +str ) && 
+        !isNaN( +str ) &&
         parseFloat( str ) >= 0;
     if( isValid )
     {
@@ -168,9 +168,9 @@ function validateNonNegativeFloat( str, respond, res )
 
 /****
     * @brief Check that a user is logged in. Respond with a 401 if they are not.
-    * 
+    *
     * @param req    Client request object.
-    * 
+    *
     * @return       1 if not logged in and a response was sent.
     *               If user is logged in, return user document.
 ****/
@@ -267,7 +267,7 @@ async function validateToken( req ) {
             // to take care of that with a TTL index on the login tokens
             // collection.
 
-            // Attempt to verify the user's provided login token with the 
+            // Attempt to verify the user's provided login token with the
             // current one from the database.
             try
             {

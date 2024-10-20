@@ -96,7 +96,16 @@ import {send} from "/send.js"
         newTranscationDestinationAccountSelect = document.getElementById( "destinationAccount" );
 
         newTransactionForm = document.getElementById( "newTransactionForm" );
-        newTransactionForm.addEventListener( "submit", createNewTransaction );
+        newTransactionForm.addEventListener( "submit", e => {
+            if( transactionSubmit.editing )
+                editTransaction(e);
+            else
+                createNewTransaction(e);
+
+            // Don't reload page after submitting.
+            e.preventDefault();
+            return false;
+        } );
         document.getElementById( "date" ).valueAsDate = new Date();
 
         newTransactionButton = document.getElementById( "addTransactionButton" );
@@ -127,6 +136,12 @@ import {send} from "/send.js"
             if( next_page < 1 ) return;
             updateTransactionPage( next_page );
         } );
+
+        // Attach edit action to edit buttons for transaction modal
+        let editButtons = document.getElementsByClassName( "inputEditButton" )
+        for( let b of editButtons ) {
+            b.addEventListener( "click", editButtonAction );
+        }
 
 
         // Accounts
@@ -461,6 +476,78 @@ import {send} from "/send.js"
     };
 
 
+    const editButtonAction = e => {
+        // Get the element we are editing
+        let editElement = document.getElementById(e.target.getAttribute("for"));
+        console.log(editElement);
+        if( editElement == undefined ) return;
+        editElement.disabled = false;
+
+        // Give the element under edit (EUE) user focus.
+        editElement.focus();
+
+        // Add an event listener to enable the submit button if the transaction
+        // detail has been edited.
+        let inputHandler = e => {
+            editElement.classList.add( "edited" );
+
+            transactionSubmit.disabled = false;
+            transactionSubmit.value = "Submit Changes";
+        };
+        editElement.addEventListener( "input", inputHandler );
+
+        // Add an event listener to the element under edit (EUE) to re-disable
+        // it after the user leaves focus from the EUE and remove the event
+        // listeners.
+        let focusoutHandler = e => {
+            editElement.disabled = true;
+            editElement.removeEventListener( "focusout", focusoutHandler );
+            editElement.removeEventListener( "input", inputHandler );
+        };
+        editElement.addEventListener( "focusout", focusoutHandler );
+    };
+
+    const editTransaction = e => {
+        // Check all editable transaction fields
+        // and see what needs to be updated.
+        let update = { "_id": transactionSubmit.transactionID };
+        if( date.classList.contains( "edited" )) update.date = date.value;
+        if( document.getElementById( "location" ).classList.contains( "edited" ) )
+            update.location = document.getElementById( "location" ).value;
+        if( sourceAccount.classList.contains( "edited" ) ) {
+            update.sourceAccount = sourceAccount.value;
+            update.sourceInstitution = sourceAccount.value !== "Outside" ?
+                sourceAccount[ sourceAccount.selectedIndex ].closest( "optgroup" )?.label :
+                "Outside";
+        }
+        if( destinationAccount.classList.contains( "edited" ) ) {
+            update.destinationAccount = destinationAccount.value;
+            update.destinationInstitution = destinationAccount.value !== "Outside" ?
+                destinationAccount[ destinationAccount.selectedIndex ].closest( "optgroup" )?.label :
+                "Outside";
+        }
+        if( transactionMattressName.classList.contains( "edited" ) )
+            update.mattress = transactionMattressName.value;
+        if( amount.classList.contains( "edited" ) )
+            update.amount = amount.value;
+        if( description.classList.contains( "edited" ) )
+            update.description = description.value;
+
+
+        send(
+            "/api/transactions/edit", "POST", update,
+            (resp, status) => {
+                console.log(resp);
+                console.log(status);
+            },
+            (e, resp, status) => {
+                console.error( e );
+                console.log( status, resp );
+            },
+            true
+        )
+    };
+
     const createNewTransaction = (e) => {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
@@ -505,11 +592,6 @@ import {send} from "/send.js"
 
         xmlHttp.open( "POST", "/api/transactions/new" );
         xmlHttp.send( JSON.stringify( data ) );
-
-
-        // Don't reload page after submitting.
-        e.preventDefault();
-        return false;
     }
 
 
@@ -961,7 +1043,6 @@ import {send} from "/send.js"
 
         showModal(true, true);
 
-        // TODO: Populate details
         // Set date
         date.value = transaction.date.substring(0,10);
 
@@ -1002,6 +1083,7 @@ import {send} from "/send.js"
 
         // Hide submission button
         transactionSubmit.disabled = true;
+        transactionSubmit.transactionID = transaction_id;
     };
 
 
@@ -1091,11 +1173,19 @@ import {send} from "/send.js"
 
         description.disabled = existingTransaction;
         transactionSubmit.disabled = existingTransaction;
+        transactionSubmit.value = existingTransaction ? "No Changes" : "Submit";
+        transactionSubmit.editing = existingTransaction;
 
         let editButtons = document.getElementsByClassName( "inputEditButton" )
         for( let button of editButtons ) {
             button.style.display = existingTransaction ? "" : "none";
         }
+
+        // Get all elements that may have been edited last time and remove the
+        // edit class to restore their original styling.
+        let editedElements = document.getElementsByClassName( "edited" );
+        for( let el of editedElements )
+            el.classList.remove( "edited" );
 
 
 

@@ -88,3 +88,7 @@
     border: none;
     appearance: none;
 }
+
+#modal .edited {
+    border-bottom: solid 1px var(--primary) !important;
+}

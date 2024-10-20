@@ -539,13 +539,17 @@ import {send} from "/send.js"
             (resp, status) => {
                 console.log(resp);
                 console.log(status);
+
+                getMoneyAccounts();
+                getTransactions();
+                showModal(false);
             },
             (e, resp, status) => {
                 console.error( e );
                 console.log( status, resp );
             },
             true
-        )
+        );
     };
 
     const createNewTransaction = (e) => {

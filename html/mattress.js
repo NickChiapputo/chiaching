@@ -54,6 +54,28 @@ function getMattress(mattressName)
 function displayMattress( mattress )
 {
     console.log( `${mattress.name}: $${mattress.amount}/$${mattress.maxAmount}` );
+
+    let container = document.createElement( "div" );
+    container.classList.toggle( "mattressContainer" );
+
+    let title = document.createElement( "span" );
+    title.classList.toggle( "mattressTitle" );
+    title.innerHTML = mattress.name;
+
+    let bar = document.createElement( "div" );
+    bar.classList.toggle( "mattressBar" );
+    let percent = 100 * mattress.amount / mattress.maxAmount;
+    bar.style.background = `linear-gradient(to top, green, green ${percent}%, transparent 0%, transparent)`;
+
+    let amounts = document.createElement( "span" );
+    amounts.classList.toggle( "mattressAmounts" );
+    amounts.innerHTML = `$${mattress.amount} / $${mattress.maxAmount}`;
+
+    container.appendChild( title );
+    container.appendChild( bar );
+    container.appendChild( amounts );
+
+    mattressList.appendChild( container );
 }
 
 function createNewMattress(e)

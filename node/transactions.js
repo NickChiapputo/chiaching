@@ -949,7 +949,8 @@ async function editTransaction( res, req, data )
         // Add amount (original or new if exists) to new destination account if
         // there is a new one and it is not outside or the original one if there
         // is a new amount.
-        if( (!destAccountIsOutside && fields_to_update.destinationAccount) || fields_to_update.amount != undefined )
+        if( (!destAccountIsOutside && fields_to_update.destinationAccount) ||
+            (fields_to_update.amount != undefined && original_transaction.destinationAccount.toLowerCase() != "outside") )
         {
             let account, institution, amount;
             if( fields_to_update.destinationAccount )

@@ -27,9 +27,9 @@ function getMattresses ()
 
             console.log( `Mattress Names: ${mattressNames}` );
         },
-        (e, resp, status) => { 
+        (e, resp, status) => {
             console.error( e );
-            console.log( status, resp ); 
+            console.log( status, resp );
         },
         true
     );
@@ -43,9 +43,9 @@ function getMattress(mattressName)
 
     send( "/api/mattresses/get", "POST", query,
         (resp, status) => { displayMattress( resp.mattress ); },
-        (e, resp, status) => { 
+        (e, resp, status) => {
             console.error( e );
-            console.log( status, resp ); 
+            console.log( status, resp );
         },
         true
     );

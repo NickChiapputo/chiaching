@@ -528,6 +528,8 @@ import {send} from "/send.js"
         }
         if( transactionMattressName.classList.contains( "edited" ) )
             update.mattress = transactionMattressName.value;
+        if( tag.classList.contains( "edited" ) )
+            update.tag = tag.value;
         if( amount.classList.contains( "edited" ) )
             update.amount = amount.value;
         if( description.classList.contains( "edited" ) )

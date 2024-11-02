@@ -1,9 +1,35 @@
 @media screen {
+    @media (min-width: 1201px) {
+        :root {
+            --accounts-width:    calc(25% - 2*var(--card-padding));
+
+            /*  Must subtract an extra 2*cardPadding because accountsWidth does not
+                include its 2*cardPadding.
+                Must subtract 4*cardBorderWidth for left and right borders of account
+                and transaction elements. */
+            --transaction-width: calc(100% - var(--accounts-width) -
+                var(--accounts-margin-right) - 4*var(--card-padding) -
+                4*var(--card-border-width));
+        }
+    }
+
+    /* Small non-mobile devices */
+    @media (max-width: 1200px) {
+        :root {
+            --accounts-width: 100%;
+            --transaction-width: 100%;
+
+            --mattress-columns: 3;
+        }
+    }
+
     /* Mobile devices */
     @media (max-width: 900px) {
         :root {
             --mobile: true;
             --modal-width: calc( 98vw - 2*1em );
+
+            --mattress-columns: 2;
         }
 
         #content {
@@ -46,28 +72,6 @@
 
         .transactionTableAmount {
             min-width: 5rem;
-        }
-    }
-
-    /* Small non-mobile devices */
-    @media (max-width: 1200px) {
-        :root {
-            --accounts-width: 100%;
-            --transaction-width: 100%;
-        }
-    }
-
-    @media (min-width: 1201px) {
-        :root {
-            --accounts-width:    calc(25% - 2*var(--card-padding));
-
-            /*  Must subtract an extra 2*cardPadding because accountsWidth does not
-                include its 2*cardPadding.
-                Must subtract 4*cardBorderWidth for left and right borders of account
-                and transaction elements. */
-            --transaction-width: calc(100% - var(--accounts-width) -
-                var(--accounts-margin-right) - 4*var(--card-padding) -
-                4*var(--card-border-width));
         }
     }
 }

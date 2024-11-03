@@ -154,6 +154,7 @@ function showNewMattressForm(e)
         f.value = "";
         f.disabled = false;
     });
+    mattressInitialAmount.parentElement.style.display = "";
     newMattressSubmit.value = "Submit";
     newMattressSubmit.editing = false;
     mattressInputEditButtons.forEach(b => b.style.display = "none");
@@ -171,7 +172,7 @@ function showEditMattressForm(e) {
     // Populate modal form
     mattressName.value = mattress.name;
     mattressMaxAmount.value = mattress.maxAmount;
-    mattressInitialAmount.value = mattress.amount;
+    mattressInitialAmount.parentElement.style.display = "none";
     newMattressSubmit.value = "No Changes";
     newMattressSubmit.mattressID = mattress[ "_id" ];
     newMattressSubmit.editing = true;

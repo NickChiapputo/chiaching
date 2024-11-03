@@ -17,6 +17,11 @@
     row-gap: var(--mattress-list-gap);
 }
 
+#newMattressSubmit {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 div.mattressContainer {
     display: flex;
     flex-flow: column nowrap;
@@ -43,4 +48,13 @@ div.mattressContainer > div.mattressBar {
 
     border: solid 1px black;
     border-radius: 0.5em;
+}
+
+div.mattressContainer > img.mattressEditButton {
+    width: 1em;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    cursor: pointer;
 }

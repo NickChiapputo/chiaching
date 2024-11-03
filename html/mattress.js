@@ -1,31 +1,43 @@
-/* Exports */
+import {send} from "./send.js";
+import * as modal from "./modal.js";
+import * as forms from "./forms.js";
+
+
 export const init = () => {
-    newMattressForm.addEventListener( "submit", createNewMattress );
-    addMattressButton.addEventListener( "click", toggleNewMattressForm );
+    newMattressForm.addEventListener( "submit", submitMattressForm );
+    addMattressButton.addEventListener( "click", showNewMattressForm );
+
+    let editButtons = document.getElementsByClassName( "inputEditButton" );
+    mattressInputEditButtons = [];
+    for( let b of editButtons ) {
+        if( !newMattressForm.contains(b) ) continue;
+        mattressInputEditButtons.push(b);
+        b.addEventListener( "click", (e) => forms.editButtonAction(e, newMattressSubmit) );
+    }
+
     getMattresses();
 };
 
-export var mattressNames = [];
-
-/* Imports */
-import {send} from "/send.js"
-
-/* Local Variables and Functions */
-var showNewMattressForm = false;
-const addMattressButtonHideText = "+ Add Mattress";
-const addMattressButtonShowText = "— Add Mattress";
+export var mattresses = [];
 
 
-function getMattresses ()
-{
+const mattressInputFields = [
+    mattressName,
+    mattressMaxAmount,
+    mattressInitialAmount,
+    newMattressSubmit,
+]
+var mattressInputEditButtons = [];
+function getMattresses() {
     send( "/api/mattresses/getNames", "GET", null,
         (resp, status) => {
             // Display in mattresses section.
             clearMattresses();
-            mattressNames = resp.names;
-            mattressNames.forEach( getMattress );
-
-            console.log( `Mattress Names: ${mattressNames}` );
+            mattresses = [];
+            resp.names.sort( (a, b) =>
+                a.localeCompare( b, undefined, { sensitivity: "base" } )
+            );
+            resp.names.forEach( getAndDisplayMattress );
         },
         (e, resp, status) => {
             console.error( e );
@@ -35,14 +47,17 @@ function getMattresses ()
     );
 }
 
-function getMattress(mattressName)
+function getAndDisplayMattress(mattressName)
 {
     let query = {
         name: mattressName,
     };
 
     send( "/api/mattresses/get", "POST", query,
-        (resp, status) => { displayMattress( resp.mattress ); },
+        (resp, status) => {
+            mattresses.push( resp.mattress );
+            displayMattress( resp.mattress );
+        },
         (e, resp, status) => {
             console.error( e );
             console.log( status, resp );
@@ -53,8 +68,6 @@ function getMattress(mattressName)
 
 function displayMattress( mattress )
 {
-    console.log( `${mattress.name}: $${mattress.amount}/$${mattress.maxAmount}` );
-
     let container = document.createElement( "div" );
     container.classList.toggle( "mattressContainer" );
 
@@ -71,36 +84,62 @@ function displayMattress( mattress )
     amounts.classList.toggle( "mattressAmounts" );
     amounts.innerHTML = `$${mattress.amount} / $${mattress.maxAmount}`;
 
+    let editButton = document.createElement( "img" );
+    editButton.classList.toggle( "mattressEditButton" );
+    editButton.src = "/media/edit-pencil.svg";
+    editButton.for = mattress.name;
+    editButton.addEventListener( "click", showEditMattressForm );
+
     container.appendChild( title );
     container.appendChild( bar );
     container.appendChild( amounts );
+    container.appendChild( editButton );
 
     mattressList.appendChild( container );
 }
 
-function createNewMattress(e)
-{
-    console.log( "Creating new mattress." );
+function submitMattressForm(e) {
+    if( newMattressSubmit.editing ) {
+        editMattress(e);
+    } else {
+        createNewMattress(e);
+    }
 
+    // Don't reload page after submitting.
+    e.preventDefault();
+    return false;
+}
+
+function createNewMattress(e) {
     let data = {
         "name": mattressName.value,
         "maxAmount": mattressMaxAmount.value,
         "amount": mattressInitialAmount.value,
     };
 
+    newMattressSubmit.value = "Creating...";
+    newMattressSubmit.disabled = true;
+
     send(
-        "/api/mattresses/new", "POST", data,
-        (resp, status) => { console.log( resp ); },
+        "/api/mattresses/create", "POST", data,
+        (resp, status) => {
+            newMattressSubmit.value = "Success!";
+            getMattresses();
+            modal.hide();
+        },
         (e, resp, status) => {
-            console.error( e );
-            console.log( status, resp );
+            newMattressSubmit.value = `Error! ${status}`;
+            newMattressSubmit.disabled = false;
         },
         true
     );
+}
 
-    // Don't reload page after submitting.
-    e.preventDefault();
-    return false;
+function editMattress(e) {
+    let update = {
+        "_id": newMattressSubmit.mattressID,
+    };
+    console.log( `Updating: ${JSON.stringify(update, null, 2)}`);
 }
 
 function clearMattresses()
@@ -108,10 +147,40 @@ function clearMattresses()
     mattressList.innerHTML = '';
 }
 
-function toggleNewMattressForm(e)
+function showNewMattressForm(e)
 {
-    showNewMattressForm = !showNewMattressForm;
+    // Clear form.
+    mattressInputFields.forEach(f => {
+        f.value = "";
+        f.disabled = false;
+    });
+    newMattressSubmit.value = "Submit";
+    newMattressSubmit.editing = false;
+    mattressInputEditButtons.forEach(b => b.style.display = "none");
 
-    newMattressForm.style.display = showNewMattressForm ? "" : "none";
-    addMattressButton.innerHTML = showNewMattressForm ? addMattressButtonShowText : addMattressButtonHideText;
+    // Show form.
+    modal.selectContent( modal.ModalContent.MATTRESS );
+    modal.show();
+}
+
+function showEditMattressForm(e) {
+    // Get mattress info
+    let mattress = mattresses.find((m) => m.name == e.target.for);
+    console.log(mattress);
+
+    // Populate modal form
+    mattressName.value = mattress.name;
+    mattressMaxAmount.value = mattress.maxAmount;
+    mattressInitialAmount.value = mattress.amount;
+    newMattressSubmit.value = "No Changes";
+    newMattressSubmit.mattressID = mattress[ "_id" ];
+    newMattressSubmit.editing = true;
+
+    // Disable form inputs by default
+    mattressInputFields.forEach(f => f.disabled = true);
+    mattressInputEditButtons.forEach(b => b.style.display = "");
+
+    // Show modal
+    modal.selectContent( modal.ModalContent.MATTRESS )
+    modal.show();
 }

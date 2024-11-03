@@ -133,6 +133,7 @@
 .formInputGroup.fullWidthInputGroup {
     display: flex;
     flex-flow: column wrap;
+    width: 75%;
 }
 .formInputGroup > input[type="submit"] {
     height: auto;

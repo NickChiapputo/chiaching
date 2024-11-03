@@ -147,13 +147,20 @@ function clearMattresses()
     mattressList.innerHTML = '';
 }
 
+function clearMattressFormInputs(disabled) {
+    if( disabled === undefined )
+        disabled = false;
+    mattressInputFields.forEach(f => {
+        f.value = "";
+        f.disabled = disabled;
+        f.classList.remove( "edited" );
+    });
+}
+
 function showNewMattressForm(e)
 {
     // Clear form.
-    mattressInputFields.forEach(f => {
-        f.value = "";
-        f.disabled = false;
-    });
+    clearMattressFormInputs(false);
     mattressInitialAmount.parentElement.style.display = "";
     newMattressSubmit.value = "Submit";
     newMattressSubmit.editing = false;
@@ -170,6 +177,7 @@ function showEditMattressForm(e) {
     console.log(mattress);
 
     // Populate modal form
+    clearMattressFormInputs(true);
     mattressName.value = mattress.name;
     mattressMaxAmount.value = mattress.maxAmount;
     mattressInitialAmount.parentElement.style.display = "none";
@@ -177,8 +185,6 @@ function showEditMattressForm(e) {
     newMattressSubmit.mattressID = mattress[ "_id" ];
     newMattressSubmit.editing = true;
 
-    // Disable form inputs by default
-    mattressInputFields.forEach(f => f.disabled = true);
     mattressInputEditButtons.forEach(b => b.style.display = "");
 
     // Show modal

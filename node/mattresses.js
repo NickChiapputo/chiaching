@@ -26,6 +26,10 @@ module.exports = {
     getMattress: getMattressByName,
 };
 
+const INVALID_MATTRESS_NAMES = [
+    "unallocated",
+]
+
 /**
  * Create a new mattress for the signed-in user.
  * Must be a POST request and the body data must include the following
@@ -51,7 +55,11 @@ async function createMattress( res, req, data )
     if( user === 1 ) return;
 
     // Verify request data
-    if( !util.validateNonEmptyString( data.name, true, res ) )          return;
+    if( !util.validateNonEmptyString( data.name, true, res ) &&
+        !INVALID_MATTRESS_NAMES.includes( data.name.trim().toLowerCase() ) )
+    {
+        return;
+    }
     if( !util.validateNonNegativeFloat( data.maxAmount, true, res ) )   return;
     if( !util.validateNonNegativeFloat( data.amount, true, res ) )      return;
 

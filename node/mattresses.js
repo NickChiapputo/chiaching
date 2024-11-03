@@ -27,12 +27,12 @@ module.exports = {
 
 /**
  * Create a new mattress for the signed-in user.
- * Must be a POST request and the body data must include the following 
+ * Must be a POST request and the body data must include the following
  * mattress information:
  * - name
  * - maximum amount
  * - initial amount
- * 
+ *
  * @param {Object} res   HTTP response object
  * @param {Object} req   HTTP request object
  * @param {Object} data  Request body data
@@ -53,7 +53,7 @@ async function createMattress( res, req, data )
     if( !util.validateNonEmptyString( data.name, true, res ) )          return;
     if( !util.validateNonNegativeFloat( data.maxAmount, true, res ) )   return;
     if( !util.validateNonNegativeFloat( data.amount, true, res ) )      return;
-    
+
     // Create a new mattress and add it to the database.
     let newMattress = {
         username: user.username,
@@ -62,7 +62,7 @@ async function createMattress( res, req, data )
         amount: util.parseStringFloat( data.amount )
     };
 
-    console.log( 
+    console.log(
         `  Creating new mattress for ${newMattress.username}:\n` +
         `    Name:           ${newMattress.name}\n` +
         `    Maximum:        ${newMattress.maxAmount}\n` +
@@ -79,30 +79,30 @@ async function createMattress( res, req, data )
         // that has the same unique key. Check the indexes
         // for what the key is.
         console.log( `  Mattress already exists.` );
-        util.resolveAction( 
-            res, 400, { 
-                response: RESPONSE_CODES.ItemExists, 
-                exists: result.keyPattern 
-            } 
+        util.resolveAction(
+            res, 400, {
+                response: RESPONSE_CODES.ItemExists,
+                exists: result.keyPattern
+            }
         );
         return;
     }
     else if( !result.acknowledged )
     {
         // There was no response from MongoDB when
-        // trying to insert the document. 
+        // trying to insert the document.
         console.log( `  Unknown money account creation error. Could be a database error!` );
         util.resolveAction(
-            res, 502, { 
-                response: RESPONSE_CODES.DatabaseError 
-            } 
+            res, 502, {
+                response: RESPONSE_CODES.DatabaseError
+            }
         );
         return;
     }
 
-    util.resolveAction( 
-        res, 200, 
-        { "response" : RESPONSE_CODES.OK } 
+    util.resolveAction(
+        res, 200,
+        { "response" : RESPONSE_CODES.OK }
     );
     return;
 }
@@ -139,16 +139,16 @@ async function getMattress( res, req, data )
         return;
     }
 
-    let result = await getMattressByName( 
-        user.username, util.parseStringTrim( data.name ) 
+    let result = await getMattressByName(
+        user.username, util.parseStringTrim( data.name )
     );
-    
+
     if( !result )
         util.resolveAction( res, 500, { "response": RESPONSE_CODES.DatabaseError } );
     else
-        util.resolveAction( res, 200, { 
-            response: RESPONSE_CODES.OK, 
-            mattress: result 
+        util.resolveAction( res, 200, {
+            response: RESPONSE_CODES.OK,
+            mattress: result
         } );
     return;
 }
@@ -156,8 +156,8 @@ async function getMattress( res, req, data )
 /**
  * Check database for mattress specified by
  * owning user and the name of the mattress.
- * @param {String} username 
- * @param {String} name 
+ * @param {String} username
+ * @param {String} name
  * @returns Mattress object from database.
  */
 async function getMattressByName( username, name )
@@ -168,16 +168,12 @@ async function getMattressByName( username, name )
         name: name,
     };
 
-    options = {
-        projection: {
-            "_id": 0
-        }
-    };
+    options = {};
 
 
-    result = await dbLib.getItem( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
-        query, options 
+    result = await dbLib.getItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, options
     );
 
     return result;
@@ -209,9 +205,9 @@ async function getMattressNames( res, req )
     let options = {
         projection: { "_id": 0, "name": 1 },
     };
-    let result = await dbLib.getItems( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
-        query, options 
+    let result = await dbLib.getItems(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, options
     );
 
     if( !result )

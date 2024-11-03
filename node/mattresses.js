@@ -15,6 +15,7 @@ const ACTION_HANDLERS = {
     get: getMattress,
     getNames: getMattressNames,
     create: createMattress,
+    edit: edit,
     // setAmount: setAmount,
     // setMaxAmount: setMaxAmount,
 };
@@ -248,13 +249,96 @@ async function incrementAmount( username, mattressName, amount )
     let options = {};
 
     console.log( `  Incrementing ${username}'s mattress ${mattressName} by ${amount}.` );
-    let result = await dbLib.updateItem( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
+    let result = await dbLib.updateItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
         query, update, options );
     console.log( `    Result: ${JSON.stringify(result)}` );
-        
+
     if( !result || result.lastErrorObject.n == 0 )
         return null;
     else
         return result;
+}
+
+/**
+ * Edit an existing mattress for the signed-in user.
+ * Must be a POST request and the body data must include at least `_id` and one
+ * or more of:
+ * - name
+ * - maxAmount
+ *
+ * @param {Object} res   HTTP response object
+ * @param {Object} req   HTTP request object
+ * @param {Object} data  Request body data
+ */
+async function edit( res, req, data ) {
+    if( req.method !== "POST" )
+    {
+        util.resolveAction( res, 405, { response: RESPONSE_CODES.BadMethodPOST } );
+        return;
+    }
+
+    // Verify user
+    let user = await util.checkLoggedIn( res, req );
+    if( user === 1 ) return;
+
+    // Verify the original mattress exists.
+    if( !util.validateNonEmptyString( data._id, true, res ) ) return;
+    let query = {
+        "_id": dbLib.createObjectID( data._id ),
+        "username": user.username
+    };
+    let original_mattress = await dbLib.getItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, {}
+    );
+
+    if( !original_mattress ) {
+        util.resolveAction( res, 400, { response: RESPONSE_CODES.InvalidFormData } );
+        return;
+    }
+
+    // Validate fields if they exist.
+    let fields_to_update = {};
+    if( util.validateNonEmptyString( data.name, false ) )
+        fields_to_update.name = data.name.trim();
+    if( util.validateNonNegativeFloat( data.maxAmount, false ) )
+        fields_to_update.maxAmount = util.parseStringFloat( data.maxAmount );
+
+    // Update the mattress.
+    let update = { "$set": fields_to_update };
+    let result = await dbLib.updateItem( DB_NAMES.dbName,
+        DB_NAMES.mattressesCollectionName, query, update, {} );
+    console.log( JSON.stringify( result, null, 2 ) );
+
+    if( !result || result.lastErrorObject.n == 0 )
+    {
+        console.log( `  Update mattress failed with: ${JSON.stringify( result, null, 2 )}` );
+        util.resolveAction( res, 502, { "response" : RESPONSE_CODES.DatabaseError } );
+        return;
+    }
+
+    util.resolveAction( res, 200, { "response" : RESPONSE_CODES.OK } );
+    return;
+}
+
+
+/**
+ * Transfer `amount` from `srcMattress` to `dstMattress` owned by `username`.
+ * @param {*} username      User who owns the mattresses
+ * @param {*} srcMattress   Source mattress
+ * @param {*} dstMattress   Destination mattress
+ * @param {*} amount        Amount to subtract from `srcMattress`
+ *                          and add to `dstMattress`.
+ * @returns Codes:
+ *          - 0: success
+ *          - 1: user does not have `srcMattress`
+ *          - 2: user does not have `dstMattress`
+ *          - 3: amount is not available in mattress
+ *              - If amount is negative, `dstMattress` does not have amount
+ *              - If amount is positive, `srcMattress` does not have amount
+ */
+async function transferAmount( username, srcMattress, dstMattress, amount )
+{
+
 }

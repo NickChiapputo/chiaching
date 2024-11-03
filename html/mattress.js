@@ -99,14 +99,15 @@ function displayMattress( mattress )
 }
 
 function submitMattressForm(e) {
+    // Don't reload page after submitting.
+    e.preventDefault();
+
     if( newMattressSubmit.editing ) {
         editMattress(e);
     } else {
         createNewMattress(e);
     }
 
-    // Don't reload page after submitting.
-    e.preventDefault();
     return false;
 }
 
@@ -139,7 +140,25 @@ function editMattress(e) {
     let update = {
         "_id": newMattressSubmit.mattressID,
     };
-    console.log( `Updating: ${JSON.stringify(update, null, 2)}`);
+
+    if( mattressName.classList.contains( "edited" ) )
+        update.name = mattressName.value;
+    if( mattressMaxAmount.classList.contains( "edited" ) )
+        update.maxAmount = mattressMaxAmount.value;
+
+    send(
+        "/api/mattresses/edit", "POST", update,
+        (resp, status) => {
+            newMattressSubmit.value = "Success!";
+            getMattresses();
+            modal.hide();
+        },
+        (e, resp, status) => {
+            newMattressSubmit.value = `Error! ${status}`;
+            newMattressSubmit.disabled = false;
+        },
+        true
+    );
 }
 
 function clearMattresses()

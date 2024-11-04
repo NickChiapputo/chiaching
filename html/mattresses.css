@@ -17,9 +17,23 @@
     row-gap: var(--mattress-list-gap);
 }
 
+#mattressButtonContainer {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 1em;
+}
+
 #newMattressSubmit {
     margin-left: auto;
     margin-right: auto;
+}
+
+#mattressTransferButton {
+    height: 3em;
+}
+#mattressTransferButton > img {
+    height: 100%;
+    width: 100%;
 }
 
 div.mattressContainer {

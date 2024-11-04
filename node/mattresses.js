@@ -16,6 +16,7 @@ const ACTION_HANDLERS = {
     getNames: getMattressNames,
     create: createMattress,
     edit: edit,
+    transfer: transfer,
     // setAmount: setAmount,
     // setMaxAmount: setMaxAmount,
 };
@@ -28,7 +29,7 @@ module.exports = {
 
 const INVALID_MATTRESS_NAMES = [
     "unallocated",
-]
+];
 
 /**
  * Create a new mattress for the signed-in user.
@@ -317,7 +318,6 @@ async function edit( res, req, data ) {
     let update = { "$set": fields_to_update };
     let result = await dbLib.updateItem( DB_NAMES.dbName,
         DB_NAMES.mattressesCollectionName, query, update, {} );
-    console.log( JSON.stringify( result, null, 2 ) );
 
     if( !result || result.lastErrorObject.n == 0 )
     {
@@ -330,23 +330,125 @@ async function edit( res, req, data ) {
     return;
 }
 
+/**
+ * API endpoint for `transferAmount`. Provide data in POST must include:
+ * - `source`       -- Source mattress
+ * - `destination`  -- Destination mattress
+ * - `amount`       -- Amount to subtract from source and add to destination.
+ *
+ * @param {Object} res   HTTP response object
+ * @param {Object} req   HTTP request object
+ * @param {Object} data  Request body data
+ */
+async function transfer( res, req, data ) {
+    if( req.method !== "POST" )
+    {
+        util.resolveAction( res, 405, { response: RESPONSE_CODES.BadMethodPOST } );
+        return;
+    }
+
+    // Verify user
+    let user = await util.checkLoggedIn( res, req );
+    if( user === 1 ) return;
+
+    // Verify required data exists
+    if( !util.validateNonEmptyString( data.source, true, res ) ) return;
+    if( !util.validateNonEmptyString( data.destination, true, res ) ) return;
+    if( !util.validateNonNegativeFloat( data.amount, true, res ) ) return;
+
+    let result = await transferAmount(
+        user.username,
+        data.source,
+        data.destination,
+        util.parseStringFloat( data.amount )
+    );
+
+    if( result ) {
+        if( result != 3 ) {
+            util.resolveAction( res, 400,
+                { response: RESPONSE_CODES.InvalidFormData } );
+        } else {
+            util.resolveAction( res, 502,
+                { response: RESPONSE_CODES.DatabaseError } );
+        }
+        return;
+    }
+
+    util.resolveAction( res, 200, { "response" : RESPONSE_CODES.OK } );
+    return;
+}
+
 
 /**
  * Transfer `amount` from `srcMattress` to `dstMattress` owned by `username`.
  * @param {*} username      User who owns the mattresses
- * @param {*} srcMattress   Source mattress
- * @param {*} dstMattress   Destination mattress
+ * @param {*} srcMattress   Source mattress `_id`
+ * @param {*} dstMattress   Destination mattress `_id`
  * @param {*} amount        Amount to subtract from `srcMattress`
  *                          and add to `dstMattress`.
  * @returns Codes:
  *          - 0: success
  *          - 1: user does not have `srcMattress`
  *          - 2: user does not have `dstMattress`
- *          - 3: amount is not available in mattress
- *              - If amount is negative, `dstMattress` does not have amount
- *              - If amount is positive, `srcMattress` does not have amount
+ *          - 3: Failure updating amounts
  */
 async function transferAmount( username, srcMattress, dstMattress, amount )
 {
+    // Validate mattresses exist.
+    source_is_unallocated = srcMattress.trim().toLowerCase() == "unallocated";
+    destination_is_unallocated = dstMattress.trim().toLowerCase() == "unallocated";
 
+    let source_query = undefined;
+    let source = undefined;
+    if( !source_is_unallocated ) {
+        source_query = {
+            "_id": dbLib.createObjectID( srcMattress ),
+            "username": username
+        };
+        source = await dbLib.getItem(
+            DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, source_query, {}
+        );
+        if( !source ) return 1;
+    }
+
+    let destination_query = undefined;
+    let destination = undefined;
+    if( !destination_is_unallocated ) {
+        destination_query = {
+            "_id": dbLib.createObjectID( dstMattress ),
+            "username": username
+        };
+        destination = await dbLib.getItem(
+            DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+            destination_query, {}
+        );
+        if( !destination ) return 2;
+    }
+
+    // Update amounts.
+    let update = {};
+    let result = undefined;
+    if( !source_is_unallocated ) {
+        update = { "$dec": { "amount": amount } };
+        result = await dbLib.updateItem( DB_NAMES.dbName,
+            DB_NAMES.mattressesCollectionName, source_query, update, {} );
+
+        if( !result || result.lastErrorObject.n == 0 ) {
+            console.log( `  Decrement source mattress ${source.name} amount failed with: ${JSON.stringify( result, null, 2 )}` );
+            return 3;
+        }
+    }
+
+    if( !destination_is_unallocated ) {
+        update = { "$inc": { "amount": amount } };
+        result = await dbLib.updateItem( DB_NAMES.dbName,
+            DB_NAMES.mattressesCollectionName, destination_query, update, {} );
+
+        if( !result || result.lastErrorObject.n == 0 ) {
+            console.log( `  Increment destination mattress ${destination.name} amount failed with: ${JSON.stringify( result, null, 2 )}` );
+            return 3;
+        }
+    }
+
+    return 0;
 }

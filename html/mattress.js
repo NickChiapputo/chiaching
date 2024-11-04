@@ -5,7 +5,9 @@ import * as forms from "./forms.js";
 
 export const init = () => {
     newMattressForm.addEventListener( "submit", submitMattressForm );
+    mattressTransferForm.addEventListener( "submit", submitMattressTransferForm );
     addMattressButton.addEventListener( "click", showNewMattressForm );
+    mattressTransferButton.addEventListener( "click", showTransferForm );
 
     let editButtons = document.getElementsByClassName( "inputEditButton" );
     mattressInputEditButtons = [];
@@ -15,12 +17,26 @@ export const init = () => {
         b.addEventListener( "click", (e) => forms.editButtonAction(e, newMattressSubmit) );
     }
 
+    // If one selection is changed, disable that option in
+    // the other select and enable the remaining options.
+    transferMattressSource.addEventListener( "change", e => {
+        for( let opt of transferMattressDestination.options ) {
+            opt.disabled = transferMattressSource.value == opt.value;
+        }
+    });
+    transferMattressDestination.addEventListener( "change", e => {
+        for( let opt of transferMattressSource.options ) {
+            opt.disabled = transferMattressDestination.value == opt.value;
+        }
+    });
+
+
     getMattresses();
 };
 
 export var mattresses = [];
 
-
+const UNALLOCATED_MATTRESS_NAME = "unallocated";
 const mattressInputFields = [
     mattressName,
     mattressMaxAmount,
@@ -137,6 +153,9 @@ function createNewMattress(e) {
 }
 
 function editMattress(e) {
+    newMattressSubmit.value = "Submitting...";
+    newMattressSubmit.disabled = true;
+
     let update = {
         "_id": newMattressSubmit.mattressID,
     };
@@ -159,6 +178,35 @@ function editMattress(e) {
         },
         true
     );
+}
+
+function submitMattressTransferForm(e) {
+    e.preventDefault();
+
+    mattressTransferSubmit.value = "Transferring...";
+    mattressTransferSubmit.disabled = true;
+
+    let data = {
+        "source": transferMattressSource.value,
+        "destination": transferMattressDestination.value,
+        "amount": mattressTransferAmount.value,
+    };
+
+    send(
+        "/api/mattresses/transfer", "POST", data,
+        (resp, status) => {
+            mattressTransferSubmit.value = "Success!";
+            getMattresses();
+            modal.hide();
+        },
+        (e, resp, status) => {
+            mattressTransferSubmit.value = `Error! ${status}`;
+            mattressTransferSubmit.disabled = false;
+        },
+        true
+    );
+
+    return false;
 }
 
 function clearMattresses()
@@ -208,5 +256,37 @@ function showEditMattressForm(e) {
 
     // Show modal
     modal.selectContent( modal.ModalContent.MATTRESS )
+    modal.show();
+}
+
+function showTransferForm(e) {
+    // Populate inputs.
+    mattressTransferAmount.value = '';
+    transferMattressSource.innerHTML = '<option></option>';
+    transferMattressDestination.innerHTML = '<option></option>';
+
+    // Add the unallocated mattress.
+    let unallocatedOption = document.createElement( "option" );
+    unallocatedOption.innerHTML = UNALLOCATED_MATTRESS_NAME;
+    unallocatedOption.value = UNALLOCATED_MATTRESS_NAME;
+
+    transferMattressSource.appendChild(unallocatedOption);
+    transferMattressDestination.appendChild(unallocatedOption.cloneNode(true));
+
+    // Add the user's mattresses.
+    mattresses.forEach(mattress => {
+        let opt = document.createElement( "option" );
+        opt.innerHTML = `${mattress.name} — $${mattress.amount}`;
+        opt.value = mattress._id;
+
+        transferMattressSource.appendChild(opt);
+        transferMattressDestination.appendChild(opt.cloneNode(true));
+    });
+
+
+    // Show modal
+    mattressTransferSubmit.disabled = false;
+    mattressTransferSubmit.value = "Transfer";
+    modal.selectContent( modal.ModalContent.MATTRESS_TRANSFER );
     modal.show();
 }

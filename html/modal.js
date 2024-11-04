@@ -9,11 +9,13 @@ export {
 const ModalContent = Object.freeze({
     TRANSACTION: 0,
     MATTRESS: 1,
+    MATTRESS_TRANSFER: 2,
 });
 
 const Forms = [
     newTransactionForm,
     newMattressForm,
+    mattressTransferForm,
 ];
 
 /**
@@ -34,11 +36,7 @@ const hideContent = () => {
 
 const selectContent = (content) => {
     hideContent();
-    if( content == ModalContent.TRANSACTION ) {
-
-    } else if ( content == ModalContent.MATTRESS ) {
-        newMattressForm.style.display = "";
-    }
+    Forms[ content ].style.display = "";
 };
 
 const show = () => {

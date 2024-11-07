@@ -573,6 +573,13 @@ import * as forms from "./forms.js";
     const toggleIsPaycheck = (e) => {
         showPaycheckSubform = !showPaycheckSubform;
         newTransactionPaycheckSubform.style.display = showPaycheckSubform ? "" : "none";
+
+        // When submitting a non-paycheck transaction, marking these as required
+        // would prevent a form submission from succeeding. Instead, only mark
+        // them as required when the paycheck subform is being shown.
+        for( let inp of document.getElementsByClassName("paycheckInput") ) {
+            inp.required = showPaycheckSubform;
+        }
     }
 
 

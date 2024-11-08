@@ -819,7 +819,7 @@ async function editTransaction( res, req, data )
     let sourceAccount;
     if( fields_to_update.sourceAccount && !srcAccountIsOutside )
     {
-        sourceAccount = await accounts.getAccount( fields_to_update.username, fields_to_update.sourceAccount, fields_to_update.sourceInstitution );
+        sourceAccount = await accounts.getAccount( user.username, fields_to_update.sourceAccount, fields_to_update.sourceInstitution );
         if( !sourceAccount )
         {
             console.log( `  Unkonwn source account: ${fields_to_update.sourceInstitution}/${fields_to_update.sourceAccount}` );
@@ -832,7 +832,7 @@ async function editTransaction( res, req, data )
     let destinationAccount;
     if( fields_to_update.destinationAccount && !destAccountIsOutside )
     {
-        destinationAccount = await accounts.getAccount( fields_to_update.username, fields_to_update.destinationAccount, fields_to_update.destinationInstitution );
+        destinationAccount = await accounts.getAccount( user.username, fields_to_update.destinationAccount, fields_to_update.destinationInstitution );
         if( !destinationAccount )
         {
             console.log( `  Unkonwn destination account: ${fields_to_update.destinationInstitution}/${fields_to_update.destinationAccount}` );

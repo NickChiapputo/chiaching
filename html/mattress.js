@@ -34,21 +34,10 @@ export const init = () => {
     getMattresses();
 };
 
-export var mattresses = [];
-
-const UNALLOCATED_MATTRESS_NAME = "unallocated";
-const mattressInputFields = [
-    mattressName,
-    mattressMaxAmount,
-    mattressInitialAmount,
-    newMattressSubmit,
-]
-var mattressInputEditButtons = [];
-function getMattresses() {
+export const getMattresses = () => {
     send( "/api/mattresses/getNames", "GET", null,
         (resp, status) => {
             // Display in mattresses section.
-            clearMattresses();
             mattresses = [];
             resp.names.sort( (a, b) =>
                 a.localeCompare( b, undefined, { sensitivity: "base" } )
@@ -61,7 +50,18 @@ function getMattresses() {
         },
         true
     );
-}
+};
+
+export var mattresses = [];
+
+const UNALLOCATED_MATTRESS_NAME = "unallocated";
+const mattressInputFields = [
+    mattressName,
+    mattressMaxAmount,
+    mattressInitialAmount,
+    newMattressSubmit,
+]
+var mattressInputEditButtons = [];
 
 function getAndDisplayMattress(mattressName)
 {
@@ -84,8 +84,18 @@ function getAndDisplayMattress(mattressName)
 
 function displayMattress( mattress )
 {
+    // Check if mattress already exists in mattress list.
+    let existingElement = null;
+    for( let child of mattressList.children ) {
+        if( child.getAttribute( "_id" ) == mattress._id ) {
+            existingElement = child;
+            break;
+        }
+    }
+
     let container = document.createElement( "div" );
     container.classList.toggle( "mattressContainer" );
+    container.setAttribute( "_id", mattress._id );
 
     let title = document.createElement( "span" );
     title.classList.toggle( "mattressTitle" );
@@ -111,7 +121,11 @@ function displayMattress( mattress )
     container.appendChild( amounts );
     container.appendChild( editButton );
 
-    mattressList.appendChild( container );
+    if( existingElement !== null ) {
+        existingElement.replaceWith( container );
+    } else {
+        mattressList.appendChild( container );
+    }
 }
 
 function submitMattressForm(e) {

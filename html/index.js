@@ -1070,6 +1070,7 @@ import * as forms from "./forms.js";
 
 
     const showNewTransactionModal = (e) => {
+        modalLib.selectContent( modalLib.ModalContent.TRANSACTION );
         showModal(true);
     };
 

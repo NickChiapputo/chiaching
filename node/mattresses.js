@@ -15,6 +15,8 @@ const ACTION_HANDLERS = {
     get: getMattress,
     getNames: getMattressNames,
     create: createMattress,
+    edit: edit,
+    transfer: transfer,
     // setAmount: setAmount,
     // setMaxAmount: setMaxAmount,
 };
@@ -25,14 +27,18 @@ module.exports = {
     getMattress: getMattressByName,
 };
 
+const INVALID_MATTRESS_NAMES = [
+    "unallocated",
+];
+
 /**
  * Create a new mattress for the signed-in user.
- * Must be a POST request and the body data must include the following 
+ * Must be a POST request and the body data must include the following
  * mattress information:
  * - name
  * - maximum amount
  * - initial amount
- * 
+ *
  * @param {Object} res   HTTP response object
  * @param {Object} req   HTTP request object
  * @param {Object} data  Request body data
@@ -50,10 +56,14 @@ async function createMattress( res, req, data )
     if( user === 1 ) return;
 
     // Verify request data
-    if( !util.validateNonEmptyString( data.name, true, res ) )          return;
+    if( !util.validateNonEmptyString( data.name, true, res ) &&
+        !INVALID_MATTRESS_NAMES.includes( data.name.trim().toLowerCase() ) )
+    {
+        return;
+    }
     if( !util.validateNonNegativeFloat( data.maxAmount, true, res ) )   return;
     if( !util.validateNonNegativeFloat( data.amount, true, res ) )      return;
-    
+
     // Create a new mattress and add it to the database.
     let newMattress = {
         username: user.username,
@@ -62,7 +72,7 @@ async function createMattress( res, req, data )
         amount: util.parseStringFloat( data.amount )
     };
 
-    console.log( 
+    console.log(
         `  Creating new mattress for ${newMattress.username}:\n` +
         `    Name:           ${newMattress.name}\n` +
         `    Maximum:        ${newMattress.maxAmount}\n` +
@@ -79,30 +89,30 @@ async function createMattress( res, req, data )
         // that has the same unique key. Check the indexes
         // for what the key is.
         console.log( `  Mattress already exists.` );
-        util.resolveAction( 
-            res, 400, { 
-                response: RESPONSE_CODES.ItemExists, 
-                exists: result.keyPattern 
-            } 
+        util.resolveAction(
+            res, 400, {
+                response: RESPONSE_CODES.ItemExists,
+                exists: result.keyPattern
+            }
         );
         return;
     }
     else if( !result.acknowledged )
     {
         // There was no response from MongoDB when
-        // trying to insert the document. 
+        // trying to insert the document.
         console.log( `  Unknown money account creation error. Could be a database error!` );
         util.resolveAction(
-            res, 502, { 
-                response: RESPONSE_CODES.DatabaseError 
-            } 
+            res, 502, {
+                response: RESPONSE_CODES.DatabaseError
+            }
         );
         return;
     }
 
-    util.resolveAction( 
-        res, 200, 
-        { "response" : RESPONSE_CODES.OK } 
+    util.resolveAction(
+        res, 200,
+        { "response" : RESPONSE_CODES.OK }
     );
     return;
 }
@@ -139,16 +149,16 @@ async function getMattress( res, req, data )
         return;
     }
 
-    let result = await getMattressByName( 
-        user.username, util.parseStringTrim( data.name ) 
+    let result = await getMattressByName(
+        user.username, util.parseStringTrim( data.name )
     );
-    
+
     if( !result )
         util.resolveAction( res, 500, { "response": RESPONSE_CODES.DatabaseError } );
     else
-        util.resolveAction( res, 200, { 
-            response: RESPONSE_CODES.OK, 
-            mattress: result 
+        util.resolveAction( res, 200, {
+            response: RESPONSE_CODES.OK,
+            mattress: result
         } );
     return;
 }
@@ -156,8 +166,8 @@ async function getMattress( res, req, data )
 /**
  * Check database for mattress specified by
  * owning user and the name of the mattress.
- * @param {String} username 
- * @param {String} name 
+ * @param {String} username
+ * @param {String} name
  * @returns Mattress object from database.
  */
 async function getMattressByName( username, name )
@@ -168,16 +178,12 @@ async function getMattressByName( username, name )
         name: name,
     };
 
-    options = {
-        projection: {
-            "_id": 0
-        }
-    };
+    options = {};
 
 
-    result = await dbLib.getItem( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
-        query, options 
+    result = await dbLib.getItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, options
     );
 
     return result;
@@ -209,9 +215,9 @@ async function getMattressNames( res, req )
     let options = {
         projection: { "_id": 0, "name": 1 },
     };
-    let result = await dbLib.getItems( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
-        query, options 
+    let result = await dbLib.getItems(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, options
     );
 
     if( !result )
@@ -252,13 +258,197 @@ async function incrementAmount( username, mattressName, amount )
     let options = {};
 
     console.log( `  Incrementing ${username}'s mattress ${mattressName} by ${amount}.` );
-    let result = await dbLib.updateItem( 
-        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, 
+    let result = await dbLib.updateItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
         query, update, options );
     console.log( `    Result: ${JSON.stringify(result)}` );
-        
+
     if( !result || result.lastErrorObject.n == 0 )
         return null;
     else
         return result;
+}
+
+/**
+ * Edit an existing mattress for the signed-in user.
+ * Must be a POST request and the body data must include at least `_id` and one
+ * or more of:
+ * - name
+ * - maxAmount
+ *
+ * @param {Object} res   HTTP response object
+ * @param {Object} req   HTTP request object
+ * @param {Object} data  Request body data
+ */
+async function edit( res, req, data ) {
+    if( req.method !== "POST" )
+    {
+        util.resolveAction( res, 405, { response: RESPONSE_CODES.BadMethodPOST } );
+        return;
+    }
+
+    // Verify user
+    let user = await util.checkLoggedIn( res, req );
+    if( user === 1 ) return;
+
+    // Verify the original mattress exists.
+    if( !util.validateNonEmptyString( data._id, true, res ) ) return;
+    let query = {
+        "_id": dbLib.createObjectID( data._id ),
+        "username": user.username
+    };
+    let original_mattress = await dbLib.getItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        query, {}
+    );
+
+    if( !original_mattress ) {
+        util.resolveAction( res, 400, { response: RESPONSE_CODES.InvalidFormData } );
+        return;
+    }
+
+    // Validate fields if they exist.
+    let fields_to_update = {};
+    if( util.validateNonEmptyString( data.name, false ) )
+        fields_to_update.name = data.name.trim();
+    if( util.validateNonNegativeFloat( data.maxAmount, false ) )
+        fields_to_update.maxAmount = util.parseStringFloat( data.maxAmount );
+
+    // Update the mattress.
+    let update = { "$set": fields_to_update };
+    let result = await dbLib.updateItem( DB_NAMES.dbName,
+        DB_NAMES.mattressesCollectionName, query, update, {} );
+
+    if( !result || result.lastErrorObject.n == 0 )
+    {
+        console.log( `  Update mattress failed with: ${JSON.stringify( result, null, 2 )}` );
+        util.resolveAction( res, 502, { "response" : RESPONSE_CODES.DatabaseError } );
+        return;
+    }
+
+    util.resolveAction( res, 200, { "response" : RESPONSE_CODES.OK } );
+    return;
+}
+
+/**
+ * API endpoint for `transferAmount`. Provide data in POST must include:
+ * - `source`       -- Source mattress
+ * - `destination`  -- Destination mattress
+ * - `amount`       -- Amount to subtract from source and add to destination.
+ *
+ * @param {Object} res   HTTP response object
+ * @param {Object} req   HTTP request object
+ * @param {Object} data  Request body data
+ */
+async function transfer( res, req, data ) {
+    if( req.method !== "POST" )
+    {
+        util.resolveAction( res, 405, { response: RESPONSE_CODES.BadMethodPOST } );
+        return;
+    }
+
+    // Verify user
+    let user = await util.checkLoggedIn( res, req );
+    if( user === 1 ) return;
+
+    // Verify required data exists
+    if( !util.validateNonEmptyString( data.source, true, res ) ) return;
+    if( !util.validateNonEmptyString( data.destination, true, res ) ) return;
+    if( !util.validateNonNegativeFloat( data.amount, true, res ) ) return;
+
+    let result = await transferAmount(
+        user.username,
+        data.source,
+        data.destination,
+        util.parseStringFloat( data.amount )
+    );
+
+    if( result ) {
+        if( result != 3 ) {
+            util.resolveAction( res, 400,
+                { response: RESPONSE_CODES.InvalidFormData } );
+        } else {
+            util.resolveAction( res, 502,
+                { response: RESPONSE_CODES.DatabaseError } );
+        }
+        return;
+    }
+
+    util.resolveAction( res, 200, { "response" : RESPONSE_CODES.OK } );
+    return;
+}
+
+
+/**
+ * Transfer `amount` from `srcMattress` to `dstMattress` owned by `username`.
+ * @param {*} username      User who owns the mattresses
+ * @param {*} srcMattress   Source mattress `_id`
+ * @param {*} dstMattress   Destination mattress `_id`
+ * @param {*} amount        Amount to subtract from `srcMattress`
+ *                          and add to `dstMattress`.
+ * @returns Codes:
+ *          - 0: success
+ *          - 1: user does not have `srcMattress`
+ *          - 2: user does not have `dstMattress`
+ *          - 3: Failure updating amounts
+ */
+async function transferAmount( username, srcMattress, dstMattress, amount )
+{
+    // Validate mattresses exist.
+    source_is_unallocated = srcMattress.trim().toLowerCase() == "unallocated";
+    destination_is_unallocated = dstMattress.trim().toLowerCase() == "unallocated";
+
+    let source_query = undefined;
+    let source = undefined;
+    if( !source_is_unallocated ) {
+        source_query = {
+            "_id": dbLib.createObjectID( srcMattress ),
+            "username": username
+        };
+        source = await dbLib.getItem(
+            DB_NAMES.dbName, DB_NAMES.mattressesCollectionName, source_query, {}
+        );
+        if( !source ) return 1;
+    }
+
+    let destination_query = undefined;
+    let destination = undefined;
+    if( !destination_is_unallocated ) {
+        destination_query = {
+            "_id": dbLib.createObjectID( dstMattress ),
+            "username": username
+        };
+        destination = await dbLib.getItem(
+            DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+            destination_query, {}
+        );
+        if( !destination ) return 2;
+    }
+
+    // Update amounts.
+    let update = {};
+    let result = undefined;
+    if( !source_is_unallocated ) {
+        update = { "$dec": { "amount": amount } };
+        result = await dbLib.updateItem( DB_NAMES.dbName,
+            DB_NAMES.mattressesCollectionName, source_query, update, {} );
+
+        if( !result || result.lastErrorObject.n == 0 ) {
+            console.log( `  Decrement source mattress ${source.name} amount failed with: ${JSON.stringify( result, null, 2 )}` );
+            return 3;
+        }
+    }
+
+    if( !destination_is_unallocated ) {
+        update = { "$inc": { "amount": amount } };
+        result = await dbLib.updateItem( DB_NAMES.dbName,
+            DB_NAMES.mattressesCollectionName, destination_query, update, {} );
+
+        if( !result || result.lastErrorObject.n == 0 ) {
+            console.log( `  Increment destination mattress ${destination.name} amount failed with: ${JSON.stringify( result, null, 2 )}` );
+            return 3;
+        }
+    }
+
+    return 0;
 }

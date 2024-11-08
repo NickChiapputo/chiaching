@@ -27,8 +27,11 @@ form select {
 
 form input:not([type="radio"], [type="checkbox"], [type="submit"]), form select {
 	width: 30em;
-	min-width: 300px;
-	max-width: 90%;
+	max-width: 100%;
+}
+
+form input[type="number"] {
+	width: 10em;
 }
 
 form label, form span {

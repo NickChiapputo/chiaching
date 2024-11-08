@@ -61,7 +61,6 @@
         <script type="module" src="send.js"></script>
         <script type="module" src="mattress.js"></script>
         <script type="module" src="index.js"></script>
-        <script src="https://cdn.plot.ly/plotly-2.29.0.min.js" charset="utf-8"></script>
 
 
         <!-- CSS Styles -->
@@ -69,7 +68,6 @@
         <link rel="stylesheet" id="colorSchemeCSS" href="/css/colors-latte.css">
         <link rel="stylesheet" href="/css/theme-definition.css">
         <link rel="stylesheet" href="/css/html_body.css">
-        <!-- <link rel="stylesheet" href="/css/loading.css"> -->
         <link rel="stylesheet" href="/css/header.css">
         <link rel="stylesheet" href="/css/footer.css">
         <link rel="stylesheet" href="/css/form.css">
@@ -156,7 +154,7 @@
                                 <label for="amount">Amount<span class="required">*</span></label>
                                 <div class="inputWithButton">
                                     <img class="inputEditButton" for="amount" src="/media/edit-pencil.svg" />
-                                    <input type="number" id="amount" name="amount" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" id="amount" name="amount"  min="0.00" step="0.01" placeholder="0.00" required>
                                 </div>
                             </div>
 
@@ -169,43 +167,43 @@
                                 <!-- Earnings -->
                                 <div class="formInputGroup fullWidthInputGroup">
                                     <label for="earnings">Gross Earnings<span class="required">*</span></label>
-                                    <input type="number" id="earnings" name="earnings" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="earnings" name="earnings"  min="0.00" step="0.01" placeholder="0.00">
                                 </div>
 
                                 <!-- Taxes -->
                                 <div class="formInputGroup">
                                     <label for="federalTaxes">Federal Taxes<span class="required">*</span></label>
-                                    <input type="number" id="federalTaxes" name="federalTaxes" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="federalTaxes" name="federalTaxes"  min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="stateTaxes">State Taxes<span class="required">*</span></label>
-                                    <input type="number" id="stateTaxes" name="stateTaxes" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="stateTaxes" name="stateTaxes"  min="0.00" step="0.01" placeholder="0.00">
                                 </div>
 
                                 <!-- Benefits -->
                                 <div class="formInputGroup">
                                     <label for="healthcare">Healthcare<span class="required">*</span></label>
-                                    <input type="number" id="healthcare" name="healthcare" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="healthcare" name="healthcare"  min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="vision">Vision<span class="required">*</span></label>
-                                    <input type="number" id="vision" name="vision" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="vision" name="vision" min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="dental">Dental<span class="required">*</span></label>
-                                    <input type="number" id="dental" name="dental" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="dental" name="dental" min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="401k">401(k)<span class="required">*</span></label>
-                                    <input type="number" id="401k" name="401k" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="401k" name="401k" min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="hsa">HSA<span class="required">*</span></label>
-                                    <input type="number" id="hsa" name="hsa" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="hsa" name="hsa" min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                                 <div class="formInputGroup">
                                     <label for="rothIRA">Roth IRA<span class="required">*</span></label>
-                                    <input type="number" id="rothIRA" name="rothIRA" min="0.00" step="0.01" value="0.00" required>
+                                    <input type="number" class="paycheckInput" id="rothIRA" name="rothIRA" min="0.00" step="0.01" placeholder="0.00">
                                 </div>
                             </div>
 
@@ -219,6 +217,57 @@
 
                             <div class="formInputGroup fullWidthInputGroup">
                                 <input type="submit" value="Submit" id="transactionSubmit">
+                            </div>
+                        </form>
+
+                        <form id="newMattressForm" class="addNewForm">
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="mattressName">Mattress Name<span class="required">*</span></label>
+                                <div class="inputWithButton">
+                                    <img class="inputEditButton" for="mattressName" src="/media/edit-pencil.svg" />
+                                    <input type="text" id="mattressName" name="mattressName" placeholder="My Mattress" required>
+                                </div>
+                            </div>
+
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="mattressMaxAmount">Maximum Amount<span class="required">*</span></label>
+                                <div class="inputWithButton">
+                                    <img class="inputEditButton" for="mattressMaxAmount" src="/media/edit-pencil.svg" />
+                                    <input type="number" id="mattressMaxAmount" name="mattressMaxAmount" min="0" step="1" placeholder="100" required>
+                                </div>
+                            </div>
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="mattressInitialAmount">Initial Amount<span class="required">*</span></label>
+                                <input type="number" id="mattressInitialAmount" name="mattressInitialAmount" min="0" step="1" placeholder="0" required>
+                            </div>
+
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <input type="submit" id="newMattressSubmit" value="Create Mattress">
+                            </div>
+                        </form>
+
+                        <form id="mattressTransferForm" class="addNewForm">
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="transferMattressSource">From<span class="required">*</span></label>
+                                <select id="transferMattressSource" name="transferMattressSource" required>
+                                    <option></option>
+                                </select>
+                            </div>
+
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="transferMattressDestination">To<span class="required">*</span></label>
+                                <select id="transferMattressDestination" name="transferMattressDestination" required>
+                                    <option></option>
+                                </select>
+                            </div>
+
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <label for="mattressTransferAmount">Amount<span class="required">*</span></label>
+                                <input type="number" id="mattressTransferAmount" name="mattressTransferAmount" min="0" step="1" placeholder="0" required>
+                            </div>
+
+                            <div class="formInputGroup fullWidthInputGroup">
+                                <input type="submit" id="mattressTransferSubmit" value="Transfer">
                             </div>
                         </form>
                     </div>
@@ -322,26 +371,12 @@
                 <div id="mattressList">
                 </div>
 
-                <button id="addMattressButton" class="addNewButton">+ Add Mattress</button>
-                <form id="newMattressForm" class="addNewForm" style="display: none;">
-                    <div class="formInputGroup">
-                        <label for="mattressName">Mattress Name</label>
-                        <input type="text" id="mattressName" name="mattressName" placeholder="My Mattress" required>
-                    </div>
-
-                    <div class="formInputGroup">
-                        <label for="mattressMaxAmount">Maximum Amount</label>
-                        <input type="number" id="mattressMaxAmount" name="mattressMaxAmount" min="0.00" step="0.01" placeholder="0.00" required>
-                    </div>
-                    <div class="formInputGroup">
-                        <label for="mattressInitialAmount">Initial Amount</label>
-                        <input type="number" id="mattressInitialAmount" name="mattressInitialAmount" min="0.00" step="0.01" placeholder="0.00" class="" required>
-                    </div>
-
-                    <div class="formInputGroup fullWidthInputGroup">
-                        <input type="submit" value="Create Mattress">
-                    </div>
-                </form>
+                <div id="mattressButtonContainer">
+                    <button id="addMattressButton" class="addNewButton">+ Add Mattress</button>
+                    <button id="mattressTransferButton" class="addNewButton" title="Transfer Between Mattresses">
+                        <img src="/media/transfer.svg"/>
+                    </button>
+                </div>
             </div>
         </div>
 

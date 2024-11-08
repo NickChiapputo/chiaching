@@ -1,7 +1,9 @@
 // Import template header and footer HTML.
 import {header} from '/header.js'
-import {init as initMattresses, mattressNames} from "/mattress.js"
+import {init as initMattresses, mattresses} from "/mattress.js"
 import {send} from "/send.js"
+import * as modalLib from "./modal.js";
+import * as forms from "./forms.js";
 
 (() => {
     var userInfo = undefined;
@@ -56,18 +58,20 @@ import {send} from "/send.js"
         document.getElementById( "header" ).outerHTML = header;
         // document.getElementById( "footer" ).outerHTML = footer;
 
+        // Ignore enter as submission to prevent early form submissions.
         window.addEventListener( "keydown", (e) => {
             if (e.keyIdentifier=='U+000A' || e.keyIdentifier=='Enter' || e.keyCode==13)
             {
                 if (e.target.nodeName=='INPUT' && e.target.type=='text')
                 {
-                    console.log( "Ignoring input" )
                     e.preventDefault();
                     return false;
                 }
             }
         }, true);
 
+        // Make sure the user is supposed to be here. If their login is
+        // outdated, redirct to the login page with a redirect link back here.
         send(
             "/api/user/validateToken", "GET", {},
             (response) => {
@@ -82,11 +86,6 @@ import {send} from "/send.js"
             },
             true
         );
-
-        modalContainer.addEventListener( "click", (e) => {
-            if( e.target == modalContainer ) showModal(false);
-        } );
-        modalExitButton.addEventListener( "click", e => { showModal(false); } );
 
 
         // Transactions
@@ -140,7 +139,8 @@ import {send} from "/send.js"
         // Attach edit action to edit buttons for transaction modal
         let editButtons = document.getElementsByClassName( "inputEditButton" )
         for( let b of editButtons ) {
-            b.addEventListener( "click", editButtonAction );
+            if( !newTransactionForm.contains(b) ) continue;
+            b.addEventListener( "click", e => forms.editButtonAction(e, transactionSubmit) );
         }
 
 
@@ -154,6 +154,7 @@ import {send} from "/send.js"
 
 
         // Populate data
+        modalLib.init();
         getMoneyAccounts();
         getTransactions();
         // getBudgets();
@@ -475,38 +476,6 @@ import {send} from "/send.js"
         newBudgetButton.innerHTML = showNewBudgetForm ? newBudgetButtonShowText : newBudgetButtonHideText;
     };
 
-
-    const editButtonAction = e => {
-        // Get the element we are editing
-        let editElement = document.getElementById(e.target.getAttribute("for"));
-        console.log(editElement);
-        if( editElement == undefined ) return;
-        editElement.disabled = false;
-
-        // Give the element under edit (EUE) user focus.
-        editElement.focus();
-
-        // Add an event listener to enable the submit button if the transaction
-        // detail has been edited.
-        let inputHandler = e => {
-            editElement.classList.add( "edited" );
-
-            transactionSubmit.disabled = false;
-            transactionSubmit.value = "Submit Changes";
-        };
-        editElement.addEventListener( "input", inputHandler );
-
-        // Add an event listener to the element under edit (EUE) to re-disable
-        // it after the user leaves focus from the EUE and remove the event
-        // listeners.
-        let focusoutHandler = e => {
-            editElement.disabled = true;
-            editElement.removeEventListener( "focusout", focusoutHandler );
-            editElement.removeEventListener( "input", inputHandler );
-        };
-        editElement.addEventListener( "focusout", focusoutHandler );
-    };
-
     const editTransaction = e => {
         // Check all editable transaction fields
         // and see what needs to be updated.
@@ -604,6 +573,13 @@ import {send} from "/send.js"
     const toggleIsPaycheck = (e) => {
         showPaycheckSubform = !showPaycheckSubform;
         newTransactionPaycheckSubform.style.display = showPaycheckSubform ? "" : "none";
+
+        // When submitting a non-paycheck transaction, marking these as required
+        // would prevent a form submission from succeeding. Instead, only mark
+        // them as required when the paycheck subform is being shown.
+        for( let inp of document.getElementsByClassName("paycheckInput") ) {
+            inp.required = showPaycheckSubform;
+        }
     }
 
 
@@ -1094,6 +1070,7 @@ import {send} from "/send.js"
 
 
     const showNewTransactionModal = (e) => {
+        modalLib.selectContent( modalLib.ModalContent.TRANSACTION );
         showModal(true);
     };
 
@@ -1117,10 +1094,10 @@ import {send} from "/send.js"
 
         // Populate the mattress list dropdown
         transactionMattressName.innerHTML = '<option></option>';
-        mattressNames.forEach((name) => {
+        mattresses.forEach((mattress) => {
             let mattressOption = document.createElement( "option" );
-            mattressOption.innerHTML = name;
-            mattressOption.value = name;
+            mattressOption.innerHTML = mattress.name;
+            mattressOption.value = mattress.name;
             transactionMattressName.appendChild( mattressOption );
         });
 
@@ -1184,6 +1161,7 @@ import {send} from "/send.js"
 
         let editButtons = document.getElementsByClassName( "inputEditButton" )
         for( let button of editButtons ) {
+            if( !newTransactionForm.contains(button) ) continue;
             button.style.display = existingTransaction ? "" : "none";
         }
 

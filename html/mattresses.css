@@ -1,3 +1,8 @@
+:root {
+    --mattress-columns: 4;
+    --mattress-list-gap: 1em;
+}
+
 #mattresses {
     width: 100%;
 }
@@ -8,4 +13,62 @@
 
     width: calc(100% - 2*1em);
     padding: 1em;
+    column-gap: var(--mattress-list-gap);
+    row-gap: var(--mattress-list-gap);
+}
+
+#mattressButtonContainer {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 1em;
+}
+
+#newMattressSubmit {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#mattressTransferButton {
+    height: 3em;
+}
+#mattressTransferButton > img {
+    height: 100%;
+    width: 100%;
+}
+
+div.mattressContainer {
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 0.5em;
+
+    width: calc((100% / var(--mattress-columns)) -
+        ((var(--mattress-columns) - 1 ) * var(--mattress-list-gap) / var(--mattress-columns)));
+}
+
+div.mattressContainer > span {
+    width: 100%;
+    text-align: center;
+}
+
+div.mattressContainer > div.mattressBar {
+    height: 10em;
+    max-height: 20vh;
+
+    width: 1em;
+
+    background: transparent;
+    margin-left: auto;
+    margin-right: auto;
+
+    border: solid 1px black;
+    border-radius: 0.5em;
+}
+
+div.mattressContainer > img.mattressEditButton {
+    width: 1em;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    cursor: pointer;
 }

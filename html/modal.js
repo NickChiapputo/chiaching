@@ -49,6 +49,11 @@ const hide = () => {
     clearClasses();
     modalContainer.classList.add( "modalHidden" );
     modal.classList.add( "modalHidden" );
+
+    // On Firefox, the calendar icon will show through any
+    // elements on top of the date input.
+    transactionListStartDate.disabled = false;
+    transactionListEndDate.disabled = false;
 };
 
 const clearClasses = () => {

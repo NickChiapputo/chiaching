@@ -697,10 +697,8 @@ import * as forms from "./forms.js";
                     }
                 });
 
-                console.log( JSON.stringify( tag_amounts, null, 2 ) );
-                console.log( `Surplus = ${surplus}` );
-
                 populateTransactions();
+                populateTagOverview(tag_amounts);
             },
             (e, resp, status) => {
                 console.error( e );
@@ -732,6 +730,77 @@ import * as forms from "./forms.js";
             },
             true
         );
+    };
+
+
+    const populateTagOverview = (tag_data) => {
+        // Sort tags by decreasing absolute amount.
+        let tags = Object.keys( tag_data )
+            .sort((a, b) =>
+                Math.abs(tag_data[ a ]) < Math.abs(tag_data[ b ])
+            );
+
+        let maximum = 0;
+        let surplus = 0;
+        tags.forEach(tag => {
+            let amount = Math.abs( tag_data[ tag ] );
+            maximum = amount > maximum ? amount : maximum;
+            surplus += tag_data[ tag ];
+        });
+
+        // For each tag, create a new summary row.
+        tagOverview.innerHTML = '';
+        tags.forEach(tag => {
+            let row = document.createElement( "div" );
+            row.classList.toggle( "tagSummary" );
+
+            let tagName = document.createElement( "span" );
+            tagName.classList.toggle( "tagName" );
+            tagName.title = tag;
+            tagName.innerHTML = tag;
+
+            let tagBar = document.createElement( "div" );
+            let percent = 100 * Math.abs(tag_data[ tag ]) / maximum;
+            let color = tag_data[ tag ] < 0 ? "negative-currency-foreground" : "Green"
+            tagBar.classList.toggle( "tagBar" );
+            tagBar.style.background = `linear-gradient(to right, var(--${color}), var(--${color}) ${percent}%, transparent 0%, transparent)`;
+
+            let tagAmount = document.createElement( "span" );
+            tagAmount.classList.toggle( "tagAmount" );
+            tagAmount.innerHTML = numberToCurrencyString( tag_data[ tag ] );
+            if( tag_data[ tag ] < 0 ) {
+                tagAmount.classList.toggle( "currencyAmountNegative" );
+            }
+
+            row.appendChild( tagName );
+            row.appendChild( tagBar );
+            row.appendChild( tagAmount );
+            tagOverview.appendChild( row );
+        });
+
+        // Create a final surplus row to summarize the tags.
+        let row = document.createElement( "div" );
+        row.classList.toggle( "tagSummary" );
+
+        let tagName = document.createElement( "span" );
+        tagName.classList.toggle( "tagName" );
+        tagName.title = "Surplus";
+        tagName.innerHTML = "Surplus";
+
+        let tagBar = document.createElement( "div" );
+        tagBar.classList.toggle( "tagBar" );
+
+        let tagAmount = document.createElement( "span" );
+        tagAmount.classList.toggle( "tagAmount" );
+        tagAmount.innerHTML = numberToCurrencyString( surplus );
+        if( surplus < 0 ) {
+            tagAmount.classList.toggle( "currencyAmountNegative" );
+        }
+
+        row.appendChild( tagName );
+        row.appendChild( tagBar );
+        row.appendChild( tagAmount );
+        tagOverview.appendChild( row );
     };
 
 

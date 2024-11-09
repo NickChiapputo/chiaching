@@ -80,7 +80,7 @@ table > tbody {
     height: 1.5em;
 }
 
-.transactionTableDate, .transactionTableLocation, 
+.transactionTableDate, .transactionTableLocation,
 .transactionTableAccount, .transactionTableTag,
 .transactionTableDescription {
     text-align: left;
@@ -116,6 +116,7 @@ table tbody tr:nth-of-type(even) {
     width: 100%;
 
     margin-top: 1rem;
+    margin-bottom: 1rem;
 
     display: flex;
     flex-flow: row nowrap;
@@ -156,4 +157,48 @@ table tbody tr:nth-of-type(even) {
 
 .transactionPage.currentPage:hover {
     background-color: var(--foreground-text);
+}
+
+/** Tag Summaries **/
+#tagOverview {
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 0.5em;
+    width: 100%;
+}
+
+#tagOverview > div.tagSummary {
+    display: flex;
+    flex-flow: row nowrap;
+    column-gap: 1em;
+    width: 100%;
+}
+
+#tagOverview > div.tagSummary > span.tagName {
+    width: 15ch;
+    flex-grow: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#tagOverview > div.tagSummary > div.tagBar {
+    flex-grow: 2;
+
+    border: solid 1px black;
+    border-radius: 0.5em;
+}
+
+#tagOverview > div.tagSummary > span.tagAmount {
+    width: 10ch;
+    flex-grow: 0;
+    text-align: right;
+}
+
+#tagOverview > div.tagSummary:last-child > div.tagBar {
+    border: none;
+}
+#tagOverview > div.tagSummary:last-child > span.tagName,
+#tagOverview > div.tagSummary:last-child > span.tagAmount {
+    font-weight: bold;
 }

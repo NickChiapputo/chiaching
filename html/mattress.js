@@ -104,7 +104,7 @@ function displayMattress( mattress )
     let bar = document.createElement( "div" );
     bar.classList.toggle( "mattressBar" );
     let percent = 100 * mattress.amount / mattress.maxAmount;
-    bar.style.background = `linear-gradient(to top, green, green ${percent}%, transparent 0%, transparent)`;
+    bar.style.background = `linear-gradient(to top, var(--Green), var(--Green) ${percent}%, transparent 0%, transparent)`;
 
     let amounts = document.createElement( "span" );
     amounts.classList.toggle( "mattressAmounts" );

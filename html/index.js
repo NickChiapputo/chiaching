@@ -136,6 +136,11 @@ import * as forms from "./forms.js";
             updateTransactionPage( next_page );
         } );
 
+        monthBackButton.addEventListener( "click",
+            e => changeTransactionMonthRange(false));
+        monthForwardButton.addEventListener( "click",
+            e => changeTransactionMonthRange(true));
+
         // Attach edit action to edit buttons for transaction modal
         let editButtons = document.getElementsByClassName( "inputEditButton" )
         for( let b of editButtons ) {
@@ -645,6 +650,25 @@ import * as forms from "./forms.js";
         }
     };
 
+
+    const changeTransactionMonthRange = (forward) => {
+        if( typeof(forward) !== "boolean" ) return;
+
+        let offset = forward ? 1 : -1;
+
+        let startSplit = transactionListStartDate.value.split( '-' );
+        let startMonth = parseInt(startSplit[1]);
+        let startYear  = parseInt(startSplit[0]);
+
+        let endSplit = transactionListEndDate.value.split( '-' );
+        let endMonth = parseInt(endSplit[1]);
+        let endYear  = parseInt(endSplit[0]);
+
+        let newStartDate = new Date( startYear, startMonth + offset - 1, 1 );
+        let newEndDate   = new Date( endYear,   endMonth + offset,   0 );
+        setTransactionsDates( newStartDate, newEndDate );
+        getTransactions();
+    }
 
     const setTransactionsDates = (start, end) => {
         let startMonth = ("0" + (start.getMonth() + 1)).slice(-2);

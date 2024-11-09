@@ -329,18 +329,14 @@
 
             <div id="transactions">
                 <div class="sectionTitle">Transactions</div>
-                <!-- Put header here! -->
-                <form id="transactionDateForm" class="addNewForm">
-                    <div class="formInputGroup">
-                        <label for="transactionListStartDate">Start Date</label>
-                        <input type="date" id="transactionListStartDate" name="transactionListStartDate" required>
-                    </div>
-                    <div class="formInputGroup">
-                        <label for="transactionListEndDate">End Date</label>
-                        <input type="date" id="transactionListEndDate" name="transactionListEndDate" required>
-                    </div>
-                </form>
-                <button id="addTransactionButton" class="addNewButton">+ Add Transaction</button>
+                <div id="transactionControlsContainer">
+                    <button id="addTransactionButton" class="addNewButton">+ Add Transaction</button>
+                    <button id="monthBackButton"><</button>
+                    <input type="date" id="transactionListStartDate" name="transactionListStartDate" required>
+                    <span>to</span>
+                    <input type="date" id="transactionListEndDate" name="transactionListEndDate" required>
+                    <button id="monthForwardButton">></button>
+                </div>
                 <table id="transactionsList">
                     <thead>
                         <tr>
@@ -363,6 +359,8 @@
                         <span id="transactionTablePageNext" class="transactionPage">Next</span>
                     </div>
                 </div>
+
+                <hr id="tagSeparator"/>
 
                 <div class="sectionTitle">Tags</div>
                 <div id="tagOverview">

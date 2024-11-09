@@ -9,8 +9,38 @@
     margin: 0 auto auto auto;
 }
 
+/**** TRANSACTION CONTROLS ****/
+#transactionControlsContainer {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 1ch;
+
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+#transactionControlsContainer > #monthBackButton,
+#transactionControlsContainer > #monthForwardButton {
+    margin: auto 0 auto 0;
+    padding: 0 calc(0.50 * var(--card-padding)) 0 calc(0.50 * var(--card-padding));
+
+    height: fit-content;
+    width: auto;
+    aspect-ratio: 1;
+}
+
+#transactionControlsContainer > input[type="date"] {
+    background: transparent;
+}
+
+#transactionControlsContainer > span {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 #addTransactionButton {
-    margin: var(--button-margin)
+    margin: unset;
+    margin-right: auto;
 }
 
 
@@ -112,11 +142,15 @@ table tbody tr:nth-of-type(even) {
 }
 
 /* Transaction Table Page Selectors */
+#tagSeparator {
+    width: 100%;
+    margin: 1em 0 1em 0;
+}
+
 #transactionTablePageContainer {
     width: 100%;
 
     margin-top: 1rem;
-    margin-bottom: 1rem;
 
     display: flex;
     flex-flow: row nowrap;

@@ -153,8 +153,8 @@ table tbody tr:nth-of-type(even) {
     margin-top: 1rem;
 
     display: flex;
-    flex-flow: row nowrap;
-    column-gap: 0.5rem;
+    flex-flow: column nowrap;
+    row-gap: 0.5rem;
     justify-content: space-between;
 }
 

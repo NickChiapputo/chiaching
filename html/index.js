@@ -847,7 +847,7 @@ import * as forms from "./forms.js";
 
         // Display transaction numbers being shown.
         transactionTableNumbers.innerHTML =
-            `Showing ${start_transaction+1}–${end_transaction} of ${transactions.length}`;
+            `${start_transaction+1}–${end_transaction} of ${transactions.length}`;
 
         // Create links for the pages.
         // Remove existing links except next and previous

@@ -1116,6 +1116,7 @@ import * as forms from "./forms.js";
         if( transaction === undefined )
             return;
 
+        modalLib.selectContent( modalLib.ModalContent.TRANSACTION );
         showModal(true, true);
 
         // Set date

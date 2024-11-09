@@ -201,6 +201,7 @@ async function getTransactions( res, req, data )
             !util.validateDateString( data.endDate, false ) )
         {
             console.log( `  Invalid start date '${data.startDate}' or end date '${data.endDate}'.` );
+            util.resolveAction( res, 400, { response: RESPONSE_CODES.MissingData } );
             return;
         }
 

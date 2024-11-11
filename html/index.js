@@ -774,6 +774,7 @@ import * as forms from "./forms.js";
 
         // For each tag, create a new summary row.
         tagOverview.innerHTML = '';
+        let tagBarContents = [];
         tags.forEach(tag => {
             let row = document.createElement( "div" );
             row.classList.toggle( "tagSummary" );
@@ -787,7 +788,7 @@ import * as forms from "./forms.js";
             let percent = 100 * Math.abs(tag_data[ tag ]) / maximum;
             let color = tag_data[ tag ] < 0 ? "negative-currency-foreground" : "Green"
             tagBar.classList.toggle( "tagBar" );
-            tagBar.style.background = `linear-gradient(to right, var(--${color}), var(--${color}) ${percent}%, transparent 0%, transparent)`;
+            tagBarContents.push( [tagBar, color, percent] );
 
             let tagAmount = document.createElement( "span" );
             tagAmount.classList.toggle( "tagAmount" );
@@ -825,6 +826,15 @@ import * as forms from "./forms.js";
         row.appendChild( tagBar );
         row.appendChild( tagAmount );
         tagOverview.appendChild( row );
+
+        // Delay for a short period to allow the browser to display the default
+        // empty bar, then set the color and fill percent to initiate the
+        // transition.
+        setTimeout(() => {
+            tagBarContents.forEach( contents => {
+                contents[0].style.cssText = `--bar-color: var(--${contents[1]}); --bar-percent: ${contents[2]}%;`;
+            } );
+        }, 100);
     };
 
 

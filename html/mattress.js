@@ -108,7 +108,7 @@ function displayMattress( mattress )
 
     let amounts = document.createElement( "span" );
     amounts.classList.toggle( "mattressAmounts" );
-    amounts.innerHTML = `$${mattress.amount} / $${mattress.maxAmount}`;
+    amounts.innerHTML = `$${mattress.amount.toFixed(2)} / $${mattress.maxAmount}`;
 
     let editButton = document.createElement( "img" );
     editButton.classList.toggle( "mattressEditButton" );

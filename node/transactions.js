@@ -374,6 +374,8 @@ async function createNewTransaction( res, req, data )
             } );
             return;
         }
+
+        doc.mattress = util.parseStringTrim( data.mattress );
     }
     else
     {

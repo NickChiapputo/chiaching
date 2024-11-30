@@ -62,6 +62,16 @@ export const getMattresses = () => {
 
             displayMattress( unallocated_mattress, true );
             mattresses.push( unallocated_mattress );
+
+            // Iterate through the mattresses in the UI. If the mattress does
+            // not exist in the new mattress list, remove it from the UI.
+            for( let child of mattressList.children ) {
+                let mattress = mattresses.find(
+                    m => m[ "_id" ] == child.getAttribute( "_id" )
+                );
+                if( mattress !== undefined ) continue;
+                mattressList.removeChild( child );
+            }
         },
         (e, resp, status) => {
             console.error( e );
@@ -101,12 +111,7 @@ async function getAndDisplayMattress(mattressName)
     );
 };
 
-function displayMattress( mattress, is_unallocated )
-{
-    // Ensure this is a boolean.
-    is_unallocated = is_unallocated === true;
-
-    // Check if mattress already exists in mattress list.
+function findExistingMattressContainer(mattress) {
     let existingElement = null;
     for( let child of mattressList.children ) {
         if( child.getAttribute( "_id" ) == mattress._id ) {
@@ -114,6 +119,17 @@ function displayMattress( mattress, is_unallocated )
             break;
         }
     }
+
+    return existingElement;
+}
+
+function displayMattress( mattress, is_unallocated )
+{
+    // Ensure this is a boolean.
+    is_unallocated = is_unallocated === true;
+
+    // Check if mattress already exists in mattress list.
+    let existingElement = findExistingMattressContainer( mattress );
 
     let container = document.createElement( "div" );
     container.classList.toggle( "mattressContainer" );
@@ -208,28 +224,39 @@ function createNewMattress(e) {
 }
 
 function editMattress(e) {
-    newMattressSubmit.value = "Submitting...";
-    newMattressSubmit.disabled = true;
-
     let update = {
         "_id": newMattressSubmit.mattressID,
     };
+    let endpoint = '';
+    let button = undefined;
+    if( e.submitter == newMattressDelete ) {
+        endpoint = "/api/mattresses/delete";
+        button = newMattressDelete;
+        newMattressDelete.value = "Deleting...";
+    } else {
+        endpoint = "/api/mattresses/edit";
+        button = newMattressSubmit;
+        newMattressSubmit.value = "Submitting...";
 
-    if( mattressName.classList.contains( "edited" ) )
-        update.name = mattressName.value;
-    if( mattressMaxAmount.classList.contains( "edited" ) )
-        update.maxAmount = mattressMaxAmount.value;
+        if( mattressName.classList.contains( "edited" ) )
+            update.name = mattressName.value;
+        if( mattressMaxAmount.classList.contains( "edited" ) )
+            update.maxAmount = mattressMaxAmount.value;
+    }
 
+    newMattressSubmit.disabled = true;
+    newMattressDelete.disabled = true;
     send(
-        "/api/mattresses/edit", "POST", update,
+        endpoint, "POST", update,
         (resp, status) => {
-            newMattressSubmit.value = "Success!";
+            button.value = "Success!";
             getMattresses();
             modal.hide();
         },
         (e, resp, status) => {
-            newMattressSubmit.value = `Error! ${status}`;
-            newMattressSubmit.disabled = false;
+            button.value = `Error! ${status}`;
+            button.disabled = false;
+            newMattressDelete.disabled = false;
         },
         true
     );
@@ -286,6 +313,7 @@ function showNewMattressForm(e)
     mattressInitialAmount.parentElement.style.display = "";
     newMattressSubmit.value = "Submit";
     newMattressSubmit.editing = false;
+    newMattressDelete.style.display = "none";
     mattressInputEditButtons.forEach(b => b.style.display = "none");
 
     // Show form.
@@ -305,6 +333,8 @@ function showEditMattressForm(name) {
     newMattressSubmit.value = "No Changes";
     newMattressSubmit.mattressID = mattress[ "_id" ];
     newMattressSubmit.editing = true;
+    newMattressDelete.style.display = "";
+    newMattressDelete.disabled = false;
 
     mattressInputEditButtons.forEach(b => b.style.display = "");
 

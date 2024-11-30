@@ -17,8 +17,7 @@ const ACTION_HANDLERS = {
     create: createMattress,
     edit: edit,
     transfer: transfer,
-    // setAmount: setAmount,
-    // setMaxAmount: setMaxAmount,
+    delete: deleteMattress,
 };
 
 module.exports = {
@@ -451,4 +450,44 @@ async function transferAmount( username, srcMattress, dstMattress, amount )
     }
 
     return 0;
+}
+
+/**
+ * API endpoint for `delete`. Provide data in POST must include:
+ * - `_id`       -- Source mattress object ID
+ *
+ * @param {Object} res   HTTP response object
+ * @param {Object} req   HTTP request object
+ * @param {Object} data  Request body data
+ */
+async function deleteMattress( res, req, data ) {
+    // Verify user
+    let user = await util.checkLoggedIn( res, req );
+    if( user === 1 ) return;
+
+    // Verify _id is present.
+    // TODO: Check if _id is a list of ids to delete for bulk actions.
+    if( data._id == undefined || typeof(data._id) != "string" )
+    {
+        console.log( `_id = ${data._id}` );
+        util.resolveAction( res, 400, { response: RESPONSE_CODES.MissingData } );
+        return;
+    }
+
+    console.log( `Deleting mattress ${data._id} for ${user.username}` );
+
+    // Delete the mattress.
+    let result = await dbLib.deleteItem(
+        DB_NAMES.dbName, DB_NAMES.mattressesCollectionName,
+        { "_id": dbLib.createObjectID( data._id ), "username": user.username }
+    );
+
+    if( result.deletedCount != undefined && result.deletedCount == 1 ) {
+        util.resolveAction( res, 200, { response: RESPONSE_CODES.OK } );
+    }
+    else {
+        util.resolveAction( res, 400, { response: RESPONSE_CODES.MissingData } );
+    }
+
+    return;
 }

@@ -26,9 +26,22 @@
     column-gap: 1em;
 }
 
+#newMattressFormSubmitContainer {
+    flex-flow: row nowrap;
+}
 #newMattressSubmit {
     margin-left: auto;
     margin-right: auto;
+}
+#newMattressSubmit, #newMattressDelete {
+    width: 45%;
+    min-width: unset;
+}
+#newMattressDelete {
+    border-color: var(--negative-currency-foreground);
+}
+#newMattressDelete:hover {
+    background-color: var(--negative-currency-foreground);
 }
 
 #mattressTransferButton {

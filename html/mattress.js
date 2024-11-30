@@ -128,7 +128,6 @@ function displayMattress( mattress, is_unallocated )
     let percent = is_unallocated ?
         0.0 : 100 * mattress.amount / mattress.maxAmount;
     bar.style.background = `linear-gradient(to right, var(--Green), var(--Green) ${percent}%, transparent 0%, transparent)`;
-    bar.title = `${mattress.name} ${percent.toFixed(2)}% full, ${numberToCurrencyString(mattress.amount)} / ${numberToCurrencyString(mattress.maxAmount)}`;
 
     let amount = document.createElement( "span" );
     amount.classList.toggle( "mattressAmounts" );
@@ -147,12 +146,6 @@ function displayMattress( mattress, is_unallocated )
         max_amount.classList.toggle( "unallocatedMattressMaxAmount" );
     }
 
-    let editButton = document.createElement( "img" );
-    editButton.classList.toggle( "mattressEditButton" );
-    editButton.src = "/media/edit-pencil.svg";
-    editButton.for = mattress.name;
-    editButton.addEventListener( "click", showEditMattressForm );
-
     container.appendChild( title );
     container.appendChild( bar );
     if( !is_unallocated ) {
@@ -160,12 +153,13 @@ function displayMattress( mattress, is_unallocated )
         container.appendChild( amount_spacer );
     }
     container.appendChild( max_amount );
-    if( !is_unallocated ) {
-        container.appendChild( editButton );
-    }
 
     if( is_unallocated ) {
         container.classList.toggle( "unallocated" );
+        container.title = `${numberToCurrencyString(mattress.amount)} unallocated funds`;
+    } else {
+        container.addEventListener( "click", e => showEditMattressForm( mattress.name ) );
+        container.title = `${mattress.name} ${percent.toFixed(2)}% full, ${numberToCurrencyString(mattress.amount)} / ${numberToCurrencyString(mattress.maxAmount)}`;
     }
 
     if( existingElement !== null ) {
@@ -299,10 +293,9 @@ function showNewMattressForm(e)
     modal.show();
 }
 
-function showEditMattressForm(e) {
+function showEditMattressForm(name) {
     // Get mattress info
-    let mattress = mattresses.find((m) => m.name == e.target.for);
-    console.log(mattress);
+    let mattress = mattresses.find((m) => m.name == name);
 
     // Populate modal form
     clearMattressFormInputs(true);

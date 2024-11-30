@@ -2,6 +2,8 @@
     --mattress-columns: 1;
     --mattress-list-col-gap: 0.5em;
     --mattress-list-row-gap: 0.5em;
+    --mattress-side-padding: 0.5ch;
+    --mattress-border-radius: var(--mattress-side-padding);
 }
 
 #mattresses {
@@ -43,10 +45,21 @@ div.mattressContainer {
     column-gap: 0.5ch;
 
     width: calc((100% / var(--mattress-columns)) -
-        ((var(--mattress-columns) - 1 ) * var(--mattress-list-col-gap) / var(--mattress-columns)));
+        ((var(--mattress-columns) - 1 ) * var(--mattress-list-col-gap) / var(--mattress-columns)) -
+        2 * var(--mattress-side-padding) - 1px);
+
+    border-radius: var(--mattress-border-radius);
+    padding: 0 var(--mattress-side-padding);
 }
 div.mattressContainer.unallocated {
     font-weight: bold;
+}
+div.mattressContainer:hover {
+    background: var(--background-color-card-l2);
+    cursor: pointer;
+}
+div.mattressContainer.unallocated:hover {
+    cursor: default;
 }
 
 div.mattressContainer > span {

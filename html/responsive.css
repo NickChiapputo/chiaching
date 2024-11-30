@@ -1,4 +1,11 @@
 @media screen {
+    @media (min-width: 1920px) {
+        :root {
+            --mattress-columns: 2;
+            --mattress-list-col-gap: 1.5em;
+        }
+    }
+
     @media (min-width: 1201px) {
         :root {
             --accounts-width:    calc(25% - 2*var(--card-padding));
@@ -19,7 +26,7 @@
             --accounts-width: 100%;
             --transaction-width: 100%;
 
-            --mattress-columns: 3;
+            --mattress-columns: 1;
         }
     }
 
@@ -29,7 +36,7 @@
             --mobile: true;
             --modal-width: calc( 98vw - 2*1em );
 
-            --mattress-columns: 2;
+            --mattress-columns: 1;
         }
 
         #content {

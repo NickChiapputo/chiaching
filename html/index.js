@@ -5,7 +5,22 @@ import {send} from "/send.js"
 import * as modalLib from "./modal.js";
 import * as forms from "./forms.js";
 
-(() => {
+export const CURRENCY_FORMAT = new Intl.NumberFormat(
+    undefined, // system locale
+    {
+        style: "currency",
+        currency: "USD"
+    }
+);
+
+export const numberToCurrencyString = (n) => {
+    let str = Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    if( n < 0 )
+        str = '(' + str + ')';
+    str = '$' + str;
+    return str;
+}
+
     var userInfo = undefined;
     var loginForm = undefined;
     var registerForm = undefined;
@@ -34,7 +49,7 @@ import * as forms from "./forms.js";
     var newTransactionPaycheckSubform = undefined;
 
     // Accounts List
-    var accounts = {};
+    export var accounts = {};
 
     // New Accounts
     var newAccountButton = undefined;
@@ -1429,16 +1444,6 @@ import * as forms from "./forms.js";
         xhr.send();
     };
 
-
-    const numberToCurrencyString = (n) => {
-        let str = Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        if( n < 0 )
-            str = '(' + str + ')';
-        str = '$' + str;
-        return str;
-    }
-
-
     const populateAccounts = (accountList) => {
         accounts = {}; // Reset accounts list.
 
@@ -1599,4 +1604,3 @@ import * as forms from "./forms.js";
             menuBar.appendChild( adminDashboardNavItem );
         }
     };
-})();

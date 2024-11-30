@@ -1,6 +1,7 @@
 import {send} from "./send.js";
 import * as modal from "./modal.js";
 import * as forms from "./forms.js";
+import {accounts, numberToCurrencyString} from "./index.js";
 
 
 export const init = () => {
@@ -36,13 +37,31 @@ export const init = () => {
 
 export const getMattresses = () => {
     send( "/api/mattresses/getNames", "GET", null,
-        (resp, status) => {
-            // Display in mattresses section.
-            mattresses = [];
+        async (resp, status) => {
+            // Sort mattresses alphabetically.
             resp.names.sort( (a, b) =>
                 a.localeCompare( b, undefined, { sensitivity: "base" } )
             );
-            resp.names.forEach( getAndDisplayMattress );
+
+            // Reset mattress list.
+            mattresses = [];
+
+            // Display each mattress sequentially.
+            // Because this function makes API requests to fill out the mattress
+            // information, the mattress won't be guaranteed to be in order.
+            // Awaiting will guarantee this but will slow down the process some.
+            // It would be possible to create the placeholders and then request
+            // the mattress asynchronously, but that is more code I don't want
+            // or need to write.
+            for( const name of resp.names ) {
+                await getAndDisplayMattress( name );
+            }
+
+            // Create the "unallocated" mattress.
+            let unallocated_mattress = getUnallocatedMattress();
+
+            displayMattress( unallocated_mattress, true );
+            mattresses.push( unallocated_mattress );
         },
         (e, resp, status) => {
             console.error( e );
@@ -60,16 +79,16 @@ const mattressInputFields = [
     mattressMaxAmount,
     mattressInitialAmount,
     newMattressSubmit,
-]
+];
 var mattressInputEditButtons = [];
 
-function getAndDisplayMattress(mattressName)
+async function getAndDisplayMattress(mattressName)
 {
     let query = {
         name: mattressName,
     };
 
-    send( "/api/mattresses/get", "POST", query,
+    await send( "/api/mattresses/get", "POST", query,
         (resp, status) => {
             mattresses.push( resp.mattress );
             displayMattress( resp.mattress );
@@ -82,8 +101,11 @@ function getAndDisplayMattress(mattressName)
     );
 };
 
-function displayMattress( mattress )
+function displayMattress( mattress, is_unallocated )
 {
+    // Ensure this is a boolean.
+    is_unallocated = is_unallocated === true;
+
     // Check if mattress already exists in mattress list.
     let existingElement = null;
     for( let child of mattressList.children ) {
@@ -103,12 +125,27 @@ function displayMattress( mattress )
 
     let bar = document.createElement( "div" );
     bar.classList.toggle( "mattressBar" );
-    let percent = 100 * mattress.amount / mattress.maxAmount;
-    bar.style.background = `linear-gradient(to top, var(--Green), var(--Green) ${percent}%, transparent 0%, transparent)`;
+    let percent = is_unallocated ?
+        0.0 : 100 * mattress.amount / mattress.maxAmount;
+    bar.style.background = `linear-gradient(to right, var(--Green), var(--Green) ${percent}%, transparent 0%, transparent)`;
+    bar.title = `${mattress.name} ${percent.toFixed(2)}% full, ${numberToCurrencyString(mattress.amount)} / ${numberToCurrencyString(mattress.maxAmount)}`;
 
-    let amounts = document.createElement( "span" );
-    amounts.classList.toggle( "mattressAmounts" );
-    amounts.innerHTML = `$${mattress.amount.toFixed(2)} / $${mattress.maxAmount}`;
+    let amount = document.createElement( "span" );
+    amount.classList.toggle( "mattressAmounts" );
+    if( !is_unallocated ) {
+        amount.innerHTML = numberToCurrencyString(mattress.amount);
+    }
+
+    let amount_spacer = document.createElement( "span" );
+    amount_spacer.innerHTML = ' / ';
+
+    let max_amount = document.createElement( "span" );
+    max_amount.classList.toggle( "mattressAmounts" );
+    max_amount.innerHTML = numberToCurrencyString(
+        is_unallocated ? mattress.amount : mattress.maxAmount);
+    if( is_unallocated ) {
+        max_amount.classList.toggle( "unallocatedMattressMaxAmount" );
+    }
 
     let editButton = document.createElement( "img" );
     editButton.classList.toggle( "mattressEditButton" );
@@ -118,8 +155,18 @@ function displayMattress( mattress )
 
     container.appendChild( title );
     container.appendChild( bar );
-    container.appendChild( amounts );
-    container.appendChild( editButton );
+    if( !is_unallocated ) {
+        container.appendChild( amount );
+        container.appendChild( amount_spacer );
+    }
+    container.appendChild( max_amount );
+    if( !is_unallocated ) {
+        container.appendChild( editButton );
+    }
+
+    if( is_unallocated ) {
+        container.classList.toggle( "unallocated" );
+    }
 
     if( existingElement !== null ) {
         existingElement.replaceWith( container );
@@ -279,18 +326,11 @@ function showTransferForm(e) {
     transferMattressSource.innerHTML = '<option></option>';
     transferMattressDestination.innerHTML = '<option></option>';
 
-    // Add the unallocated mattress.
-    let unallocatedOption = document.createElement( "option" );
-    unallocatedOption.innerHTML = UNALLOCATED_MATTRESS_NAME;
-    unallocatedOption.value = UNALLOCATED_MATTRESS_NAME;
-
-    transferMattressSource.appendChild(unallocatedOption);
-    transferMattressDestination.appendChild(unallocatedOption.cloneNode(true));
-
     // Add the user's mattresses.
     mattresses.forEach(mattress => {
         let opt = document.createElement( "option" );
-        opt.innerHTML = `${mattress.name} — $${mattress.amount}`;
+        opt.innerHTML = `${mattress.name} —  ` +
+            `${numberToCurrencyString(mattress.amount)}`;
         opt.value = mattress._id;
 
         transferMattressSource.appendChild(opt);
@@ -303,4 +343,24 @@ function showTransferForm(e) {
     mattressTransferSubmit.value = "Transfer";
     modal.selectContent( modal.ModalContent.MATTRESS_TRANSFER );
     modal.show();
+}
+
+function getUnallocatedMattress() {
+    let amount = 0.0;
+    for( let institution in accounts ) {
+        accounts[ institution ].forEach((account) => {
+            amount += account.balance;
+        });
+    }
+
+    mattresses.forEach((mattress) => {
+        if( mattress.name == UNALLOCATED_MATTRESS_NAME ) return;
+        amount -= mattress.amount;
+    });
+
+    return {
+        "_id": UNALLOCATED_MATTRESS_NAME,
+        "name": UNALLOCATED_MATTRESS_NAME,
+        "amount": amount,
+    };
 }

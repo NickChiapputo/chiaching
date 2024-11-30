@@ -1,6 +1,7 @@
 :root {
-    --mattress-columns: 4;
-    --mattress-list-gap: 1em;
+    --mattress-columns: 1;
+    --mattress-list-col-gap: 0.5em;
+    --mattress-list-row-gap: 0.5em;
 }
 
 #mattresses {
@@ -13,8 +14,8 @@
 
     width: calc(100% - 2*1em);
     padding: 1em;
-    column-gap: var(--mattress-list-gap);
-    row-gap: var(--mattress-list-gap);
+    column-gap: var(--mattress-list-col-gap);
+    row-gap: var(--mattress-list-row-gap);
 }
 
 #mattressButtonContainer {
@@ -38,30 +39,52 @@
 
 div.mattressContainer {
     display: flex;
-    flex-flow: column nowrap;
-    row-gap: 0.5em;
+    flex-flow: row nowrap;
+    column-gap: 0.5ch;
 
     width: calc((100% / var(--mattress-columns)) -
-        ((var(--mattress-columns) - 1 ) * var(--mattress-list-gap) / var(--mattress-columns)));
+        ((var(--mattress-columns) - 1 ) * var(--mattress-list-col-gap) / var(--mattress-columns)));
+}
+div.mattressContainer.unallocated {
+    font-weight: bold;
 }
 
 div.mattressContainer > span {
-    width: 100%;
-    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.mattressContainer > span.mattressTitle {
+    width: 15ch;
+    text-align: left;
+}
+
+div.mattressContainer > span.mattressAmounts {
+    width: 10ch;
+    text-align: right;
+}
+div.mattressContainer > span.mattressAmounts.unallocatedMattressMaxAmount {
+    /* Approximately same width as two span.mattressAmounts
+     * plus three gaps plus the edit icon.
+    **/
+    width: calc(22ch + 1em);
 }
 
 div.mattressContainer > div.mattressBar {
-    height: 10em;
-    max-height: 20vh;
+    display: flex;
+    flex-flow: row-reverse nowrap;
 
-    width: 1em;
+    width: 10ch;
 
-    background: transparent;
+    flex-grow: 1;
+
     margin-left: auto;
     margin-right: auto;
 
     border: solid 1px black;
     border-radius: 0.5em;
+}
+div.mattressContainer.unallocated > div.mattressBar {
+    border: none;
 }
 
 div.mattressContainer > img.mattressEditButton {

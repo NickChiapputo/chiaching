@@ -429,7 +429,7 @@ async function transferAmount( username, srcMattress, dstMattress, amount )
     let update = {};
     let result = undefined;
     if( !source_is_unallocated ) {
-        update = { "$dec": { "amount": amount } };
+        update = { "$inc": { "amount": -amount } };
         result = await dbLib.updateItem( DB_NAMES.dbName,
             DB_NAMES.mattressesCollectionName, source_query, update, {} );
 

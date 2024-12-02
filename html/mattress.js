@@ -83,7 +83,7 @@ export const getMattresses = () => {
 
 export var mattresses = [];
 
-const UNALLOCATED_MATTRESS_NAME = "unallocated";
+export const UNALLOCATED_MATTRESS_NAME = "unallocated";
 const mattressInputFields = [
     mattressName,
     mattressMaxAmount,

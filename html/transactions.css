@@ -201,14 +201,33 @@ table tbody tr:nth-of-type(even) {
     width: 100%;
 }
 
-#tagOverview > div.tagSummary {
+
+#tagOverview > div.mattressOverviewContainer {
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 0.5em;
+    width: calc(100% - 1ch);
+
+    border-bottom: dashed 1px black;
+    margin-bottom: 0.25em;
+
+    padding: 0 0.5ch 0.25em 0.5ch;
+    border-radius: 0.5ch;
+
+    transition: var(--transaction-background-transition);
+}
+#tagOverview > div.mattressOverviewContainer:hover {
+    background-color: var(--transaction-hover-background);
+}
+
+#tagOverview div.tagSummary {
     display: flex;
     flex-flow: row nowrap;
     column-gap: 1em;
     width: 100%;
 }
 
-#tagOverview > div.tagSummary > span.tagName {
+#tagOverview div.tagSummary > span.tagName {
     width: 15ch;
     flex-grow: 0;
 
@@ -226,7 +245,7 @@ table tbody tr:nth-of-type(even) {
     inherits: false;
     initial-value: 0%;
 }
-#tagOverview > div.tagSummary > div.tagBar {
+#tagOverview div.tagSummary > div.tagBar {
     --bar-color: transparent;
     --bar-percent: -1%;
 
@@ -239,12 +258,13 @@ table tbody tr:nth-of-type(even) {
     background: linear-gradient(to right, var(--bar-color) 0%, var(--bar-color) var(--bar-percent), transparent var(--bar-percent), transparent 100%);
 }
 
-#tagOverview > div.tagSummary > span.tagAmount {
+#tagOverview div.tagSummary > span.tagAmount {
     width: 10ch;
     flex-grow: 0;
     text-align: right;
 }
 
+/* Surplus row */
 #tagOverview > div.tagSummary:last-child > div.tagBar {
     border: none;
 }

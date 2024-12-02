@@ -1,6 +1,6 @@
 // Import template header and footer HTML.
 import {header} from '/header.js'
-import {init as initMattresses, mattresses} from "/mattress.js"
+import {init as initMattresses, mattresses, UNALLOCATED_MATTRESS_NAME} from "/mattress.js"
 import {send} from "/send.js"
 import * as modalLib from "./modal.js";
 import * as forms from "./forms.js";
@@ -714,30 +714,65 @@ export const numberToCurrencyString = (n) => {
                     return dateA < dateB ? 1 : dateA > dateB ? -1 : 0;
                 } );
 
-                let tag_amounts = {};
+                let mattress_amounts = {};
                 let surplus = 0;
                 transactions.forEach(transaction => {
-                    if( transaction.sourceInstitution.toLowerCase() === "outside" )
-                    {
-                        surplus += transaction.amount;
-                        if( transaction.tag in tag_amounts ) tag_amounts[ transaction.tag ] += transaction.amount;
-                        else tag_amounts[ transaction.tag ] = transaction.amount;
+                    let mattress = transaction.mattress ?
+                        transaction.mattress : UNALLOCATED_MATTRESS_NAME;
+
+                    let is_incoming = transaction.sourceInstitution.toLowerCase() === "outside";
+                    let is_outgoing = transaction.destinationInstitution.toLowerCase() === "outside";
+
+                    if( !is_incoming && !is_outgoing ) {
+                        // Internal transaction. Ignore!
+                        return;
                     }
-                    else if( transaction.destinationInstitution.toLowerCase() === "outside" )
-                    {
-                        surplus -= transaction.amount;
-                        if( transaction.tag in tag_amounts ) tag_amounts[ transaction.tag ] -= transaction.amount;
-                        else tag_amounts[ transaction.tag ] = -transaction.amount;
+
+                    // If source is outside, transaction amount is positive.
+                    // If destination is outside, transaction amount is negative.
+                    let amount = transaction.amount * (is_incoming ? 1 : -1);
+
+                    // Update overall net surplus
+                    surplus += amount;
+
+                    // Update mattress net surplus.
+                    if( !(mattress in mattress_amounts) ) {
+                        mattress_amounts[ mattress ] = {
+                            surplus: amount,
+                            tags: {}
+                        };
+                    } else {
+                        mattress_amounts[ mattress ].surplus += amount;
                     }
-                    else
-                    {
-                        // Internal transaction
-                        // console.log( transaction );
+
+                    // Update tag net surplus within mattress.
+                    if( !(transaction.tag in mattress_amounts[ mattress ].tags) ) {
+                        mattress_amounts[ mattress ].tags[ transaction.tag ] = amount;
+                    } else {
+                        mattress_amounts[ mattress ].tags[ transaction.tag ] += amount;
                     }
+
+                    // if( transaction.sourceInstitution.toLowerCase() === "outside" )
+                    // {
+                    //     surplus += transaction.amount;
+                    //     if( mattress in mattress_amounts ) mattress_amounts[ mattress ] += transaction.amount;
+                    //     else mattress_amounts[ mattress ] = transaction.amount;
+                    // }
+                    // else if( transaction.destinationInstitution.toLowerCase() === "outside" )
+                    // {
+                    //     surplus -= transaction.amount;
+                    //     if( mattress in mattress_amounts ) mattress_amounts[ mattress ] -= transaction.amount;
+                    //     else mattress_amounts[ mattress ] = -transaction.amount;
+                    // }
+                    // else
+                    // {
+                    //     // Internal transaction
+                    //     // console.log( transaction );
+                    // }
                 });
 
                 populateTransactions();
-                populateTagOverview(tag_amounts);
+                populateMattressOverview(mattress_amounts);
             },
             (e, resp, status) => {
                 console.error( e );
@@ -772,53 +807,85 @@ export const numberToCurrencyString = (n) => {
     };
 
 
-    const populateTagOverview = (tag_data) => {
-        // Sort tags by decreasing absolute amount.
-        let tags = Object.keys( tag_data )
-            .sort((a, b) =>
-                Math.abs(tag_data[ a ]) < Math.abs(tag_data[ b ])
-            );
+    const populateMattressOverview = (mattress_data) => {
+        // Sort mattresses alphabetically.
+        let mattress_names = Object.keys( mattress_data )
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())
+        );
 
-        let maximum = 0;
+        // Calculate maximum amount (positive or negative)
+        // and the total net surplus.
         let surplus = 0;
-        tags.forEach(tag => {
-            let amount = Math.abs( tag_data[ tag ] );
-            maximum = amount > maximum ? amount : maximum;
-            surplus += tag_data[ tag ];
+        mattress_names.forEach(mattress_name => {
+            surplus += mattress_data[ mattress_name ].surplus;
         });
 
-        // For each tag, create a new summary row.
+        // For each mattress, create a container that holds
+        // a single row for each tag used with that mattress.
+        // Each row shows the name of the tag, a bar filled
+        // to the percentage of the highest surplus (absolute
+        // value) tag within that mattress, and then the net
+        // amount in the tag (incoming - outgoing).
         tagOverview.innerHTML = '';
         let tagBarContents = [];
-        tags.forEach(tag => {
-            let row = document.createElement( "div" );
-            row.classList.toggle( "tagSummary" );
+        mattress_names.forEach(mattress_name => {
+            let mattress = mattress_data[ mattress_name ];
 
-            let tagName = document.createElement( "span" );
-            tagName.classList.toggle( "tagName" );
-            tagName.title = tag;
-            tagName.innerHTML = tag;
+            // Container
+            let mattress_overview_container = document.createElement( "div" );
+            mattress_overview_container.classList.toggle( "mattressOverviewContainer" );
 
-            let tagBar = document.createElement( "div" );
-            let percent = 100 * Math.abs(tag_data[ tag ]) / maximum;
-            let color = tag_data[ tag ] < 0 ? "negative-currency-foreground" : "Green"
-            tagBar.classList.toggle( "tagBar" );
-            tagBarContents.push( [tagBar, color, percent] );
+            // Subtitle Header
+            let subtitle = document.createElement( "div" );
+            subtitle.innerHTML = mattress_name;
+            subtitle.classList.toggle( "sectionSubtitle" );
+            mattress_overview_container.appendChild( subtitle );
 
-            let tagAmount = document.createElement( "span" );
-            tagAmount.classList.toggle( "tagAmount" );
-            tagAmount.innerHTML = numberToCurrencyString( tag_data[ tag ] );
-            if( tag_data[ tag ] < 0 ) {
-                tagAmount.classList.toggle( "currencyAmountNegative" );
-            }
+            // Sort tags by amount and find maximum tag net amount.
+            let tags = Object.keys(mattress.tags).sort( (a,b) => {
+                return Math.abs(mattress.tags[ a ]) < Math.abs(mattress.tags[ b ])
+            });
 
-            row.appendChild( tagName );
-            row.appendChild( tagBar );
-            row.appendChild( tagAmount );
-            tagOverview.appendChild( row );
+            let maximum = 0;
+            tags.forEach( tag => {
+                maximum = Math.max( maximum, Math.abs( mattress.tags[ tag ] ) );
+            });
+
+            // Create a row for each tag.
+            tags.forEach(tag => {
+                let row = document.createElement( "div" );
+                row.classList.toggle( "tagSummary" );
+
+                let tagName = document.createElement( "span" );
+                tagName.classList.toggle( "tagName" );
+                tagName.title = tag;
+                tagName.innerHTML = tag;
+
+                let tagBar = document.createElement( "div" );
+                let percent = 100 * Math.abs(mattress.tags[ tag ]) / maximum;
+                let color = mattress.tags[ tag ] < 0 ? "negative-currency-foreground" : "Green"
+                tagBar.classList.toggle( "tagBar" );
+                tagBarContents.push( [tagBar, color, percent] );
+
+                let tagAmount = document.createElement( "span" );
+                tagAmount.classList.toggle( "tagAmount" );
+                tagAmount.innerHTML = numberToCurrencyString( mattress.tags[ tag ] );
+                if( mattress.tags[ tag ] < 0 ) {
+                    tagAmount.classList.toggle( "currencyAmountNegative" );
+                }
+
+                row.appendChild( tagName );
+                row.appendChild( tagBar );
+                row.appendChild( tagAmount );
+                mattress_overview_container.appendChild( row );
+            });
+
+            // Add the new mattress container with tag rows
+            // to the overall summary container.
+            tagOverview.appendChild( mattress_overview_container );
         });
 
-        // Create a final surplus row to summarize the tags.
+        // Create a final surplus row to summarize the mattresses/tags.
         let row = document.createElement( "div" );
         row.classList.toggle( "tagSummary" );
 

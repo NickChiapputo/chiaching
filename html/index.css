@@ -11,7 +11,7 @@
     /* Transactions */
 
         --transaction-hover-background: var(--background-color-card-l2);
-        --transaction-background-transition: background 0.25s;
+        --transaction-background-transition: background 0.10s;
 
     /* Accounts */
         --accounts-institution-padding: 0 0 var(--card-padding) 0;

@@ -555,7 +555,9 @@ export const numberToCurrencyString = (n) => {
             }
             else if( this.readyState == 4 && this.status != 200 )
             {
-                console.log( `Error! HTTP Code: ${this.status}` );
+                let err_string = `Error! HTTP Code: ${this.status}`;
+                transactionSubmit.innerHTML = err_string;
+                console.log( err_string );
             }
         };
 
@@ -1281,6 +1283,7 @@ export const numberToCurrencyString = (n) => {
         // Populate the mattress list dropdown
         transactionMattressName.innerHTML = '<option></option>';
         mattresses.forEach((mattress) => {
+            if( mattress.name == UNALLOCATED_MATTRESS_NAME ) return;
             let mattressOption = document.createElement( "option" );
             mattressOption.innerHTML = mattress.name;
             mattressOption.value = mattress.name;

@@ -183,7 +183,25 @@
         * `sourceAccount`
         * `sourceInstitution`
         * `tag`
-* **sessions**: 
+    * Indexes
+        * For searching through transactions
+            * ```db.transactions.createIndex({
+    description: "text",
+    location: "text",
+    tag: "text", mattress: "text",
+    sourceInstitution: "text", destinationInstitution: "text",
+    sourceAccount: "text", destinationAccount: "text"
+}, {
+    name: "transaction_search",
+    weights: {
+        description: 5,
+        location: 4,
+        tag: 3, mattress: 3,
+        sourceInstitution: 2, destinationInstitution: 2,
+        sourceAccount: 1, destinationAccount: 1
+    }
+})```
+* **sessions**:
     * Indexes
         * Expires after `expiresAt` date
         * `db.session.createIndex( { "expiresAt": 1 }, { expireAfterSeconds: 0 } )`

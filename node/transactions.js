@@ -135,7 +135,7 @@ module.exports = {
 };
 
 
-async function getTransactionsWithinDateRange( username, startDate, endDate )
+async function getTransactionsWithinDateRange( username, startDate, endDate, searchText )
 {
     let query = {
         username: username,
@@ -143,6 +143,22 @@ async function getTransactionsWithinDateRange( username, startDate, endDate )
     };
 
     let options = {};
+
+    if( searchText != undefined ) {
+        query[ "$text" ] = {
+            "$search" : searchText
+        };
+
+        if( !('projection' in options) ) options[ "projection" ] = {};
+        options[ "projection" ][ "score" ] = {
+            "$meta": "textScore"
+        };
+        options[ "sort" ] = {
+            "score": {
+                "$meta": "textScore"
+            }
+        };
+    }
 
     let result = await dbLib.getItems( DB_NAMES.dbName, DB_NAMES.transactionsCollectionName, query, options );
     return result;
@@ -205,11 +221,19 @@ async function getTransactions( res, req, data )
             return;
         }
 
+        let search = undefined;
+        if( util.validateNonEmptyString( data.search, false ) ) {
+            search = util.parseStringTrim( data.search );
+        }
+
         let startDate = util.dateToUTCDate( new Date( data.startDate.trim() ) );
         let endDate = util.dateToUTCDate( new Date( data.endDate.trim() ) );
 
-        // TODO: Parse startDate and endDate for validity first.
-        let result = await getTransactionsWithinDateRange( user.username, startDate, endDate );
+        let result = await getTransactionsWithinDateRange(
+            user.username,
+            startDate, endDate,
+            search
+        );
         util.resolveAction( res, 200, { response: RESPONSE_CODES.OK, transactions: result } );
         return;
     }

@@ -1,6 +1,7 @@
 // Import template header and footer HTML.
 import {header} from '/header.js'
 import {init as initMattresses, mattresses, UNALLOCATED_MATTRESS_NAME} from "/mattress.js"
+import {init as initTransactions} from "/transaction.js"
 import {send} from "/send.js"
 import * as modalLib from "./modal.js";
 import * as forms from "./forms.js";
@@ -163,6 +164,12 @@ export const numberToCurrencyString = (n) => {
             b.addEventListener( "click", e => forms.editButtonAction(e, transactionSubmit) );
         }
 
+        transactionSearchInput.addEventListener( "keypress", e => {
+            if( e.keyCode == 13 ) {
+                getTransactions(true);
+            }
+        } );
+
 
         // Accounts
         newAccountForm = document.getElementById( "newMoneyAccountForm" );
@@ -178,6 +185,7 @@ export const numberToCurrencyString = (n) => {
         getMoneyAccounts();
         getTransactions();
         // getBudgets();
+        initTransactions();
         initMattresses();
     });
 
@@ -701,12 +709,18 @@ export const numberToCurrencyString = (n) => {
         transactionListEndDate.valueAsDate = end;
     };
 
-    const getTransactions = () => {
+    const getTransactions = (search) => {
+        let query = {
+            startDate: transactionListStartDate.value,
+            endDate: transactionListEndDate.value
+        };
+        if( search ) {
+            query.search = transactionSearchInput.value;
+            console.log( `Searching for '${query.search}'` );
+        }
+
         send( "/api/transactions/getWithinDate", "POST",
-            {
-                startDate: transactionListStartDate.value,
-                endDate: transactionListEndDate.value
-            },
+            query,
             (resp, status) => {
                 // Sort transactions by descending date (newest first).
                 transactions = resp.transactions;

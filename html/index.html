@@ -60,6 +60,7 @@
         <!-- JavaScript source files. -->
         <script type="module" src="send.js"></script>
         <script type="module" src="mattress.js"></script>
+        <script type="module" src="transaction.js"></script>
         <script type="module" src="index.js"></script>
 
 
@@ -337,6 +338,10 @@
                     <span>to</span>
                     <input type="date" id="transactionListEndDate" name="transactionListEndDate" required>
                     <button id="monthForwardButton">></button>
+                    <button id="transactionSearchButton">
+                        <img src="/media/search.svg" alt="Transaction search button">
+                    </button>
+                    <input id="transactionSearchInput" type="search" class="hidden" placeholder="Search Transactions">
                 </div>
                 <table id="transactionsList">
                     <thead>

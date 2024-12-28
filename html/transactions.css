@@ -14,19 +14,30 @@
     display: flex;
     flex-flow: row wrap;
     column-gap: 1ch;
+    row-gap: var(--card-gap);
 
     width: 100%;
     margin-bottom: 1em;
 }
 
 #transactionControlsContainer > #monthBackButton,
-#transactionControlsContainer > #monthForwardButton {
+#transactionControlsContainer > #monthForwardButton,
+#transactionControlsContainer > #transactionSearchButton {
     margin: auto 0 auto 0;
     padding: 0 calc(0.50 * var(--card-padding)) 0 calc(0.50 * var(--card-padding));
 
-    height: fit-content;
+    height: 2em;
     width: auto;
     aspect-ratio: 1;
+}
+
+#transactionControlsContainer > #transactionSearchButton {
+    padding: calc(0.25 * var(--card-padding));
+    border: none
+}
+#transactionControlsContainer > #transactionSearchButton > img {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #transactionControlsContainer > input[type="date"] {
@@ -36,6 +47,34 @@
 #transactionControlsContainer > span {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+#transactionControlsContainer > #transactionSearchInput {
+    --transition-duration: 0.25s;
+
+    width: 100%;
+    background-color: transparent;
+    transition:
+        height var(--transition-duration),
+        margin-top calc(2*var(--transition-duration)),
+        border-color var(--transition-duration);
+
+    height: 1.5em;
+    margin-top: 0;
+
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: var(--foreground-text);
+    border-radius: 1ch;
+}
+
+#transactionControlsContainer > #transactionSearchInput.hidden {
+    height: 0;
+    border-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    margin-top: calc(-1 * var(--card-gap));
 }
 
 #addTransactionButton {

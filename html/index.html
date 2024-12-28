@@ -147,7 +147,8 @@
                                 <label for="tag">Tag<span class="required">*</span></label>
                                 <div class="inputWithButton">
                                     <img class="inputEditButton" for="tag" src="/media/edit-pencil.svg" />
-                                    <input type="text" id="tag" name="tag" placeholder="Tag" required>
+                                    <input type="text" id="tag" list="transactionTagsList" autocomplete="off" name="tag" placeholder="Tag" required>
+                                    <datalist id="transactionTagsList"></datalist>
                                 </div>
                             </div>
 

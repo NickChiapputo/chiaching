@@ -800,6 +800,7 @@ export const numberToCurrencyString = (n) => {
         send( "/api/transactions/getTags", "GET", {},
             (resp, status) => {
                 transaction_tags = resp.result;
+                populateTags();
             },
             (e, resp, status) => {
                 console.error( e );
@@ -1276,6 +1277,14 @@ export const numberToCurrencyString = (n) => {
         showModal(true);
     };
 
+    const populateTags = () => {
+        transactionTagsList.textContent = "";
+        transaction_tags.forEach(transactionTag => {
+            let option = document.createElement( "option" );
+            option.value = transactionTag;
+            transactionTagsList.appendChild(option);
+        });
+    }
 
     /**
      * Display or hide the transaction modal dependent on `show`. All input

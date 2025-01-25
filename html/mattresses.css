@@ -85,7 +85,7 @@ div.mattressContainer > span.mattressTitle {
 }
 
 div.mattressContainer > span.mattressAmounts {
-    width: 10ch;
+    width: 11ch;
     text-align: right;
 }
 div.mattressContainer > span.mattressAmounts.unallocatedMattressMaxAmount {

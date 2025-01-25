@@ -166,7 +166,7 @@ export const numberToCurrencyString = (n) => {
 
         transactionSearchInput.addEventListener( "keypress", e => {
             if( e.keyCode == 13 ) {
-                getTransactions(true);
+                getTransactions();
             }
         } );
 
@@ -709,15 +709,12 @@ export const numberToCurrencyString = (n) => {
         transactionListEndDate.valueAsDate = end;
     };
 
-    const getTransactions = (search) => {
+    const getTransactions = () => {
         let query = {
             startDate: transactionListStartDate.value,
-            endDate: transactionListEndDate.value
+            endDate: transactionListEndDate.value,
+            search: transactionSearchInput.value,
         };
-        if( search ) {
-            query.search = transactionSearchInput.value;
-            console.log( `Searching for '${query.search}'` );
-        }
 
         send( "/api/transactions/getWithinDate", "POST",
             query,

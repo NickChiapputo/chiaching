@@ -38,7 +38,7 @@
     border: var(--modal-border);
     border-radius: var(--modal-border-radius);
 
-    background-color: rgba(var(--background-color-card-l1), 0.6);
+    background-color: rgba(var(--background-color-card-l1-RGB), 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 

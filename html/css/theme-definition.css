@@ -8,7 +8,8 @@
 
     /* Foreground and background */
         --background-color:                 var(--Base);
-        --background-color-card-l1:         var(--Surface0RGB);
+        --background-color-card-l1-RGB:     var(--Surface0RGB);
+        --background-color-card-l1:         var(--Surface0);
         --background-color-card-l2:         var(--Surface1);
 
         --card-background:                  transparent;

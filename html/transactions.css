@@ -250,6 +250,8 @@ table tbody tr:nth-of-type(even) {
     border-bottom: dashed 1px black;
     margin-bottom: 0.25em;
 
+    background: rgba(var(--background-color-card-l1-RGB), 0.3);
+
     padding: 0 0.5ch 0.25em 0.5ch;
     border-radius: 0.5ch;
 
@@ -258,7 +260,11 @@ table tbody tr:nth-of-type(even) {
 #tagOverview > div.mattressOverviewContainer:hover {
     background-color: var(--transaction-hover-background);
 }
-
+#tagOverview div.sectionSubtitle.mattressSummary {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
 #tagOverview div.tagSummary {
     display: flex;
     flex-flow: row nowrap;

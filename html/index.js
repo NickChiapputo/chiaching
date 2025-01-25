@@ -854,8 +854,16 @@ export const numberToCurrencyString = (n) => {
 
             // Subtitle Header
             let subtitle = document.createElement( "div" );
-            subtitle.innerHTML = mattress_name;
+            let mattressName = document.createElement( "span" );
+            let mattressNetAmountSpan = document.createElement( "span" );
+            let mattressNetAmount = Object.values( mattress.tags ).reduce((a, b) => a + b, 0);
+            mattressName.textContent = mattress_name;
+            mattressNetAmountSpan.textContent = numberToCurrencyString( mattressNetAmount );
+            if( mattressNetAmount < 0 ) mattressNetAmountSpan.classList.toggle( "currencyAmountNegative" );
             subtitle.classList.toggle( "sectionSubtitle" );
+            subtitle.classList.toggle( "mattressSummary" );
+            subtitle.appendChild( mattressName );
+            subtitle.appendChild( mattressNetAmountSpan );
             mattress_overview_container.appendChild( subtitle );
 
             // Sort tags by amount and find maximum tag net amount.

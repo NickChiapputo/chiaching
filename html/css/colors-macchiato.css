@@ -1,79 +1,79 @@
-root{
-    --macchiatoRosewater:      ;
-    --macchiatoRosewaterRGB:   ;
+:root{
+    --Rosewater:      #f4dbd6;
+    --RosewaterRGB:   244, 219, 214;
 
-    --macchiatoFlamingo:       ;
-    --macchiatoFlamingoRGB:    ;
+    --Flamingo:       #f0c6c6;
+    --FlamingoRGB:    240, 198, 198;
 
-    --macchiatoPink:           ;
-    --macchiatoPinkRGB:        ;
+    --Pink:           #f5bde6;
+    --PinkRGB:        245, 189, 230;
 
-    --macchiatoMauve:          ;
-    --macchiatoMauveRGB:       ;
+    --Mauve:          #c6a0f6;
+    --MauveRGB:       198, 160, 246;
 
-    --macchiatoRed:            ;
-    --macchiatoRedRGB:         ;
+    --Red:            #ed8796;
+    --RedRGB:         237, 135, 150;
 
-    --macchiatoMaroon:         ;
-    --macchiatoMaroonRGB:      ;
+    --Maroon:         #ee99a0;
+    --MaroonRGB:      238, 153, 160;
 
-    --macchiatoPeach:          ;
-    --macchiatoPeachRGB:       ;
+    --Peach:          #f5a97f;
+    --PeachRGB:       245, 169, 127;
 
-    --macchiatoYellow:         ;
-    --macchiatoYellowRGB:      ;
+    --Yellow:         #eed49f;
+    --YellowRGB:      238, 212, 159;
 
-    --macchiatoGreen:          ;
-    --macchiatoGreenRGB:       ;
+    --Green:          #a6da95;
+    --GreenRGB:       166, 218, 149;
 
-    --macchiatoTeal:           ;
-    --macchiatoTealRGB:        ;
+    --Teal:           #8bd5ca;
+    --TealRGB:        139, 213, 202;
 
-    --macchiatoSky:            ;
-    --macchiatoSkyRGB:         ;
+    --Sky:            #91d7e3;
+    --SkyRGB:         145, 215, 227;
 
-    --macchiatoSapphire:       ;
-    --macchiatoSapphireRGB:    ;
+    --Sapphire:       #7dc4e4;
+    --SapphireRGB:    125, 196, 228;
 
-    --macchiatoBlue:           ;
-    --macchiatoBlueRGB:        ;
+    --Blue:           #8aadf4;
+    --BlueRGB:        138, 173, 244;
 
-    --macchiatoLavender:       ;
-    --macchiatoLavenderRGB:    ;
+    --Lavender:       #b7bdf8;
+    --LavenderRGB:    183, 189, 248;
 
-    --macchiatoText:           ;
-    --macchiatoTextRGB:        ;
+    --Text:           #cad3f5;
+    --TextRGB:        202, 211, 245;
 
-    --macchiatoSubtext1:       ;
-    --macchiatoSubtext1RGB:    ;
+    --Subtext1:       #b8c0e0;
+    --Subtext1RGB:    184, 192, 224;
 
-    --macchiatoSubtext2:       ;
-    --macchiatoSubtext2RGB:    ;
+    --Subtext2:       #a5adcb;
+    --Subtext2RGB:    165, 173, 203;
 
-    --macchiatoOverlay2:       ;
-    --macchiatoOverlay2RGB:    ;
+    --Overlay2:       #939ab7;
+    --Overlay2RGB:    147, 154, 183;
 
-    --macchiatoOverlay1:       ;
-    --macchiatoOverlay1RGB:    ;
+    --Overlay1:       #8087a2;
+    --Overlay1RGB:    128, 135, 162;
 
-    --macchiatoOverlay0:       ;
-    --macchiatoOverlay0RGB:    ;
+    --Overlay0:       #6e738d;
+    --Overlay0RGB:    110, 115, 141;
 
-    --macchiatoSurface2:       ;
-    --macchiatoSurface2RGB:    ;
+    --Surface2:       #5b6078;
+    --Surface2RGB:    91, 96, 120;
 
-    --macchiatoSurface1:       ;
-    --macchiatoSurface1RGB:    ;
+    --Surface1:       #494d64;
+    --Surface1RGB:    73, 77, 100;
 
-    --macchiatoSurface0:       ;
-    --macchiatoSurface0RGB:    ;
+    --Surface0:       #363a4f;
+    --Surface0RGB:    54, 58, 79;
 
-    --macchiatoBase:           ;
-    --macchiatoBaseRGB:        ;
+    --Base:           #24273a;
+    --BaseRGB:        36, 39, 58;
 
-    --macchiatoMantle:         ;
-    --macchiatoMantleRGB:      ;
+    --Mantle:         #1e2030;
+    --MantleRGB:      30, 32, 48;
 
-    --macchiatoCrust:          ;
-    --macchiatoCrustRGB:       ;
+    --Crust:          #181926;
+    --CrustRGB:       24, 25, 38;
 }

@@ -1,79 +1,79 @@
-root{
-    --mochaRosewater:      ;
-    --mochaRosewaterRGB:   ;
+:root{
+    --Rosewater:      #f5e0dc;
+    --RosewaterRGB:   245, 224, 220;
 
-    --mochaFlamingo:       ;
-    --mochaFlamingoRGB:    ;
+    --Flamingo:       #f2cdcd;
+    --FlamingoRGB:    242, 205, 205;
 
-    --mochaPink:           ;
-    --mochaPinkRGB:        ;
+    --Pink:           #f5c2e7;
+    --PinkRGB:        245, 194, 231;
 
-    --mochaMauve:          ;
-    --mochaMauveRGB:       ;
+    --Mauve:          #cba6f7;
+    --MauveRGB:       203, 166, 247;
 
-    --mochaRed:            ;
-    --mochaRedRGB:         ;
+    --Red:            #f38ba8;
+    --RedRGB:         243, 139, 168;
 
-    --mochaMaroon:         ;
-    --mochaMaroonRGB:      ;
+    --Maroon:         #eba0ac;
+    --MaroonRGB:      235, 160, 172;
 
-    --mochaPeach:          ;
-    --mochaPeachRGB:       ;
+    --Peach:          #fab387;
+    --PeachRGB:       250, 179, 135;
 
-    --mochaYellow:         ;
-    --mochaYellowRGB:      ;
+    --Yellow:         #f9e2af;
+    --YellowRGB:      249, 226, 175;
 
-    --mochaGreen:          ;
-    --mochaGreenRGB:       ;
+    --Green:          #a6e3a1;
+    --GreenRGB:       166, 227, 161;
 
-    --mochaTeal:           ;
-    --mochaTealRGB:        ;
+    --Teal:           #94e2d5;
+    --TealRGB:        148, 226, 213;
 
-    --mochaSky:            ;
-    --mochaSkyRGB:         ;
+    --Sky:            #89dceb;
+    --SkyRGB:         137, 220, 235;
 
-    --mochaSapphire:       ;
-    --mochaSapphireRGB:    ;
+    --Sapphire:       #74c7ec;
+    --SapphireRGB:    116, 199, 236;
 
-    --mochaBlue:           ;
-    --mochaBlueRGB:        ;
+    --Blue:           #89b4fa;
+    --BlueRGB:        137, 180, 250;
 
-    --mochaLavender:       ;
-    --mochaLavenderRGB:    ;
+    --Lavender:       #b4befe;
+    --LavenderRGB:    180, 190, 254;
 
-    --mochaText:           ;
-    --mochaTextRGB:        ;
+    --Text:           #cdd6f4;
+    --TextRGB:        205, 214, 244;
 
-    --mochaSubtext1:       ;
-    --mochaSubtext1RGB:    ;
+    --Subtext1:       #bac2de;
+    --Subtext1RGB:    186, 194, 222;
 
-    --mochaSubtext2:       ;
-    --mochaSubtext2RGB:    ;
+    --Subtext2:       #a6adc8;
+    --Subtext2RGB:    166, 173, 200;
 
-    --mochaOverlay2:       ;
-    --mochaOverlay2RGB:    ;
+    --Overlay2:       #9399b2;
+    --Overlay2RGB:    147, 153, 178;
 
-    --mochaOverlay1:       ;
-    --mochaOverlay1RGB:    ;
+    --Overlay1:       #7f849c;
+    --Overlay1RGB:    127, 132, 156;
 
-    --mochaOverlay0:       ;
-    --mochaOverlay0RGB:    ;
+    --Overlay0:       #6c7086;
+    --Overlay0RGB:    108, 112, 134;
 
-    --mochaSurface2:       ;
-    --mochaSurface2RGB:    ;
+    --Surface2:       #585b70;
+    --Surface2RGB:    88, 91, 112;
 
-    --mochaSurface1:       ;
-    --mochaSurface1RGB:    ;
+    --Surface1:       #45475a;
+    --Surface1RGB:    69, 71, 90;
 
-    --mochaSurface0:       ;
-    --mochaSurface0RGB:    ;
+    --Surface0:       #313244;
+    --Surface0RGB:    49, 50, 68;
 
-    --mochaBase:           ;
-    --mochaBaseRGB:        ;
+    --Base:           #1e1e2e;
+    --BaseRGB:        30, 30, 46;
 
-    --mochaMantle:         ;
-    --mochaMantleRGB:      ;
+    --Mantle:         #181825;
+    --MantleRGB:      24, 24, 37;
 
-    --mochaCrust:          ;
-    --mochaCrustRGB:       ;
+    --Crust:          #11111b;
+    --CrustRGB:       17, 17, 27;
 }

@@ -170,6 +170,13 @@ export const numberToCurrencyString = (n) => {
             }
         } );
 
+        // If the duplicate transaction button is clicked, remove all of the
+        // edit buttons, re-enable all of the inputs, and disable the duplicate
+        // button/container.
+        transactionDuplicateButton.addEventListener( "click", e => {
+            showModal( true, false, true );
+        } );
+
 
         // Accounts
         newAccountForm = document.getElementById( "newMoneyAccountForm" );
@@ -1247,8 +1254,7 @@ export const numberToCurrencyString = (n) => {
 
         // Set mattress (if applicable)
         if( transaction.mattress ) {
-            // TODO: this
-            // setSelectOption( transactionMattressName, transaction.mattress );
+            setSelectOption( transactionMattressName, transaction.mattress );
         }
 
         // Set tag
@@ -1258,15 +1264,29 @@ export const numberToCurrencyString = (n) => {
         amount.value = transaction.amount;
 
         // Set paycheck
+        isPaycheck.checked = transaction.isPaycheck;
+        showPaycheckSubform = !transaction.isPaycheck; // it will be toggled in toggleIsPaycheck
+        toggleIsPaycheck();
+        if( transaction.isPaycheck ){
             // Set gross earnings
+            earnings.value = transaction.earnings;
             // Set federal taxes
+            federalTaxes.value = transaction.federalTaxes;
             // Set state taxes
+            stateTaxes.value = transaction.stateTaxes;
             // Set healthcare
+            healthcare.value = transaction.healthcare;
             // Set vision
+            vision.value = transaction.vision;
             // Set dental
+            dental.value = transaction.dental;
             // Set 401(k)
+            document.getElementById( "401k" ).value = transaction[ "401k" ];
             // Set HSA
+            hsa.value = transaction.hsa;
             // Set Roth IRA
+            rothIRA.value = transaction.rothIRA;
+        }
 
         // Set description
         description.value = transaction.description;
@@ -1301,8 +1321,9 @@ export const numberToCurrencyString = (n) => {
      *
      * @param {*} show                  Flag to show or hide the modal
      * @param {*} existingTransaction   Flag to disable or enable input fields
+     * @param {*} notClear              Flag to not clear inputs
      */
-    const showModal = (show, existingTransaction) => {
+    const showModal = (show, existingTransaction, notClear) => {
         modalContainer.classList.remove( "modalHidden" );
         modal.classList.remove( "modalHidden" );
         modalContainer.classList.remove( "modalShow" );
@@ -1319,32 +1340,38 @@ export const numberToCurrencyString = (n) => {
         });
 
         // Clear the input fields.
-        date.value = new Date().toISOString().substring(0,10);
-        document.getElementById("location").value = "";
-        sourceAccount.selectedIndex = 0;
-        destinationAccount.selectedIndex = 0;
-        // TODO: Set mattress (if applicable)
-        tag.value = "";
-        amount.value = "";
-        // Set paycheck
-            // Set gross earnings
-            // Set federal taxes
-            // Set state taxes
-            // Set healthcare
-            // Set vision
-            // Set dental
-            // Set 401(k)
-            // Set HSA
-            // Set Roth IRA
-        description.value = "";
+        if( !notClear ) {
+            date.value = new Date().toISOString().substring(0,10);
+            document.getElementById("location").value = "";
+            sourceAccount.selectedIndex = 0;
+            destinationAccount.selectedIndex = 0;
+            transactionMattressName.selectedIndex = 0;
+            tag.value = "";
+            amount.value = "";
+            isPaycheck.checked = false;
+            earnings.value = "";
+            federalTaxes.value = "";
+            stateTaxes.value = "";
+            healthcare.value = "";
+            vision.value = "";
+            dental.value = "";
+            document.getElementById("401k").value = "";
+            hsa.value = "";
+            rothIRA.value = "";
+            description.value = "";
+        }
 
         if( show )
         {  // Show modal
+            modalContainer.classList.remove( "modalHidden" );
+            modal.classList.remove( "modalHidden" );
             modalContainer.classList.add( "modalShow" );
             modal.classList.add( "modalShow" );
         }
         else
         { // Hide modal
+            modalContainer.classList.remove( "modalShow" );
+            modal.classList.remove( "modalShow" );
             modalContainer.classList.add( "modalHidden" );
             modal.classList.add( "modalHidden" );
         }
@@ -1387,6 +1414,11 @@ export const numberToCurrencyString = (n) => {
         let editedElements = document.getElementsByClassName( "edited" );
         for( let el of editedElements )
             el.classList.remove( "edited" );
+
+
+        // Show the transaction duplicate button only for existing transactions.
+        // ...because you can't duplicate something that doesn't exist.
+        transactionDuplicateContainer.style.display = existingTransaction ? "" : "none";
 
 
 

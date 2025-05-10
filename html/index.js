@@ -1329,18 +1329,20 @@ export const numberToCurrencyString = (n) => {
         modalContainer.classList.remove( "modalShow" );
         modal.classList.remove( "modalShow" );
 
-        // Populate the mattress list dropdown
-        transactionMattressName.innerHTML = '<option></option>';
-        mattresses.forEach((mattress) => {
-            if( mattress.name == UNALLOCATED_MATTRESS_NAME ) return;
-            let mattressOption = document.createElement( "option" );
-            mattressOption.innerHTML = mattress.name;
-            mattressOption.value = mattress.name;
-            transactionMattressName.appendChild( mattressOption );
-        });
 
         // Clear the input fields.
         if( !notClear ) {
+            // Populate the mattress list dropdown only when
+            // we are clearing the inputs.
+            transactionMattressName.innerHTML = '<option></option>';
+            mattresses.forEach((mattress) => {
+                if( mattress.name == UNALLOCATED_MATTRESS_NAME ) return;
+                let mattressOption = document.createElement( "option" );
+                mattressOption.innerHTML = mattress.name;
+                mattressOption.value = mattress.name;
+                transactionMattressName.appendChild( mattressOption );
+            });
+
             date.value = new Date().toISOString().substring(0,10);
             document.getElementById("location").value = "";
             sourceAccount.selectedIndex = 0;

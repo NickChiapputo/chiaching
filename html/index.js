@@ -543,9 +543,6 @@ export const numberToCurrencyString = (n) => {
         send(
             "/api/transactions/edit", "POST", update,
             (resp, status) => {
-                console.log(resp);
-                console.log(status);
-
                 getMoneyAccounts();
                 getTransactions();
                 showModal(false);

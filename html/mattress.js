@@ -372,7 +372,9 @@ function getUnallocatedMattress() {
     let amount = 0.0;
     for( let institution in accounts ) {
         accounts[ institution ].forEach((account) => {
-            amount += account.balance;
+            let valid_account = account.type === undefined ||
+                (account.type !== undefined && account.type.toLowerCase() != "loan" );
+            if(valid_account) amount += account.balance;
         });
     }
 

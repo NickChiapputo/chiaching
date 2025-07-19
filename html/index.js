@@ -189,8 +189,9 @@ export const numberToCurrencyString = (n) => {
 
         // Populate data
         modalLib.init();
-        getMoneyAccounts();
-        getTransactions();
+        // wait for accounts to populate because the transaction summary section needs to check the destination accounts
+        getMoneyAccounts().then(() => getTransactions());
+        // getTransactions();
         // getBudgets();
         initTransactions();
         initMattresses();
@@ -739,6 +740,16 @@ export const numberToCurrencyString = (n) => {
 
                     let is_incoming = transaction.sourceInstitution.toLowerCase() === "outside";
                     let is_outgoing = transaction.destinationInstitution.toLowerCase() === "outside";
+
+                    let destination_account = getAccount(transaction.destinationInstitution, transaction.destinationAccount);
+                    let source_account = getAccount(transaction.sourceInstitution, transaction.sourceAccount);
+                    if( destination_account !== null ) {
+                        is_outgoing |= destination_account.type == "Loan";
+                    }
+
+                    if( source_account !== null ) {
+                        is_incoming |= source_account.type == "Loan";
+                    }
 
                     if( !is_incoming && !is_outgoing ) {
                         // Internal transaction. Ignore!
@@ -1537,40 +1548,45 @@ export const numberToCurrencyString = (n) => {
 
 
     const getMoneyAccounts = () => {
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if( this.readyState == 4 && this.status == 200 )
-            {
-                let response = {};
-                try
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if( this.readyState == 4 && this.status == 200 )
                 {
-                    response = JSON.parse( this.responseText );
-                    populateAccounts( response.accounts );
-                    populateTransactionAccounts();
+                    let response = {};
+                    try
+                    {
+                        response = JSON.parse( this.responseText );
+                        populateAccounts( response.accounts );
+                        populateTransactionAccounts();
+
+                        resolve();
+                    }
+                    catch( e )
+                    {
+                        reject();
+                        console.log( `Error handling get accounts response:\n${this.responseText}\n${e}` );
+                        return;
+                    }
                 }
-                catch( e )
+                else if( this.readyState == 4 && this.status != 200 )
                 {
-                    console.log( `Error handling get accounts response:\n${this.responseText}\n${e}` );
-                    return;
+                    console.log( `Error! HTTP Code: ${this.status}.` );
+
+                    let response = {};
+                    try
+                    {
+                        response = JSON.parse( this.responseText );
+                    }
+                    catch( e )
+                    {
+                    } finally { reject(); }
                 }
             }
-            else if( this.readyState == 4 && this.status != 200 )
-            {
-                console.log( `Error! HTTP Code: ${this.status}.` );
 
-                let response = {};
-                try
-                {
-                    response = JSON.parse( this.responseText );
-                }
-                catch( e )
-                {
-                }
-            }
-        }
-
-        xhr.open( "GET", "/api/accounts/get" );
-        xhr.send();
+            xhr.open( "GET", "/api/accounts/get" );
+            xhr.send();
+        });
     };
 
     const populateAccounts = (accountList) => {
@@ -1655,6 +1671,18 @@ export const numberToCurrencyString = (n) => {
         // Set total balance.
         // TODO: Split into different types of accounts.
         document.getElementById( "totalValueSpan" ).innerHTML = numberToCurrencyString( allAccountsSum ).substring(1);
+    }
+
+    const getAccount = (institution, account_name) => {
+        if( accounts[ institution ] === undefined ) return null;
+        for( let i = 0; i < accounts[ institution ].length; i++ ) {
+            let account = accounts[ institution ][ i ];
+            if( account.name == account_name ) {
+                return account;
+            }
+        }
+
+        return null;
     }
 
 

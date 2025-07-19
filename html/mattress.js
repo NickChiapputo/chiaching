@@ -22,12 +22,20 @@ export const init = () => {
     // the other select and enable the remaining options.
     transferMattressSource.addEventListener( "change", e => {
         for( let opt of transferMattressDestination.options ) {
-            opt.disabled = transferMattressSource.value == opt.value;
+            opt.disabled = transferMattressSource.value == opt.value && opt.value != "";
+        }
+
+        if(transferMattressSource.selectedIndex != 0 && transferMattressDestination.selectedIndex != 0) {
+            fill_mattress_transfer();
         }
     });
     transferMattressDestination.addEventListener( "change", e => {
         for( let opt of transferMattressSource.options ) {
-            opt.disabled = transferMattressDestination.value == opt.value;
+            opt.disabled = transferMattressDestination.value == opt.value && opt.value != "";
+        }
+
+        if(transferMattressSource.selectedIndex != 0 && transferMattressDestination.selectedIndex != 0) {
+            fill_mattress_transfer();
         }
     });
 
@@ -393,4 +401,28 @@ function getUnallocatedMattress() {
         "name": UNALLOCATED_MATTRESS_NAME,
         "amount": amount,
     };
+}
+
+function get_mattress(mattress_id) {
+    let found_mattress = null;
+    mattresses.forEach(mattress => {
+        if(mattress_id == mattress["_id"]) {
+            found_mattress = mattress;
+            return;
+        }
+    });
+
+    return found_mattress;
+}
+
+function fill_mattress_transfer() {
+    if(transferMattressSource.value === UNALLOCATED_MATTRESS_NAME) {
+        let mattress = get_mattress(transferMattressDestination.value);
+        let unallocated = get_mattress(UNALLOCATED_MATTRESS_NAME);
+
+        let amount_needed = mattress.maxAmount - mattress.amount;
+        let max_transferable = Math.min(amount_needed, unallocated.amount);
+        mattressTransferAmount.value = Math.abs(max_transferable) < 0.01
+            ? 0 : max_transferable.toFixed(2);
+    }
 }

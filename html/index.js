@@ -1602,6 +1602,10 @@ export const numberToCurrencyString = (n) => {
         });
 
         let allAccountsSum = 0.00;
+        let cashCreditSum = 0.00;
+        let loanSum = 0.00;
+        let investmentSum = 0.00;
+        let unknownSum = 0.00;
 
         // Populate page with accounts grouped by institution.
         const accountsListDiv = document.getElementById( "accountsList" );
@@ -1661,6 +1665,15 @@ export const numberToCurrencyString = (n) => {
 
 
                 allAccountsSum += account.balance;
+                if(account.type == "Checking" || account.type == "Savings" || account.type == "Credit") {
+                    cashCreditSum += account.balance;
+                } else if(account.type == "Loan") {
+                    loanSum += account.balance;
+                } else if(account.type == "Investment") {
+                    investmentSum += account.balance;
+                } else {
+                    unknownSum += account.balance;
+                }
             });
 
 
@@ -1670,7 +1683,25 @@ export const numberToCurrencyString = (n) => {
 
         // Set total balance.
         // TODO: Split into different types of accounts.
-        document.getElementById( "totalValueSpan" ).innerHTML = numberToCurrencyString( allAccountsSum ).substring(1);
+        totalValueSpan.innerHTML = numberToCurrencyString( allAccountsSum ).substring(1);
+        if( allAccountsSum < 0 ) totalValueSpan.parentElement.classList.toggle( "currencyAmountNegative" );
+
+        cashCreditValueSpan.innerHTML = numberToCurrencyString( cashCreditSum ).substring(1);
+        if( cashCreditSum < 0 ) cashCreditValueSpan.parentElement.classList.toggle( "currencyAmountNegative" );
+
+        loanValueSpan.innerHTML = numberToCurrencyString( loanSum ).substring(1);
+        if( loanSum < 0 ) loanValueSpan.parentElement.classList.toggle( "currencyAmountNegative" );
+
+        investmentValueSpan.innerHTML = numberToCurrencyString( investmentSum ).substring(1);
+        if( investmentSum < 0 ) investmentValueSpan.parentElement.classList.toggle( "currencyAmountNegative" );
+
+        if(unknownSum > 0.00) {
+            unknownAccountTotal.style.display = '';
+            unknownValueSpan.innerHTML = numberToCurrencyString( allAccountsSum ).substring(1);
+            if( account.balance < 0 ) unknownValueSpan.parentElement.classList.toggle( "currencyAmountNegative" );
+        } else {
+            unknownAccountTotal.style.display = 'none';
+        }
     }
 
     const getAccount = (institution, account_name) => {

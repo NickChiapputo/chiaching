@@ -358,6 +358,11 @@ function showTransferForm(e) {
 
         transferMattressSource.appendChild(opt);
         transferMattressDestination.appendChild(opt.cloneNode(true));
+
+        if(mattress.name === UNALLOCATED_MATTRESS_NAME) {
+            transferMattressSource.selectedIndex = transferMattressSource.options.length - 1;
+            transferMattressDestination.options[ transferMattressDestination.options.length - 1 ].disabled = true;
+        }
     });
 
 
